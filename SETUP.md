@@ -32,7 +32,7 @@ Salva il file e ricarica il browser. Non occorre rigenerare nulla per una normal
 
 **La rigenerazione necessaria per i config riguarda i file originali** (`.yml`, `.properties`, ecc.): questi vengono impacchettati in un bundle JavaScript per essere disponibili anche offline. Non modificare a mano `assets/js/generated/config-files.js`. Lo snapshot delle release GitHub può essere aggiornato separatamente per la consultazione offline: vedi il punto 11.
 
-I corpi degli articoli usano `bodyHtml`: sono stringhe HTML dentro il `.js`, non contenuti da scrivere in `index.html`. Sono contenuti fidati dell'editor, non una destinazione per HTML fornito dai visitatori. I Markdown in `sources/` conservano la provenienza della documentazione, ma **non sono il sistema di aggiornamento** del tema.
+I corpi degli articoli usano `bodyHtml`: sono stringhe HTML dentro il `.js`, non contenuti da scrivere in `index.html`. Sono contenuti fidati dell'editor, non una destinazione per HTML fornito dai visitatori. La wiki e la reference HTML leggono direttamente questi dati; aggiornamenti e collegamenti si mantengono negli stessi file JavaScript.
 
 ## 3. Configurare la gallery della preview
 
@@ -222,7 +222,7 @@ Se hai già copiato i config in `synced-configs/`, salta soltanto il primo coman
 
 Per ottenere il sito aggiornato sul PC dopo un sync fatto da Actions, esegui `git pull` nel clone website oppure scarica di nuovo la repository. L'archivio ZIP che avevi scaricato prima **non si aggiorna da solo**.
 
-Per distribuire un nuovo ZIP, comprimi l'intera cartella website aggiornata, includendo asset e bundle. Non includere `.git/`, `.sync/`, `__pycache__/`, token, checkout privati o file del tuo server. Per un pacchetto di solo consultazione bastano HTML, assets, config e fonti referenziate; per un template riutilizzabile conserva anche guide, workflow, tools e tests.
+Per distribuire un nuovo ZIP, comprimi l'intera cartella website aggiornata, includendo asset e bundle. Non includere `.git/`, `.sync/`, `__pycache__/`, token, checkout privati o file del tuo server. Per un pacchetto di solo consultazione bastano HTML, assets e config: la documentazione è incorporata nei dati JavaScript. Per un template riutilizzabile conserva anche guide, workflow, tools e tests.
 
 ### Aggiungere un nuovo file config
 
@@ -237,7 +237,7 @@ Lavora su una nuova copia/repository, non sovrascrivere CoreChatX accidentalment
 1. In `site-config.js` cambia prodotto, descrizione, tagline, logo/favicon, link, palette e gallery. Sostituisci le immagini nei percorsi configurati.
 2. In `landing-content.js` sostituisci testi, schede, FAQ e collegamenti alla wiki.
 3. In `docs-content.js` sostituisci gli articoli e le categorie; rimuovi i contenuti CoreChatX non pertinenti. Aggiorna anche `ui-text.js`, che contiene testi editoriali delle pagine indice oltre alle etichette generiche.
-4. Aggiorna fonti/provenienza in `sources/` e tutti i riferimenti rimasti al vecchio prodotto.
+4. Aggiorna la pagina sull'ambito della documentazione e tutti i riferimenti rimasti al vecchio prodotto.
 5. In `tools/config-sync-map.mjs` cambia repository/ref e lista dei default. Rimuovi gli snapshot del vecchio plugin che non devono restare pubblici, poi rigenera il bundle.
 6. Allinea anche `repository`/`ref` nel workflow website e percorsi/branch/destinazione nel notifier del nuovo plugin. I secret devono avere accesso alle **nuove** repository.
 7. Adatta i test specifici di CoreChatX: `validate-theme.mjs` contiene una soglia di almeno 60 articoli e i browser test verificano pagine/chiavi CoreChatX. Mantieni i controlli di integrità e quelli generici della gallery; sostituisci solo le aspettative di prodotto.

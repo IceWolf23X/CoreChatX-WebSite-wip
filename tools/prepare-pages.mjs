@@ -2,7 +2,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-export const STATIC_ENTRIES = ['index.html', 'reference.html', 'assets', 'synced-configs', 'sources'];
+export const STATIC_ENTRIES = ['index.html', 'reference.html', 'assets', 'synced-configs'];
 
 async function verifyTree(file) {
   const stat = await fs.lstat(file);
@@ -15,6 +15,7 @@ async function verifyTree(file) {
   else if (!stat.isFile()) throw new Error(`Unsupported public file type: ${file}`);
 }
 
+/** Package the public HTML, assets and configuration snapshots into the Pages output. */
 export async function preparePages(root) {
   root = path.resolve(root);
   // Validate before touching the existing output. This also prevents symlink traversal.

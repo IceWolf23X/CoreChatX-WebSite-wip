@@ -4,10 +4,11 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 const moduleUrl = new URL('../tools/prepare-pages.mjs', import.meta.url);
+// Build a minimal site and private test files without any source-document directory.
 async function fixture(t) {
  const root=await fs.mkdtemp(path.join(os.tmpdir(),'corex-pages-'));
  t.after(()=>fs.rm(root,{recursive:true,force:true}));
- for(const dir of ['assets/js/data','synced-configs/paper','sources','.sync/plugin','.git','docs'])await fs.mkdir(path.join(root,dir),{recursive:true});
+ for(const dir of ['assets/js/data','synced-configs/paper','.sync/plugin','.git','docs'])await fs.mkdir(path.join(root,dir),{recursive:true});
  await fs.writeFile(path.join(root,'index.html'),'<div id="app-root"></div>');
  await fs.writeFile(path.join(root,'reference.html'),'<main></main>');
  await fs.writeFile(path.join(root,'assets/js/data/site-config.js'),'window.COREX_SITE = {};');

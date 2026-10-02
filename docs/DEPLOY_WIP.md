@@ -59,7 +59,7 @@ Il bypass vale solo per quel processo: non cambia permanentemente la policy del 
 
 Non crea release del plugin e non carica JAR. Li pubblicherai nella sezione **Releases della repository WIP**. Fino alla prima release con un JAR riconosciuto, la pagina download resta vuota.
 
-Il workflow Pages pubblica soltanto `index.html`, `reference.html`, `assets/`, `synced-configs/` e `sources/`, più metadata pubblici di build. Il checkout privato `.sync/`, le credenziali Git e i tool non entrano nell'artefatto distribuito. Documenti e tool restano comunque pubblici come file della repository.
+Il workflow Pages pubblica soltanto `index.html`, `reference.html`, `assets/` e `synced-configs/`, più metadata pubblici di build. Gli articoli della wiki sono mantenuti nei dati JavaScript sotto `assets/`. Il checkout privato `.sync/`, le credenziali Git e i tool non entrano nell'artefatto distribuito. Guide e tool restano comunque pubblici come file della repository.
 
 ## 4. Aggiornamenti successivi
 

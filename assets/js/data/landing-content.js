@@ -255,6 +255,6 @@ window.COREX_LANDING = {
       { label: 'Modrinth', linkKey: 'modrinth', external: true }
     ],
     copyright: '© 2026 CoreChatX · A CoreX plugin by IceWolf23X.',
-    sourceLink: { label: 'Documentation sources & scope', href: '#/docs/reference/source-notes' }
+    scopeLink: { label: 'Documentation scope', href: '#/docs/reference/source-notes' }
   }
 };

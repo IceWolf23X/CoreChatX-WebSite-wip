@@ -4,10 +4,11 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 const moduleUrl=new URL('../tools/publish-wip.mjs',import.meta.url);
+// Build the complete publication input without retaining source-document files.
 function fixture(t){
  const root=fs.mkdtempSync(path.join(os.tmpdir(),'corex-publish-'));
  t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
- for(const d of ['assets','tools','tests','docs','sources','synced-configs','.github'])fs.mkdirSync(path.join(root,d));
+ for(const d of ['assets','tools','tests','docs','synced-configs','.github'])fs.mkdirSync(path.join(root,d));
  for(const f of ['index.html','reference.html','README.md','SETUP.md','.gitignore','.gitattributes','.nojekyll','PUBBLICA-WIP.cmd','Publish-Wip.ps1'])fs.writeFileSync(path.join(root,f),'test');
  return root;
 }

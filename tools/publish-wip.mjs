@@ -13,7 +13,7 @@ const OWNER = 'IceWolf23X';
 const REPO = 'CoreChatX-WebSite-wip';
 const PUBLIC_ENTRIES = [
   '.github', '.gitignore', '.gitattributes', '.nojekyll', 'README.md', 'SETUP.md',
-  'index.html', 'reference.html', 'assets', 'docs', 'sources', 'synced-configs',
+  'index.html', 'reference.html', 'assets', 'docs', 'synced-configs',
   'tools', 'tests', 'PUBBLICA-WIP.cmd', 'Publish-Wip.ps1'
 ];
 const sleepDefault = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -49,6 +49,7 @@ function isTargetRemote(value) {
     .some(url => value.trim().toLowerCase() === url.toLowerCase());
 }
 
+/** Validate and publish a fresh WIP checkout, then verify its requested Pages deployment. */
 export async function publish(root, options = {}) {
   root = path.resolve(root);
   const run = options.run || systemRun;

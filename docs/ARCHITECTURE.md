@@ -15,6 +15,8 @@ index.html (empty shell)
 
 Normal content changes do not require editing HTML or renderer code.
 
+Wiki articles are maintained directly in `docs-content.js`; both the routed wiki and `reference.html` read the same data. Article tools link to the full HTML reference. The documentation-scope page keeps stable navigation anchors and explains the configuration snapshots and public references.
+
 ## Code highlighting
 
 Both HTML entry points load the vendored Highlight.js 11.11.1 core, its matching properties grammar and `core/syntax-highlight.js` from local assets. The BSD-3-Clause license ships beside the vendor files. No CDN, package installation or external network request is needed for highlighting.

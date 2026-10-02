@@ -14,10 +14,11 @@
     var tmp=document.createElement('div');tmp.innerHTML=a.bodyHtml || '';
     return Math.max(1,Math.ceil((tmp.textContent || '').trim().split(/\s+/).filter(Boolean).length/220));
   }
+  // Render a category-specific article card without depending on document provenance.
   function card(a, compact) {
     return '<a class="doc-card" href="' + route(a.id) + '">' + icon(a.icon) + icon('arrow', 'card-arrow') +
       '<h3>' + E(a.title) + '</h3><p>' + E(a.description) + '</p>' +
-      (!compact ? '<span class="doc-card-label">' + (a.source ? 'Read the overview' : 'Reference notes') + ' →</span>' : '') + '</a>';
+      (!compact ? '<span class="doc-card-label">' + (a.group === 'overview' ? 'Read the overview' : 'Reference notes') + ' →</span>' : '') + '</a>';
   }
   function section(id, title, list, compact) {
     return '<section class="hub-section" id="' + id + '"><div class="hub-section-header"><h2>' + E(title) + '</h2><span>' + String(list.length).padStart(2,'0') + ' ARTICLES</span></div>' +
@@ -71,20 +72,21 @@
     }, {rootMargin:'-115px 0px -68% 0px',threshold:0});
     document.querySelectorAll('#article-body h2[id], #article-body h3[id], #article-body .hub-section[id]').forEach(function (h) { observer.observe(h); });
   }
-  function setHeading(title,description,group,minutes,source) {
+  // Populate article identity and the copy, print and maintained HTML-reference tools.
+  function setHeading(title,description,group,minutes) {
     document.getElementById('article-title').textContent = title;
     document.getElementById('article-description').textContent = description;
     document.getElementById('article-kicker').innerHTML = '<span class="eyebrow">' + E(group) + '</span>' + (minutes ? '<span class="reading-time">· ' + minutes + ' min reference</span>':'');
     var t=ui.articleTools;
     var tools = '<button type="button" class="article-tool" data-copy-article>' + icon('copy') + E(t.copy) + '</button><button type="button" class="article-tool" data-print>' + icon('print') + E(t.print) + '</button>';
-    if (source) tools += '<a class="article-tool source-tool" href="sources/' + E(source) + '" download>' + icon('file') + '<span>' + E(t.source) + '</span>' + icon('download') + '</a>';
-    else tools += '<a class="article-tool source-tool" href="reference.html">' + icon('book') + '<span>' + E(t.fullReference) + '</span></a>';
+    tools += '<a class="article-tool reference-tool" href="reference.html">' + icon('book') + '<span>' + E(t.fullReference) + '</span></a>';
     document.getElementById('article-tools').innerHTML = tools;
     document.title = title + ' — ' + window.COREX_SITE.brand.product + ' Documentation';
   }
+  // Build the overview or configuration directory from the maintained article data.
   function renderHub(id) {
     var isOverview = id === 'overview', h=isOverview?ui.hubs.overview:ui.hubs.instructions;
-    setHeading(h.title,h.description,h.kicker,0,null);
+    setHeading(h.title,h.description,h.kicker,0);
     document.getElementById('breadcrumbs').innerHTML = '<a href="#/">Home</a>' + icon('chevron') + '<span>Documentation</span>' + icon('chevron') + '<span>' + E(h.kicker) + '</span>';
     var out='',toc=[];
     if (isOverview) {
@@ -103,7 +105,6 @@
     }
     document.getElementById('article-body').className='hub-body';
     document.getElementById('article-body').innerHTML=out;
-    document.getElementById('article-source').innerHTML='<div class="source-box">'+icon('file')+'<div><strong>'+E(ui.sourceBox.completeTitle)+'</strong>'+E(ui.sourceBox.completeText)+' <a href="#/docs/reference/source-notes">'+E(ui.sourceBox.completeLink)+'</a></div></div>';
     document.getElementById('article-pagination').innerHTML='';
     setTOC(toc,id);
   }
@@ -137,14 +138,14 @@
     if(id==='overview'||id==='instructions'){renderHub(id);return;}
     var a=articles.get(id);
     if(!a){
-      setHeading(ui.notFound.title,ui.notFound.description,'Documentation',0,null);
+      setHeading(ui.notFound.title,ui.notFound.description,'Documentation',0);
       document.getElementById('breadcrumbs').innerHTML='<a href="#/docs/overview">Documentation</a>'+icon('chevron')+'<span>'+E(ui.notFound.breadcrumb)+'</span>';
       document.getElementById('article-body').className='';
       document.getElementById('article-body').innerHTML='<div class="doc-not-found">'+E(ui.notFound.body)+'<br><a class="button primary" href="#/docs/overview">'+E(ui.notFound.action)+' '+icon('arrow')+'</a></div>';
-      document.getElementById('article-source').innerHTML='';document.getElementById('article-pagination').innerHTML='';setTOC([],id);return;
+      document.getElementById('article-pagination').innerHTML='';setTOC([],id);return;
     }
     var g=groups.get(a.group),mode=a.group==='overview'?'overview':'instructions';
-    setHeading(a.title,a.description,g.label,readMinutes(a),a.source);
+    setHeading(a.title,a.description,g.label,readMinutes(a));
     document.getElementById('breadcrumbs').innerHTML='<a href="#/docs/'+mode+'">Documentation</a>'+icon('chevron')+'<a href="#/docs/'+mode+'">'+E(g.label)+'</a>'+icon('chevron')+'<span>'+E(a.title)+'</span>';
     var body=document.getElementById('article-body');body.className='prose';body.innerHTML=a.bodyHtml;
     if(window.COREX_CONFIG_VIEW)window.COREX_CONFIG_VIEW.renderMounts(body);
@@ -153,10 +154,6 @@
       var list=data.articles.filter(function(other){return other.group===a.group&&other.id!==a.id;});
       body.innerHTML+='<div class="hub-body">'+section('file-directory','Explore the files',list,true)+'</div>';
     }
-    if(a.source){
-      var label=a.group==='overview'?ui.sourceBox.overviewTitle:ui.sourceBox.configurationTitle;
-      document.getElementById('article-source').innerHTML='<div class="source-box">'+icon('file')+'<div><strong>'+E(label)+'</strong>'+E(a.sourceTitle)+' · Source lines '+a.sourceStart+'–'+a.sourceEnd+'.<br><a href="sources/'+E(a.source)+'" download>'+E(ui.sourceBox.original)+'</a> · <a href="#/docs/reference/source-notes">'+E(ui.sourceBox.sourceScope)+'</a></div></div>';
-    }else document.getElementById('article-source').innerHTML='';
     if(window.COREX_HIGHLIGHT)window.COREX_HIGHLIGHT.render(body);
     pagination(a);setTOC(tocFromBody(),id);
   }

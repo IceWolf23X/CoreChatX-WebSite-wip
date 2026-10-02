@@ -63,7 +63,7 @@ window.COREX_UI = {
     sidebarSearch: 'Search the docs',
     overviewTab: 'Overview',
     instructionsTab: 'Instructions',
-    sidebarBottom: 'Sources & reference scope',
+    sidebarBottom: 'Documentation scope',
     onThisPage: 'On this page',
     tocIntroduction: 'Introduction',
     helpText: 'Need a different answer?\nSearch features, commands or an exact configuration key.',
@@ -71,11 +71,10 @@ window.COREX_UI = {
     reportIssue: 'Report an issue',
     fullReference: 'Full reference',
     bottomNote: 'reference · Paper backend & Velocity proxy',
-    sourceScope: 'Source snapshot and scope',
+    scope: 'Documentation scope',
     articleTools: {
       copy: 'Copy page text',
       print: 'Print',
-      source: 'Source Markdown',
       fullReference: 'Full reference'
     },
     pagination: {
@@ -84,24 +83,15 @@ window.COREX_UI = {
     },
     notFound: {
       title: 'Page not found',
-      description: 'This documentation link does not match an article in this source snapshot.',
+      description: 'This documentation link does not match an article in the wiki.',
       body: 'Use the documentation menu or search for a feature, command or configuration key.',
       action: 'Back to documentation',
       breadcrumb: 'Unknown page'
     },
-    sourceBox: {
-      completeTitle: 'Complete supplied reference snapshot',
-      completeText: 'All sections of both supplied Markdown files are included.',
-      completeLink: 'See source provenance, version notes and external references.',
-      overviewTitle: 'From the supplied feature overview',
-      configurationTitle: 'From the supplied configuration reference',
-      sourceScope: 'Source scope & external references',
-      original: 'Original Markdown'
-    },
     hubs: {
       overview: {
         title: 'The complete feature overview.',
-        description: 'Discover what CoreChatX brings to your community — and how its features work together. Every section of the supplied overview, in one place.',
+        description: 'Discover what CoreChatX brings to your community — and how its features work together. Explore the feature overview in one place.',
         kicker: 'Overview',
         introStrong: 'One suite, not ten plugins.',
         introText: 'Public chat, private messages, channels, interactive content, player preferences and bridges — one connected communication layer.'

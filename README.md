@@ -28,6 +28,8 @@ The shipped site has **no backend and no build step for normal content editing**
 
 `index.html` is intentionally only a shell. It should not contain product copy.
 
+The wiki and `reference.html` read the maintained article data directly. Article tools offer Copy, Print and the full HTML reference; configuration examples keep their own raw YAML/properties downloads. Update documentation in `docs-content.js` and validate its internal links before publishing.
+
 ## Configuration defaults
 
 Actual plugin defaults are kept as ordinary YAML / properties files in `synced-configs/`. Documentation articles reference them with a `config-file` component instead of duplicating their contents.
