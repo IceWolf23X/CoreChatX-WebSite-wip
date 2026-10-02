@@ -2,6 +2,8 @@
 
 ## Stato del pacchetto
 
+Pubblicazione completata il 2 ottobre 2026: [sito WIP](https://icewolf23x.github.io/CoreChatX-WebSite-wip/), repository pubblica su `main`, Pages tramite GitHub Actions e HTTPS. I default provengono dal branch `codex/fix-source-audit`, commit `eb06bd05f2a4d952ee7fee6323e3f52b32d7b145`. La descrizione della preparazione originale sotto rimane storica.
+
 La repository di destinazione è **IceWolf23X/CoreChatX-WebSite-wip**, pubblica, branch `main`. Lo ZIP è pronto per la pubblicazione, **ma durante la sua preparazione non è stata creata alcuna repository e non è stato attivato Pages sul tuo account**: gli strumenti GitHub disponibili in quella chat erano di sola lettura.
 
 Il sito include già landing, wiki, gallery, tema chiaro/scuro, layout fino a 32:9, catalogo release via API della repository WIP, i 19 default amministrativi verificati tramite GitHub e un template generato separato. Le release della repository di produzione restano indipendenti.
@@ -75,7 +77,7 @@ La sincronizzazione futura dalla repository privata richiede una configurazione 
 
 1. Crea un fine-grained token limitato a **CoreChatX-plugin**, permesso **Contents: Read-only**.
 2. Nel website vai su **Settings → Secrets and variables → Actions → New repository secret** e salvalo come `COREX_PLUGIN_READ_TOKEN`.
-3. Avvia **Actions → Sync plugin configuration defaults → Run workflow**.
+3. Riabilita **Actions → Sync plugin configuration defaults → Enable workflow**, poi seleziona **Run workflow**. Il workflow è stato disabilitato dopo la pubblicazione perché il token privato non è ancora configurato.
 4. Il deploy Pages parte dopo il sync riuscito tramite `workflow_run`, anche se il commit è fatto dal normale GITHUB_TOKEN. Non serve un token di scrittura aggiuntivo per Pages.
 
 Il notifier nella repository privata è facoltativo e non è stato installato durante la preparazione. L'esempio `docs/examples/plugin-repository-notify.yml` è già diretto a `IceWolf23X/CoreChatX-WebSite-wip`: richiede `COREX_WEBSITE_DISPATCH_TOKEN` con Contents: Read and write **solo sul website**. La guida completa resta `docs/GITHUB_SYNC.md`. Non mettere un token in `site-config.js` e non pubblicare configurazioni reali di server.

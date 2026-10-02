@@ -43,7 +43,7 @@ jobs:
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           repository: IceWolf23X/CoreChatX-plugin
-          ref: master
+          ref: codex/fix-source-audit
           token: ${{ secrets.COREX_PLUGIN_READ_TOKEN }}
           path: .sync/plugin
           persist-credentials: false

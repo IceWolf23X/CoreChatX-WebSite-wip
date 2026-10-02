@@ -39,8 +39,14 @@ test('gallery labels and settings remain in editable JavaScript data', () => {
   assert.match(fs.readFileSync(path.join(root,'assets/js/data/site-config.js'),'utf8'), /images\s*:/);
   assert.match(fs.readFileSync(path.join(root,'index.html'),'utf8'), /assets\/js\/core\/preview-gallery.js/);
 });
-test('SETUP guide covers practical setup, gallery, secrets and deployment caveat', () => {
+// Verify setup coverage and keep the documented source aligned with both workflows.
+test('SETUP guide covers practical setup, gallery, secrets and deployment caveat', async () => {
+  const { SOURCE_REF } = await import('../tools/config-sync-map.mjs');
   const file=path.join(root,'SETUP.md');assert.ok(fs.existsSync(file),'SETUP.md must be included');
   const guide=fs.readFileSync(file,'utf8');
-  for (const needle of ['COREX_PLUGIN_READ_TOKEN','COREX_WEBSITE_DISPATCH_TOKEN','COREX_WEBSITE_WRITE_TOKEN','heroPreview','images','intervalMs','CoreArmorX','build-config-bundle.mjs','GITHUB_TOKEN','index.html','master','branch']) assert.ok(guide.includes(needle), 'Guide must mention '+needle);
+  for (const needle of ['COREX_PLUGIN_READ_TOKEN','COREX_WEBSITE_DISPATCH_TOKEN','COREX_WEBSITE_WRITE_TOKEN','heroPreview','images','intervalMs','CoreArmorX','build-config-bundle.mjs','GITHUB_TOKEN','index.html',SOURCE_REF,'branch']) assert.ok(guide.includes(needle), 'Guide must mention '+needle);
+  const sync=fs.readFileSync(path.join(root,'.github/workflows/sync-plugin-configs.yml'),'utf8');
+  const notifier=fs.readFileSync(path.join(root,'docs/examples/plugin-repository-notify.yml'),'utf8');
+  assert.ok(sync.includes('ref: '+SOURCE_REF), 'Sync checkout must use the mapped source branch');
+  assert.ok(notifier.includes('branches: ['+SOURCE_REF+']'), 'Notifier must watch the mapped source branch');
 });

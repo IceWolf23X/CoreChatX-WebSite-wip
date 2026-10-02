@@ -34,7 +34,7 @@ COREX_PLUGIN_READ_TOKEN
 
 Use a fine-grained PAT or GitHub App token with **read-only access to the private plugin repository contents**. Do not grant broader permissions than needed.
 
-The workflow that consumes it is `.github/workflows/sync-plugin-configs.yml`.
+The workflow that consumes it is `.github/workflows/sync-plugin-configs.yml`. It is disabled in the published WIP repository until this secret is configured. After adding the secret, enable it in Actions or run `gh workflow enable sync-plugin-configs.yml --repo IceWolf23X/CoreChatX-WebSite-wip`.
 
 ### Optional website write token
 
@@ -89,6 +89,6 @@ The generated JavaScript bundle is committed so direct `file://` opening keeps w
 
 The sync workflow updates snapshots. The included `Deploy GitHub Pages` workflow publishes them after a successful completion, including commits written with `GITHUB_TOKEN`. Run the first-publication script once to enable Pages (Actions source) and set `COREX_PAGES_ENABLED=true`. No deploy PAT is necessary. Failed sync never triggers a deployment of partial defaults.
 
-The notifier does not forward a commit/ref. The source checkout uses the configured `ref` (currently `master`), regardless of the event that triggered it. The same source identity is repeated in `tools/config-sync-map.mjs`; keep both locations aligned.
+The notifier does not forward a commit/ref. The source checkout uses the configured `ref` (currently `codex/fix-source-audit`), regardless of the event that triggered it. The same source identity is repeated in `tools/config-sync-map.mjs`; keep both locations aligned.
 
 For a fine-grained PAT, a website `repository_dispatch` needs **Contents: Read and write** on the website repository. Read-only access to the private plugin is a separate token and permission boundary. GitHub App installation tokens must be minted during execution, not treated as non-expiring static secrets.

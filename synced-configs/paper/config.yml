@@ -21,11 +21,20 @@ deployment:
 
 debug: false
 
+# Announces stable updates and experimental alpha/beta builds; never installs them.
+# Checks after startup and at this interval (clamped to 1-168 hours).
+# Console and OP players are notified; only stable builds are recommended.
+update-check:
+  enabled: true
+  interval-hours: 24
+
 hooks:
   # If true, PlaceholderAPI placeholders inside CoreChatX config formats are parsed when the plugin is present.
   placeholderapi: true
   # If true, LuckPerms group prefixes are read when the plugin is present.
   luckperms: true
+  # If true, join, first-join, and quit announcements are suppressed for PremiumVanish-hidden players.
+  premiumvanish: true
 
 logging:
   public-chat: true
@@ -62,6 +71,25 @@ join-quit:
   mode: "LOCAL"
   join-enabled: true
   quit-enabled: true
+
+advancement-sync:
+  # Full advancement progress and live announcements within the same Velocity group.
+  # Enable on every participating Paper backend; requires updated Paper AND Velocity builds.
+  # Restart required. Existing progress is merged when a player visits each backend.
+  # Disable advancement synchronization in other plugins first. Historical restores grant no rewards.
+  # The proxy stores progress with its configured YAML/MySQL authority; Minecraft files are retained.
+  enabled: false
+  # Match deployment.server-id to the registered Velocity backend name.
+  # Remote endpoints require HTTPS; plaintext HTTP accepts only a literal loopback address.
+  endpoint: "http://127.0.0.1:8767/corechatx/advancements"
+  # Unique secret for this backend, matching velocity-advancements.properties on the proxy.
+  token: "${CORECHATX_ADVANCEMENT_TOKEN}"
+
+death-messages:
+  # Opt in to sending AND receiving death messages between Paper backends in the same Velocity group.
+  # Requires PROXY mode, network-features-allowed, and matching updated Paper/Velocity builds.
+  # Local death messages stay unchanged. Hidden, cancelled and team-restricted deaths are not forwarded.
+  network-enabled: false
 
 reload:
   # A short summary is shown to the command sender after a successful reload.

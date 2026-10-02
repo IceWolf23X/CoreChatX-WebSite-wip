@@ -24,16 +24,16 @@ No package installation is required. Node.js 22 runs the generation tools and te
 
 ## Generation, validation and publication
 
-- `tools/config-sync-map.mjs` — Contract mapping public defaults to source paths, article IDs and bundle targets; separately marks the generated template.
+- `tools/config-sync-map.mjs` — Contract mapping public defaults from `codex/fix-source-audit` to source paths, article IDs and bundle targets; separately marks the generated template.
 - `tools/sync-plugin-configs.mjs` — Copies only mapped defaults from a plugin checkout and records changed-source provenance.
 - `tools/build-config-bundle.mjs` — Rebuilds the browser configuration snapshot from mapped files.
 - `tools/build-releases.mjs`, `tools/release-lib.mjs` — Refresh the public release fallback using the shared normalization contract.
 - `tools/prepare-pages.mjs` — `preparePages` validates the public tree and packages only HTML, assets, defaults and product sources into ignored `_site/` with build provenance.
 - `tools/publish-wip.mjs`, `Publish-Wip.ps1`, `PUBBLICA-WIP.cmd` — First-publication helper for a fresh folder; validates the site, refuses unrelated existing repositories and verifies Pages deployment.
 - `.github/workflows/deploy-pages.yml` — Node tests/validation, allow-listed artifact generation and Pages deployment, gated by `COREX_PAGES_ENABLED`.
-- `.github/workflows/sync-plugin-configs.yml` — Optional private-source synchronization; requires a repository-scoped `COREX_PLUGIN_READ_TOKEN` secret.
+- `.github/workflows/sync-plugin-configs.yml` — Optional private-source synchronization from `codex/fix-source-audit`; disabled until a repository-scoped `COREX_PLUGIN_READ_TOKEN` secret is configured.
 - `.github/workflows/build-releases.yml` — Public release snapshot refresh and optional bot commit; completion can trigger Pages deployment.
-- `tests/*.test.cjs`, `tests/*.test.mjs` — Node regression tests for rendering utilities, gallery, release metadata, Pages packaging and first-publication safeguards.
+- `tests/*.test.cjs`, `tests/*.test.mjs` — Node regression tests for rendering utilities, gallery, release metadata, Pages packaging, source-branch consistency across guides/workflows and first-publication safeguards.
 - `tests/validate-theme.mjs` — Content structure, article/config references, local paths and generated bundle validation.
 - `tests/browser_*.py` — Playwright acceptance harnesses for the wiki, gallery, releases, reference and responsive layouts; require Python Playwright, BeautifulSoup and Chromium.
 - `.gitignore`, `.gitattributes`, `.nojekyll` — Private/local build exclusions, line-ending policy and static Pages behavior.

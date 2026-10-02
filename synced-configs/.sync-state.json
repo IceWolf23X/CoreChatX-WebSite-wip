@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "sourceRepository": "IceWolf23X/CoreChatX-plugin",
-  "sourceRef": "master",
-  "sourceCommit": "8524f275cd77d83342e57ae7b94d5ba8384e68da",
-  "filesChanged": 0
+  "sourceRef": "codex/fix-source-audit",
+  "sourceCommit": "eb06bd05f2a4d952ee7fee6323e3f52b32d7b145",
+  "filesChanged": 3
 }

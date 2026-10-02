@@ -4,7 +4,7 @@
  * Runtime player/state files are deliberately excluded.
  */
 export const SOURCE_REPOSITORY = 'IceWolf23X/CoreChatX-plugin';
-export const SOURCE_REF = 'master';
+export const SOURCE_REF = 'codex/fix-source-audit';
 
 export const CONFIG_FILES = [
   { id: 'paper/config.yml', platform: 'Paper', format: 'yaml', source: 'corechatx-paper/src/main/resources/config.yml', target: 'synced-configs/paper/config.yml', article: 'paper/config-yml' },

@@ -1,19 +1,19 @@
 {
   "verifiedOn": "2026-10-02",
   "sourceRepository": "IceWolf23X/CoreChatX-plugin",
-  "sourceRef": "master",
-  "sourceCommit": "8524f275cd77d83342e57ae7b94d5ba8384e68da",
-  "verification": "Git blob hashes from live GitHub connector tree reads match all local allow-listed repository defaults; no content changes were needed.",
+  "sourceRef": "codex/fix-source-audit",
+  "sourceCommit": "eb06bd05f2a4d952ee7fee6323e3f52b32d7b145",
+  "verification": "All 19 allow-listed defaults were retrieved at this commit through authenticated GitHub REST contents reads and compared byte for byte. No runtime server configuration or credentials were copied.",
   "files": [
     {
       "file": "paper/config.yml",
-      "gitBlobSha": "caf097297a961188b5d45f78a055f14fda5e8232",
-      "bytes": 2976
+      "gitBlobSha": "eca75aa4bc35fce11ca36785a6c3c9cf453b8686",
+      "bytes": 4586
     },
     {
       "file": "paper/messages.yml",
-      "gitBlobSha": "bfdff181781fe9f05ee4719b1f3d0659fe54166c",
-      "bytes": 10468
+      "gitBlobSha": "4443785208c181fd27b401bb7526f51df6d776b8",
+      "bytes": 10911
     },
     {
       "file": "paper/chat.yml",
@@ -82,8 +82,8 @@
     },
     {
       "file": "velocity/velocity-config.properties",
-      "gitBlobSha": "2191f53db744e6af1e41e0046f0b05222cf6d066",
-      "bytes": 1416
+      "gitBlobSha": "3965c390f7227fd61a7655137ef14c495e696ed8",
+      "bytes": 1949
     },
     {
       "file": "velocity/velocity-discord.yml",

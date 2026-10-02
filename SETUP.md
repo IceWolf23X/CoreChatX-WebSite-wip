@@ -122,7 +122,7 @@ Controlla **entrambi** questi file nel website:
 - `.github/workflows/sync-plugin-configs.yml`: nello step `Check out private plugin source`, `repository` e `ref` selezionano ciò che Actions scarica.
 - `tools/config-sync-map.mjs`: `SOURCE_REPOSITORY` e `SOURCE_REF` descrivono la provenienza nel bundle. Devono coincidere con il checkout; non modificano automaticamente il workflow.
 
-Il pacchetto punta a `IceWolf23X/CoreChatX-plugin`, branch **`master`**. La copia legge i file presenti in quel branch, non i config di un server avviato, non modifiche locali non pubblicate e non l'ultimo tag per magia.
+Il pacchetto punta a `IceWolf23X/CoreChatX-plugin`, branch **`codex/fix-source-audit`**. La copia legge i file presenti in quel branch, non i config di un server avviato, non modifiche locali non pubblicate e non l'ultimo tag per magia.
 
 Verifica anche la lista `CONFIG_FILES`: contiene i percorsi dei soli default autorizzati. Il template `generated/velocity-advancements.properties`, con `source: null`, è un template mantenuto nel sito, **non** un file copiato dalla cartella resources del plugin.
 
@@ -141,7 +141,7 @@ Nel valore incolla il token. Non inserirlo in un `.js`, in un file YAML del prog
 ### 5.3 Eseguire e controllare il primo sync
 
 1. Verifica che `.github/workflows/sync-plugin-configs.yml` sia pubblicato nel branch predefinito del website.
-2. In **Actions**, seleziona **Sync plugin configuration defaults → Run workflow** sul branch predefinito.
+2. Dopo aver configurato il token, in **Actions** riabilita **Sync plugin configuration defaults → Enable workflow**, poi seleziona **Run workflow** sul branch predefinito. Il workflow resta disabilitato nella repository WIP finché il token non è disponibile.
 3. Controlla gli step di checkout, sincronizzazione, bundle, validazione e commit.
 4. Il risultato previsto è un commit che aggiorna `synced-configs/` e `assets/js/generated/config-files.js`; se i default sono già uguali, non viene creato un commit inutile.
 5. Apri una pagina config della wiki e confronta una chiave con il file sorgente.
@@ -154,7 +154,7 @@ Questo passaggio evita di dover premere Run workflow a ogni aggiornamento.
 
 1. Copia `docs/examples/plugin-repository-notify.yml` **nella repository privata del plugin**, con il nome `.github/workflows/notify-website-config-sync.yml`.
 2. In quel file sostituisci `OWNER/WEBSITE_REPOSITORY` con il nome reale del website, ad esempio `IceWolf23X/CoreChatX-WebSite-wip`.
-3. Controlla `branches: [master]` e `paths`: devono corrispondere al branch e ai percorsi che vuoi osservare nel plugin.
+3. Controlla `branches: [codex/fix-source-audit]` e `paths`: devono corrispondere al branch e ai percorsi che vuoi osservare nel plugin.
 4. Crea un altro fine-grained PAT limitato alla sola repository **website**, con **Contents: Read and write**. Questo permesso è richiesto dall'endpoint `repository_dispatch`; non basta “Actions: write”. [3]
 5. Salvalo nei secret Actions della repository **plugin**, col nome `COREX_WEBSITE_DISPATCH_TOKEN`.
 6. Pubblica il notifier e avvialo manualmente una volta dal tab Actions del plugin.
@@ -163,7 +163,7 @@ Questo passaggio evita di dover premere Run workflow a ogni aggiornamento.
 Flusso risultante:
 
 ```text
-push di un default nei percorsi osservati del plugin / master
+push di un default nei percorsi osservati del plugin / codex/fix-source-audit
     → notifier del plugin
     → repository_dispatch sul website
     → checkout privato con token di sola lettura
@@ -172,7 +172,7 @@ push di un default nei percorsi osservati del plugin / master
     → commit nel website
 ```
 
-Il notifier incluso invia solo un evento: **non trasmette un commit/tag da usare come sorgente**. Il workflow del website scarica il `ref` configurato. Il comportamento predefinito è sincronizzare `master` dopo push rilevanti, NON sincronizzare solo release. Per adottare una politica basata sui tag devi allineare anche il checkout a un tag/ref validato: cambiare soltanto il trigger non basta.
+Il notifier incluso invia solo un evento: **non trasmette un commit/tag da usare come sorgente**. Il workflow del website scarica il `ref` configurato. Il comportamento predefinito è sincronizzare `codex/fix-source-audit` dopo push rilevanti, NON sincronizzare solo release. Per adottare una politica basata sui tag devi allineare anche il checkout a un tag/ref validato: cambiare soltanto il trigger non basta.
 
 Non aggiungere a questi workflow esecuzioni da pull request non fidate con accesso ai token. Nessun codice del plugin viene compilato o eseguito dal sync: vengono letti solo i file elencati.
 

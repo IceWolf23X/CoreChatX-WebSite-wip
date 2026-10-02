@@ -5,7 +5,7 @@ name: Notify website about config changes
 
 on:
   push:
-    branches: [master]
+    branches: [codex/fix-source-audit]
     paths:
       - 'corechatx-paper/src/main/resources/*.yml'
       - 'corechatx-paper/src/main/resources/locales/**'

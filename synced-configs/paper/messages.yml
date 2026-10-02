@@ -142,3 +142,8 @@ chatitems:
   # Hover shown on clickable chat preview tokens.
   click-to-open: "<gray>Click to open the saved preview.</gray>"
   expired: "{prefix} <red>This preview has expired or was cleared during reload/restart.</red>"
+
+# Update announcements are sent only to OP players. Clicking opens the version page.
+updates:
+  stable: "{prefix} <green>CoreChatX {version} is available (installed: {installed}). Stable update recommended; review compatibility and migration notes: {url}</green>"
+  preview: "{prefix} <yellow>CoreChatX {version} {channel} is available for testing (installed: {installed}). Experimental build; not recommended for production: {url}</yellow>"
