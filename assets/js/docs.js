@@ -131,6 +131,7 @@
     if (title) example.appendChild(title); example.appendChild(code);
     notes.forEach(function (node) { explanation.appendChild(node); });
   }
+  // Render the routed article, resolve its config snapshots and highlight the final code blocks.
   function render(id) {
     current=id;sidebar(id);
     if(id==='overview'||id==='instructions'){renderHub(id);return;}
@@ -156,6 +157,7 @@
       var label=a.group==='overview'?ui.sourceBox.overviewTitle:ui.sourceBox.configurationTitle;
       document.getElementById('article-source').innerHTML='<div class="source-box">'+icon('file')+'<div><strong>'+E(label)+'</strong>'+E(a.sourceTitle)+' · Source lines '+a.sourceStart+'–'+a.sourceEnd+'.<br><a href="sources/'+E(a.source)+'" download>'+E(ui.sourceBox.original)+'</a> · <a href="#/docs/reference/source-notes">'+E(ui.sourceBox.sourceScope)+'</a></div></div>';
     }else document.getElementById('article-source').innerHTML='';
+    if(window.COREX_HIGHLIGHT)window.COREX_HIGHLIGHT.render(body);
     pagination(a);setTOC(tocFromBody(),id);
   }
   function text() {

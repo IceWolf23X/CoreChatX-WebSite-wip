@@ -1,3 +1,4 @@
+// Build the offline full reference with shared configuration and syntax rendering.
 (function () {
   'use strict';
   var site=window.COREX_SITE,docs=window.COREX_DOCS,ui=window.COREX_UI,E=window.CCX_UTILS.escapeHTML;
@@ -9,6 +10,7 @@
     '<div class="toast" id="toast" role="status" aria-live="polite"></div>';
   document.getElementById('app-root').innerHTML=html;
   window.COREX_CONFIG_VIEW.renderMounts(document.getElementById('reference-main'));
+  if(window.COREX_HIGHLIGHT)window.COREX_HIGHLIGHT.render(document.getElementById('reference-main'));
 
   function applyTheme(theme){document.documentElement.dataset.theme=theme;if(window.COREX_APPLY_THEME)window.COREX_APPLY_THEME(theme);document.querySelectorAll('[data-theme-toggle]').forEach(function(b){var dark=theme==='dark';b.setAttribute('aria-label',dark?ui.theme.toLight:ui.theme.toDark);b.setAttribute('aria-pressed',String(dark));});}
   document.querySelectorAll('[data-theme-toggle]').forEach(function(b){b.addEventListener('click',function(){var t=document.documentElement.dataset.theme==='dark'?'light':'dark';applyTheme(t);try{localStorage.setItem(site.theme.storageKey,t);}catch(_){}});});

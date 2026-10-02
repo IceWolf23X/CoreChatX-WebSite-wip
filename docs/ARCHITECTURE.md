@@ -15,6 +15,14 @@ index.html (empty shell)
 
 Normal content changes do not require editing HTML or renderer code.
 
+## Code highlighting
+
+Both HTML entry points load the vendored Highlight.js 11.11.1 core, its matching properties grammar and `core/syntax-highlight.js` from local assets. The BSD-3-Clause license ships beside the vendor files. No CDN, package installation or external network request is needed for highlighting.
+
+`docs.js` highlights the final article DOM after configuration mounts and layout changes; `reference-renderer.js` uses the same renderer after inserting all offline reference blocks. The adapter reads each block's raw `textContent`, highlights only an explicitly supported `language-*` label and preserves the text used by Copy. Plain text and unknown languages remain readable without autodetection. Already processed nodes are skipped; route changes insert fresh nodes and highlight them again.
+
+`syntax-highlight.css` maps token classes to the existing `--code-*` variables, which follow the selected light/dark theme. It does not add padding, backgrounds or overflow rules to the code-box layout.
+
 ## Plugin configuration flow
 
 ```text

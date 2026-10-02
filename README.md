@@ -50,6 +50,8 @@ node tools/build-config-bundle.mjs .
 
 The allow-list is `tools/config-sync-map.mjs`. Runtime player/state data is intentionally excluded.
 
+Wiki snippets and the full reference use locally bundled **Highlight.js 11.11.1**, including its properties grammar and BSD-3-Clause license. YAML, properties and supported labelled code blocks are highlighted after each article render; plain text and unknown labels are left unchanged. Token colors follow the light/dark theme, Copy retains the raw source text, and highlighting works offline without a CDN or package installation.
+
 ## GitHub automation
 
 `.github/workflows/sync-plugin-configs.yml` can:

@@ -11,6 +11,9 @@ No package installation is required. Node.js 22 runs the generation tools and te
 - `assets/js/data/site-config.js` — Public product identity, colors, gallery settings and release source `IceWolf23X/CoreChatX-WebSite-wip`; contains no credentials.
 - `assets/js/data/landing-content.js`, `assets/js/data/docs-content.js`, `assets/js/data/ui-text.js` — Landing sections, wiki articles and interface text. Configuration articles reference the generated bundle.
 - `assets/js/core/renderer.js`, `assets/js/core/config-renderer.js`, `assets/js/core/reference-renderer.js` — Content components, public configuration examples and reference rendering.
+- `assets/js/core/syntax-highlight.js` — `COREX_HIGHLIGHT.render` applies explicit-language Highlight.js tokens after wiki/reference rendering; preserves raw code text and skips plain text, unknown languages and previously processed nodes.
+- `assets/vendor/highlightjs/` — Unmodified Highlight.js 11.11.1 browser distribution, matching properties grammar and BSD-3-Clause license; loaded locally before the syntax renderer.
+- `assets/css/syntax-highlight.css` — Highlight.js token colors using the existing light/dark code palette, without changing code-box dimensions.
 - `assets/js/core/preview-gallery.js` — Gallery state, image validation, autoplay, navigation and reduced-motion handling.
 - `assets/js/core/github-releases.js`, `assets/js/core/releases-core.js`, `assets/js/core/releases-renderer.js` — Public GitHub metadata, release normalization/cache and download UI; credentials are never passed to the browser.
 - `assets/js/generated/config-files.js` — Generated offline bundle of the 19 source defaults and one generated template; rebuild from `synced-configs/`.
@@ -34,6 +37,7 @@ No package installation is required. Node.js 22 runs the generation tools and te
 - `.github/workflows/sync-plugin-configs.yml` — Optional private-source synchronization from `codex/fix-source-audit`; disabled until a repository-scoped `COREX_PLUGIN_READ_TOKEN` secret is configured.
 - `.github/workflows/build-releases.yml` — Public release snapshot refresh and optional bot commit; completion can trigger Pages deployment.
 - `tests/*.test.cjs`, `tests/*.test.mjs` — Node regression tests for rendering utilities, gallery, release metadata, Pages packaging, source-branch consistency across guides/workflows and first-publication safeguards.
+- `tests/syntax-highlight.test.cjs` — Real YAML/properties grammar checks, escaped HTML, explicit-language selection, repeated/dynamic rendering, missing-library fallback and offline entry-point load order.
 - `tests/validate-theme.mjs` — Content structure, article/config references, local paths and generated bundle validation.
 - `tests/browser_*.py` — Playwright acceptance harnesses for the wiki, gallery, releases, reference and responsive layouts; require Python Playwright, BeautifulSoup and Chromium.
 - `.gitignore`, `.gitattributes`, `.nojekyll` — Private/local build exclusions, line-ending policy and static Pages behavior.
