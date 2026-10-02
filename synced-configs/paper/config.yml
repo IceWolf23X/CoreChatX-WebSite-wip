@@ -1,0 +1,68 @@
+# Core plugin settings.
+
+deployment:
+  # STANDALONE = Paper-owned runtime data, using the backend selected in storage.yml.
+  # PROXY = Velocity-backed network mode. Runtime player data is owned by the CoreChatX Velocity module.
+  # Changing this mode requires a full restart.
+  mode: "STANDALONE"
+  require-full-restart-on-mode-change: true
+  # Backend id used for proxy routing and bridge source labels.
+  server-id: "paper-1"
+  # Plugin messaging channel shared with the Velocity module.
+  # In PROXY mode this also selects the isolated Velocity data/routing group for this backend.
+  network-channel: "corechatx:main"
+  # Global switch for Discord / Telegram chat bridge runtime.
+  # Discord console-only bots may still start through discord.yml -> discord.console.*.
+  bridges-allowed: true
+  # When false, Paper still boots in PROXY mode but proxy transport is intentionally disabled.
+  # Cross-server chat, PM routing, player directory sync, and proxy-owned runtime data operations will not run.
+  network-features-allowed: false
+  pending-pm-timeout-seconds: 20
+
+debug: false
+
+hooks:
+  # If true, PlaceholderAPI placeholders inside CoreChatX config formats are parsed when the plugin is present.
+  placeholderapi: true
+  # If true, LuckPerms group prefixes are read when the plugin is present.
+  luckperms: true
+
+logging:
+  public-chat: true
+  private-messages: true
+  broadcasts: true
+  reload: true
+  errors: true
+
+player-data:
+  # STANDALONE only: toggle commands still save immediately; this mainly controls the fallback save on plugin disable.
+  # In PROXY mode player settings, nicknames, ignore lists, active channel, mutes, global state and Discord links are stored by Velocity.
+  auto-save-on-disable: true
+
+nicknames:
+  # Prefix prepended to {player_nickname} only when the player has a custom nickname.
+  # Leave empty to show the nickname exactly as set with /nick.
+  # Example: "~" makes {player_nickname} render as ~Nick while {player_name} still renders the real Minecraft username.
+  prefix: ""
+  # false = /nick can change the visible name text and styling, for example IceWolf23X -> IceWolf.
+  # true = /nick can only change allowed colors/styles; the visible text after removing formatting must stay exactly the real Minecraft username.
+  # Example with true: IceWolf23X may use &cIceWolf23X, but not &cIceWolf.
+  change-only-colors: false
+  # false = nickname text may only use A-Z, a-z, 0-9 and _ after formatting is removed.
+  # true = CoreChatX does not apply an additional character whitelist to nickname text.
+  allow-special-characters: false
+
+first-join:
+  enabled: true
+  counter-enabled: true
+
+join-quit:
+  # LOCAL = announce only on the current Paper backend.
+  # NETWORK = in PROXY mode, Velocity owns true network join/leave announcements and uses velocity-messages.yml.
+  mode: "LOCAL"
+  join-enabled: true
+  quit-enabled: true
+
+reload:
+  # A short summary is shown to the command sender after a successful reload.
+  show-summary: true

@@ -1,0 +1,28 @@
+# Example workflow for the PRIVATE CoreChatX-plugin repository.
+# Save as .github/workflows/notify-website-config-sync.yml in that repository.
+# The secret must be able to create repository_dispatch events in the website repository.
+name: Notify website about config changes
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'corechatx-paper/src/main/resources/*.yml'
+      - 'corechatx-paper/src/main/resources/locales/**'
+      - 'corechatx-velocity/src/main/resources/velocity-config.properties'
+      - 'corechatx-velocity/src/main/resources/velocity-discord.yml'
+      - 'corechatx-velocity/src/main/resources/velocity-messages.yml'
+      - 'corechatx-velocity/src/main/resources/velocity-storage.yml'
+  workflow_dispatch:
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger website sync
+        env:
+          GH_TOKEN: ${{ secrets.COREX_WEBSITE_DISPATCH_TOKEN }}
+        run: |
+          gh api --method POST \
+            repos/IceWolf23X/CoreChatX-WebSite-wip/dispatches \
+            -f event_type='corex-plugin-defaults-updated'

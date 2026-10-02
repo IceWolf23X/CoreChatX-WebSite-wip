@@ -1,0 +1,56 @@
+# Telegram bridge.
+# Uses Telegram Bot API only.
+# Inbound uses long polling through getUpdates(timeout=...).
+# Outbound uses sendMessage.
+# No webhook, no Telegram4J, no MTProto.
+
+telegram:
+  enabled: false
+
+  bot-token: ""
+
+  # Fallback target for outbound messages when no per-channel target is configured.
+  # Can be a numeric chat id or a Bot API-supported @username target.
+  default-chat-id: ""
+
+  format: "[{source_server}] [{channel_id}] {sender_name}: {plain_text}"
+
+  outbound:
+    # Per-CoreChatX-channel Telegram targets.
+    # message-thread-id targets a Telegram forum topic when greater than 0.
+    channel-targets:
+      global:
+        chat-id: ""
+        message-thread-id: 0
+      staff:
+        chat-id: ""
+        message-thread-id: 0
+
+  inbound:
+    enabled: false
+
+    # Long polling timeout passed to Telegram getUpdates.
+    timeout-seconds: 30
+
+    # Small delay between normal long-poll cycles.
+    retry-delay-seconds: 3
+
+    # Backoff delay after network/API/parsing errors.
+    error-backoff-seconds: 10
+
+    skip-pending-on-start: true
+    max-length: 400
+    default-channel: "global"
+    # Display name used for Telegram -> Minecraft messages.
+    # Tokens: {source}, {source_type}, {sender_name}
+    # Set to "{sender_name}" to remove the [Telegram] prefix.
+    display-name-format: "[{source}] {sender_name}"
+
+    # Logs detected safe route keys to help configure groups/topics.
+    debug-route-detection: false
+
+    # Inbound route map.
+    # Keys can be "chatId" or "chatId:messageThreadId".
+    routes:
+      # "-1001111111111": "global"
+      # "-1001111111111:25": "staff"

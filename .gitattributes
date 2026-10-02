@@ -1,0 +1,11 @@
+# Preserve exact original config bytes across Windows and Actions.
+/synced-configs/** -text
+*.js text eol=lf
+*.mjs text eol=lf
+*.cjs text eol=lf
+*.yml text eol=lf
+*.md text eol=lf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+# More-specific rule is repeated last to preserve raw config snapshots.
+/synced-configs/** -text

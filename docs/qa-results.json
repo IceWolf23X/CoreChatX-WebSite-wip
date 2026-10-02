@@ -1,0 +1,223 @@
+{
+  "gallery": {
+    "status": "PASS",
+    "cases": [
+      "zero images preserves the placeholder",
+      "one image, legacy src and duplicates stay static without mutation or timers",
+      "click, arrows, dots and keyboard navigate without opening a lightbox",
+      "autoplay, hover pause and explicit pause/play work",
+      "keyboard focus stops autoplay until explicit Play",
+      "manual navigation resets the autoplay dwell time",
+      "rapid input never exposes a blank frame or duplicates slides",
+      "broken images are skipped; one valid becomes static; all broken keep placeholder",
+      "reduced motion disables autoplay and fade, not manual navigation",
+      "docs routing pauses hidden gallery; remount and destroy clean up",
+      "hidden tabs and offscreen gallery suspend autoplay",
+      "mobile swipe works without double advance or hijacking vertical scrolling",
+      "initial hover remains paused when gallery finishes loading or remounts",
+      "both themes and 12 widths through 32:9 keep stable gallery geometry"
+    ],
+    "caseCount": 14,
+    "javascriptErrors": [],
+    "externalRequests": [],
+    "mode": "exact shipped files embedded with test PNGs",
+    "limitations": [
+      "Native file:// navigation is blocked by managed Chromium. No GitHub Actions workflow was run on the account."
+    ]
+  },
+  "smoke": {
+    "status": "PASS",
+    "mode": "embedded browser harness",
+    "articlesRendered": 67,
+    "networkRequests": 0,
+    "javascriptErrors": 0,
+    "viewports": [
+      375,
+      390,
+      768,
+      1024,
+      1440,
+      1920
+    ],
+    "clipboardUI": "Copied",
+    "tests": [
+      "light default",
+      "shared dark theme",
+      "keyboard search",
+      "config-key results",
+      "code copy/fallback",
+      "code expansion",
+      "all 67 articles",
+      "invalid route",
+      "malformed hash",
+      "mobile sidebar",
+      "responsive overflow",
+      "setup tab keyboard controls",
+      "FAQ expansion",
+      "HTML-safe search",
+      "search Escape",
+      "safe untrusted routes",
+      "browser history"
+    ],
+    "limitations": [
+      "Managed Chromium blocks file:// navigation. The same HTML/CSS/JS was injected into about:blank; native local-file loading and storage persistence across reload were not browser-verified. The clipboard action returned success; system clipboard contents were not read back."
+    ]
+  },
+  "hover": {
+    "status": "PASS",
+    "mode": "embedded shipped files",
+    "viewportCases": 40,
+    "viewports": [
+      [
+        1440,
+        900
+      ],
+      [
+        1599,
+        900
+      ],
+      [
+        1600,
+        900
+      ],
+      [
+        1601,
+        900
+      ],
+      [
+        1920,
+        1080
+      ],
+      [
+        2560,
+        1440
+      ],
+      [
+        3440,
+        1440
+      ],
+      [
+        3840,
+        1080
+      ],
+      [
+        5120,
+        1440
+      ],
+      [
+        7680,
+        2160
+      ]
+    ],
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "motionPreferences": [
+      "no-preference",
+      "reduce"
+    ],
+    "checks": [
+      "original -1.25deg resting rotation",
+      "animated hover to 0deg",
+      "return animation",
+      "reduced-motion duration",
+      "no preview clipping or page overflow",
+      "six-column ultrawide reflow"
+    ],
+    "javascriptErrors": [],
+    "externalRequests": [],
+    "limitations": [
+      "Managed Chromium blocks file://. Exact local files were tested in the explicit embedded harness; native file loading was not verified."
+    ]
+  },
+  "ultrawide": {
+    "status": "PASS",
+    "mode": "embedded shipped files",
+    "viewports": [
+      [
+        390,
+        844
+      ],
+      [
+        1024,
+        768
+      ],
+      [
+        1599,
+        900
+      ],
+      [
+        1600,
+        900
+      ],
+      [
+        1920,
+        1080
+      ],
+      [
+        2560,
+        1080
+      ],
+      [
+        3440,
+        1440
+      ],
+      [
+        3840,
+        1080
+      ],
+      [
+        5120,
+        1440
+      ],
+      [
+        7680,
+        2160
+      ],
+      [
+        1920,
+        540
+      ]
+    ],
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "layoutChecks": 154,
+    "articleIntegrityChecks": 11,
+    "breakpointChecks": 27,
+    "networkDiagramChecks": 9,
+    "javascriptErrors": [],
+    "externalRequests": [],
+    "checks": [
+      "fluid landing width",
+      "six-column ultrawide features",
+      "adaptive wiki grids",
+      "side-by-side configuration and explanation",
+      "single-column narrow reading",
+      "sticky nav and outline",
+      "copy/expand",
+      "live resize preserves state",
+      "source code and anchor integrity",
+      "shared theme",
+      "keyboard search",
+      "mobile drawer"
+    ],
+    "limitations": [
+      "Managed Chromium blocks file://. Tested the exact shipped files in an in-memory browser harness; native local-file loading and storage across reload not verified."
+    ]
+  },
+  "reference": {
+    "status": "PASS",
+    "articles": 67,
+    "configBlocks": 20,
+    "javascriptErrors": 0,
+    "externalRequests": 0
+  },
+  "unitTests": {
+    "passed": 17,
+    "failed": 0
+  },
+  "accountChanges": false
+}

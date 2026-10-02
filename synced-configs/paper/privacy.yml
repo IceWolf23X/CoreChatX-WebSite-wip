@@ -1,0 +1,29 @@
+# Privacy defaults.
+
+private-messages:
+  enabled-by-default: true
+  allow-staff-bypass: true
+  staff-bypass-permission: "corechatx.staff"
+
+ignore:
+  enabled: true
+  max-ignored-players: 200
+  # Default behavior for /ignore inside public channel chat.
+  # This does not change private messages: ignored players are still blocked from /msg and /reply.
+  #
+  # off:
+  #   Ignored players are still blocked in private messages, but public chat is not affected.
+  #   Their public messages remain visible and their mentions/custom pings can still notify you.
+  #
+  # notifications-only:
+  #   Ignored players are still visible in public chat, but their mentions/custom pings do not notify you.
+  #   This matches the old CoreChatX behavior.
+  #
+  # hide-message:
+  #   Ignored players are hidden from public chat for the players who ignored them.
+  #   Their messages are not sent to those viewers, and their mentions/custom pings do not notify them.
+  public-chat-mode: "notifications-only"
+  # Legacy compatibility switch for old configs.
+  # If this is false and public-chat-mode is notifications-only, public chat ignore stays off.
+  # Explicit hide-message still works even when this legacy switch is false.
+  block-mentions-from-ignored: true

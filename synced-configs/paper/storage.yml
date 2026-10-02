@@ -1,0 +1,37 @@
+# Storage defaults.
+# STANDALONE runtime data uses YAML by default or the explicitly selected MYSQL backend.
+# PROXY runtime data is owned by Velocity; this file remains local backend configuration.
+
+storage:
+  backend: "YAML"
+  # Stable durable identity. Changes require a full server restart.
+  namespace: "production"
+  scope: "main"
+
+  # Used only when backend is MYSQL. CoreChatX never falls back to YAML after a MySQL boot failure.
+  mysql:
+    host: "127.0.0.1"
+    port: 3306
+    database: "corechatx"
+    username: "corechatx"
+    # Prefer password-env. The environment value overrides this inline fallback.
+    password: ""
+    password-env: "CORECHATX_MYSQL_PASSWORD"
+    ssl-mode: "VERIFY_IDENTITY"
+    connect-timeout-ms: 5000
+    validation-timeout-ms: 3000
+    query-timeout-seconds: 10
+    maximum-pool-size: 6
+    minimum-idle: 1
+    max-lifetime-ms: 1800000
+    keepalive-time-ms: 300000
+    executor-threads: 4
+    executor-queue-capacity: 256
+    # Paper-only bounded waits. Both values accept 1000..60000 milliseconds.
+    login-hydration-timeout-ms: 10000
+    operation-timeout-ms: 15000
+    unavailable-message: "CoreChatX storage is temporarily unavailable. Please try again shortly."
+    shutdown-timeout-ms: 15000
+    lease-duration-ms: 30000
+    lease-renew-interval-ms: 10000
+    schema-auto-migrate: true

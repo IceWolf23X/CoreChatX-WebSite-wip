@@ -1,0 +1,21 @@
+# Interactive keyword token configuration.
+# Each keyword replaces one or more literal aliases with one MiniMessage renderer.
+
+keywords:
+  discord:
+    enabled: true
+    tokens: [ "[discord]", "[dc]" ]
+    renderer: "<blue><hover:show_text:'<gray>Join our Discord</gray>'><click:open_url:'https://discord.gg/example'>discord</click></hover></blue>"
+    allow-placeholderapi: false
+    permission: "corechatx.keywords.use.discord"
+    enabled-channels: []
+    disabled-channels: []
+
+  rules:
+    enabled: true
+    tokens: [ "[rules]" ]
+    renderer: "<yellow><hover:show_text:'<gray>Click to read the rules</gray>'><click:run_command:'/rules'>rules</click></hover></yellow>"
+    allow-placeholderapi: false
+    permission: ""
+    enabled-channels: []
+    disabled-channels: []

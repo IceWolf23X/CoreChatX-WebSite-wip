@@ -1,0 +1,151 @@
+# Chat item token configuration.
+# Every token is matched on sanitized player text.
+# If the sender lacks the configured permission, the message is still sent
+# but that token stays plain text and no preview is created.
+
+tokens:
+  item:
+    # [item] upgrades to [shulker] automatically when the held item is a shulker box
+    # and the sender has corechatx.chatitem.shulker.
+    # The snapshot stores the held item exactly as it looked when the message was sent.
+    aliases: [ "[item]", "[i]" ]
+    permission: "corechatx.chatitem.item"
+    # In-game clickable token template. Placeholders: {token}, {name}, {material}, {amount}.
+    # {name} uses custom_name, then item_name, then material. {material} is lower-case without namespace, for example diamond_sword.
+    token-format: "<#79d6b8>[item]</#79d6b8>"
+    shulker-token-format: "<#5fc7c2>[shulker]</#5fc7c2>"
+  armor:
+    # Opens a read-only preview with helmet, chestplate, leggings, boots, and offhand.
+    aliases: [ "[armor]" ]
+    permission: "corechatx.chatitem.armor"
+    token-format: "<#6fb6ff>[armor]</#6fb6ff>"
+  hotbar:
+    # Shows the first 9 inventory slots from the sender at message time.
+    aliases: [ "[hotbar]" ]
+    permission: "corechatx.chatitem.hotbar"
+    token-format: "<#8bc8ff>[hotbar]</#8bc8ff>"
+  inventory:
+    # Includes the main inventory plus armor and offhand in a read-only snapshot.
+    aliases: [ "[inventory]", "[inv]" ]
+    permission: "corechatx.chatitem.inventory"
+    token-format: "<#5aa9ff>[inventory]</#5aa9ff>"
+  enderchest:
+    # Opens the sender ender chest snapshot captured when the message was sent.
+    aliases: [ "[enderchest]", "[ender]", "[ec]" ]
+    permission: "corechatx.chatitem.enderchest"
+    token-format: "<#7db8ff>[enderchest]</#7db8ff>"
+
+previews:
+  # Snapshots are ephemeral runtime data. Reload clears them to avoid mixing old and new state.
+  # Expired or cleared previews will no longer open from old chat messages.
+  expire-after-minutes: 30
+  titles:
+    # {player_name} is always the real snapshot owner's username.
+    # {player_nickname} uses the owner's custom nickname when available.
+    item: "<#79d6b8>{player_nickname}'s item</#79d6b8>"
+    shulker: "<#5fc7c2>{player_nickname}'s shulker</#5fc7c2>"
+    armor: "<#6fb6ff>{player_nickname}'s armor</#6fb6ff>"
+    hotbar: "<#8bc8ff>{player_nickname}'s hotbar</#8bc8ff>"
+    inventory: "<#5aa9ff>{player_nickname}'s inventory</#5aa9ff>"
+    enderchest: "<#7db8ff>{player_nickname}'s ender chest</#7db8ff>"
+
+discord-images:
+  # Global toggle for Discord ChatItem inventory snapshots.
+  # When false, CoreChatX does not render, download assets for, or send ChatItem PNG attachments to Discord.
+  # Minecraft chat tokens and in-game clickable previews continue to work normally.
+  # When true, ChatItem tokens sent from Minecraft to Discord also send a rendered PNG attachment/embed.
+  # Embed colors are derived from previews.titles.* and token-format values above.
+  enabled: true
+  # Maximum unique ChatItem images attached per chat message. The protocol hard-caps this to 3.
+  max-images-per-message: 3
+  embed:
+    # Controls the Discord embed title for each ChatItem image.
+    # Set a value to "" to omit the title completely.
+    # For [item], this text is rendered into the attached PNG with the Minecraft bitmap font
+    # instead of being sent as Discord embed text.
+    # Custom item names use Minecraft's default italic tooltip style unless the rendered component overrides it.
+    # Common placeholders: {player_name}, {player_nickname}, {type}, {token}, {plain_text}.
+    # Item placeholders: {item_name}, {material}, {durability}, {durability_line}, {enchantments}, {lore}.
+    # Extra item tooltip placeholders: {attributes}, {potion_effects}, {banner_patterns}, {armor_trim},
+    # {unbreakable}, {can_place_on}, {can_break}, {book_metadata}, {firework_data}, {tooltip_extra}.
+    title:
+      item: "{item_name}"
+      armor: "{player_nickname}'s armor"
+      hotbar: "{player_nickname}'s hotbar"
+      inventory: "{player_nickname}'s inventory"
+      enderchest: "{player_nickname}'s ender chest"
+      shulker: "{player_nickname}'s shulker"
+
+    # Controls the Discord embed description.
+    # For [item], these lines are rendered into the transparent attached PNG with the item icon.
+    # Custom lore lines use Minecraft's default italic tooltip style; enchantments, attributes and metadata do not.
+    # Each list entry becomes one rendered line.
+    # For [item], each detail placeholder adds its own blank line only when content exists.
+    # Empty rendered lines are removed, so missing metadata does not leave blank lines.
+    # Use [] to omit the description completely for that ChatItem type.
+    description:
+      item:
+        - "{enchantments}"
+        - "{attributes}"
+        - "{potion_effects}"
+        - "{lore}"
+        - "{armor_trim}"
+        - "{banner_patterns}"
+        - "{unbreakable}"
+        - "{can_place_on}"
+        - "{can_break}"
+        - "{book_metadata}"
+        - "{firework_data}"
+        - "{durability_line}"
+      armor: []
+      hotbar: []
+      inventory: []
+      enderchest: []
+      shulker: []
+  item-menu:
+    # Adds one or more Discord dropdown menus below non-[item] ChatItem images.
+    # Selecting an entry sends the selected item preview as an ephemeral message visible only to that Discord user.
+    # The menu expires with the same lifetime as the in-game clickable ChatItem preview token.
+    enabled: true
+    # Text shown inside each dropdown before a Discord user selects an item.
+    placeholder: "Inspect an item"
+    # Discord option label. Keep it short: Discord limits labels to 100 characters.
+    # Placeholders: {slot}, {slot_index}, {item_display_name}, {item_name}, {amount}, {material}, {durability}, {durability_line}, {enchantments}, {lore}.
+    # Extra tooltip placeholders are also available: {attributes}, {potion_effects}, {banner_patterns}, {armor_trim},
+    # {unbreakable}, {can_place_on}, {can_break}, {book_metadata}, {firework_data}, {tooltip_extra}.
+    label-format: "Slot {slot}: {item_display_name}"
+    # Optional Discord option description. Set to "" to omit it.
+    description-format: "x{amount} - {material}"
+    expired-message: "This ChatItem preview has expired."
+    unavailable-message: "That item preview is unavailable."
+  render:
+    # Pixel scale used by inventory-like image renders: armor, hotbar, inventory, ender chest and shulker.
+    # Higher values produce larger PNG files.
+    scale: 8
+    # Pixel scale for the Discord [item] details panel: Minecraft font, tooltip background, spacing,
+    # and the base item icon before the icon-only multiplier below is applied.
+    # Set this to 0 or a negative value to reuse "scale" above.
+    single-item-details-scale: 8
+    # Multiplies only the item icon inside the Discord [item] details panel.
+    # Text and tooltip background keep single-item-details-scale.
+    single-item-details-icon-multiplier: 4
+  assets:
+    # "auto" uses the running Minecraft server version. A fixed version or latest-release can also be used.
+    minecraft-version: "auto"
+    # When true, CoreChatX downloads/extracts vanilla client assets into its local cache.
+    # No vanilla Minecraft assets are bundled inside the plugin jar.
+    download-vanilla-assets: true
+    # Optional resource pack zip/folder paths. Relative paths are resolved from the CoreChatX plugin folder.
+    resource-packs: []
+
+network:
+  # Network mode sends only lightweight snapshot refs in chat packets.
+  # Multiple ChatItem tokens in the same message share one snapshot bundle with per-token views.
+  # The full bundle is fetched from the source backend when a remote player clicks a view.
+  request-timeout-seconds: 5
+  # Maximum unique snapshot bundle refs attached to one network chat message.
+  # The plugin-message protocol currently hard-caps the effective value to 3.
+  max-snapshots-per-message: 3
+  max-compressed-bytes: 30000
+  max-uncompressed-bytes: 2097152
+  max-item-bytes: 262144

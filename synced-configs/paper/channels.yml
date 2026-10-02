@@ -1,0 +1,113 @@
+# Channel defaults.
+# In STANDALONE mode, NETWORK still behaves as a normal local channel unless the proxy bridge is enabled.
+# In PROXY mode, only channels with scope NETWORK are forwarded cross-server.
+# SERVER and LOCAL_RADIUS always stay backend-local.
+
+channels:
+  global:
+    enabled: true
+    default: true
+    # Optional command shortcut for this channel. Example: shortcut: "g" registers /g.
+    # /g switches to this channel; /g <message> sends one message here without changing your active channel.
+    shortcut: ""
+    scope: "NETWORK"
+    permission-send: ""
+    permission-receive: ""
+    # Controls whether player names and custom ping tokens are parsed by source.
+    allow-mentions:
+      from-minecraft: true
+      from-discord: true
+      from-telegram: true
+    # If false, [item]/[inv]/[ec] tokens stay plain text in this channel.
+    allow-chatitems: true
+    # If false, successful player chat in this channel does not create overhead chat bubbles.
+    allow-chat-bubbles: true
+    # If true, locally-sent messages in this channel may be exported to Discord / Telegram bridges.
+    export-to-bridges: true
+    # Per-channel override for how /ignore works in this channel's public chat.
+    # This only changes public channel messages and public mention/custom-ping notifications.
+    # Private messages stay controlled by the global /ignore behavior.
+    #
+    # inherit:
+    #   Use privacy.yml -> ignore.public-chat-mode.
+    #
+    # off:
+    #   Ignored players are still blocked in private messages, but this channel ignores no public chat.
+    #   Their messages remain visible here and their mentions/custom pings can notify viewers.
+    #
+    # notifications-only:
+    #   Ignored players remain visible in this channel, but their mentions/custom pings do not notify viewers who ignored them.
+    #
+    # hide-message:
+    #   Ignored players are hidden in this channel for viewers who ignored them.
+    #   Their messages are not sent to those viewers, and their mentions/custom pings do not notify them.
+    ignore:
+      public-chat-mode: "inherit"
+    # Optional per-channel format. Leave blank to use chat.yml -> public-chat.format.
+    format: ""
+    discord:
+      # Optional Discord format for Minecraft -> Discord messages from this channel.
+      # Leave blank to use discord.yml -> discord.format.
+      outbound-format: ""
+      # Optional Discord format for Discord -> Minecraft messages routed to this channel.
+      # Leave blank to use discord.yml -> discord.inbound.format.
+      inbound-format: ""
+      # Account-link requirement override for Discord -> Minecraft messages routed to this CoreChatX channel.
+      # Values: inherit, true, false.
+      require-linked-inbound: "inherit"
+    telegram:
+      # Optional Telegram format for Minecraft -> Telegram messages from this channel.
+      # Leave blank to use telegram.yml -> telegram.format.
+      outbound-format: ""
+      # Optional Telegram format for Telegram -> Minecraft messages routed to this channel.
+      # Leave blank to use the regular CoreChatX channel chat format.
+      inbound-format: ""
+  local:
+    enabled: true
+    default: false
+    shortcut: ""
+    scope: "LOCAL_RADIUS"
+    radius: 100
+    permission-send: "corechatx.channel.local"
+    permission-receive: ""
+    allow-mentions:
+      from-minecraft: true
+      from-discord: true
+      from-telegram: true
+    allow-chatitems: true
+    allow-chat-bubbles: true
+    export-to-bridges: false
+    ignore:
+      public-chat-mode: "inherit"
+    format: ""
+    discord:
+      outbound-format: ""
+      inbound-format: ""
+      require-linked-inbound: "inherit"
+    telegram:
+      outbound-format: ""
+      inbound-format: ""
+  staff:
+    enabled: true
+    default: false
+    shortcut: ""
+    scope: "NETWORK"
+    permission-send: "corechatx.channel.staff"
+    permission-receive: "corechatx.staff"
+    allow-mentions:
+      from-minecraft: true
+      from-discord: true
+      from-telegram: true
+    allow-chatitems: false
+    allow-chat-bubbles: false
+    export-to-bridges: true
+    ignore:
+      public-chat-mode: "inherit"
+    format: ""
+    discord:
+      outbound-format: ""
+      inbound-format: ""
+      require-linked-inbound: "inherit"
+    telegram:
+      outbound-format: ""
+      inbound-format: ""

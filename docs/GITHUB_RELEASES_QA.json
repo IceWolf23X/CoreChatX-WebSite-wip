@@ -1,0 +1,14 @@
+{
+  "checks": [
+    "lazy public API; metadata, sanitized changelog, real asset links and optional checksum",
+    "deep-link selection and route revisits without repeated API requests",
+    "16 responsive release layouts in light/dark, 320 to 7680 px",
+    "authoritative deletion removes stale releases and download buttons",
+    "offline, rate-limit, not-found and server-error preserve and label the fallback",
+    "no-data error is distinct from a confirmed empty repository",
+    "late API response preserves current route/title and selected release"
+  ],
+  "pageErrors": [],
+  "transport": "real HTML/CSS/JS embedded in Chromium; deterministic mocked fetch responses",
+  "nativeFileTest": "blocked by managed Chromium policy"
+}

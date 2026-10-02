@@ -1,0 +1,41 @@
+# Public chat formatting and moderation settings.
+
+public-chat:
+  enabled: true
+  # Supported placeholders inside the format:
+  # {plugin_prefix}, {channel_prefix}, {rank_prefix}, {player_name}, {player_nickname}, {message}
+  # {player_name} is always the real Minecraft username.
+  # {player_nickname} is the custom nickname when set, otherwise the real Minecraft username.
+  # Layout inspired by the older NetworkChat proxy format:
+  # prefix + player name + italic separator + processed message.
+  # CoreChatX keeps its own default palette instead of copying the old colors verbatim.
+  format: "{plugin_prefix} {channel_prefix}{rank_prefix}<white>{player_nickname}</white><dark_gray><italic>» </italic></dark_gray>{message}"
+  # Optional group-specific format overrides keyed by LuckPerms primary group.
+  # These are used only when channels.yml -> format is blank for the active channel.
+  # Keys must match the LuckPerms primary group in lowercase.
+  group-formats:
+    owner: "{plugin_prefix} {channel_prefix}{rank_prefix}<white>{player_nickname}</white><dark_gray><italic>» </italic></dark_gray>{message}"
+    admin: "{plugin_prefix} {channel_prefix}{rank_prefix}<white>{player_nickname}</white><dark_gray><italic>» </italic></dark_gray>{message}"
+    mod: "{plugin_prefix} {channel_prefix}{rank_prefix}<white>{player_nickname}</white><dark_gray><italic>» </italic></dark_gray>{message}"
+    vip: "{plugin_prefix} {channel_prefix}{rank_prefix}<white>{player_nickname}</white><dark_gray><italic>» </italic></dark_gray>{message}"
+    default: "{plugin_prefix} {channel_prefix}{rank_prefix}<gray>{player_nickname}</gray><dark_gray><italic>» </italic></dark_gray>{message}"
+  plugin-prefix: "<dark_gray>[</dark_gray><gradient:#79d6b8:#5aa9ff>Chat</gradient><dark_gray>]</dark_gray>"
+  # Applied to non-global active channels such as local or staff.
+  channel-prefix-format: "<dark_gray>[</dark_gray><white>{channel_name}</white><dark_gray>]</dark_gray> "
+  fallback-rank-prefix: ""
+
+mentions:
+  enabled: true
+  # Mention matching accepts both Steve and @Steve when the token matches a local or network-online player exactly.
+  # If disabled, names are left as normal text and no mention notification logic runs.
+  # The resolver accepts real usernames and custom plain nicknames; this format controls what the rendered mention displays.
+  # {player_name} is the real Minecraft username. {player_nickname} is the visible nickname when set.
+  token-format: "<#79d6b8>@{player_nickname}</#79d6b8>"
+
+cooldowns:
+  public:
+    enabled: true
+    seconds: 2
+  private-messages:
+    enabled: false
+    seconds: 2

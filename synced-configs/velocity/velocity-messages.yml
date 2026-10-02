@@ -1,0 +1,28 @@
+# CoreChatX Velocity messages.
+# In PROXY mode, network join/quit/first-join announcements are owned and rendered by Velocity.
+# Paper messages.yml is still used for STANDALONE and local-only Paper announcements.
+
+nicknames:
+  # Prefix inserted directly into {player_nickname} only when a player has a custom nickname.
+  # Keep this aligned with Paper config.yml -> nicknames.prefix for matching visual output.
+  prefix: ""
+
+first-join:
+  # If true, the first accepted proxy/group join uses join-quit.first-join instead of join-quit.join.
+  enabled: true
+  # If true, Velocity increments and exposes {count} in the first-join format.
+  counter-enabled: true
+
+join-quit:
+  # These switches affect only Velocity-owned PROXY network announcements.
+  join-enabled: true
+  quit-enabled: true
+  # MiniMessage format. Placeholders: {player_name}, {player_nickname}.
+  # PlaceholderAPI placeholders like %luckperms_prefix% are resolved through PAPIProxyBridge when installed.
+  join: "<dark_gray>[</dark_gray><green>+</green><dark_gray>]</dark_gray> <white>{player_nickname}</white>"
+  # MiniMessage format. Placeholders: {player_name}, {player_nickname}.
+  # PlaceholderAPI placeholders like %luckperms_prefix% are resolved through PAPIProxyBridge when installed.
+  quit: "<dark_gray>[</dark_gray><red>-</red><dark_gray>]</dark_gray> <white>{player_nickname}</white>"
+  # MiniMessage format. Placeholders: {player_name}, {player_nickname}, {count}.
+  # PlaceholderAPI placeholders like %luckperms_prefix% are resolved through PAPIProxyBridge when installed.
+  first-join: "<dark_gray>[</dark_gray><gradient:#79d6b8:#5aa9ff>Welcome</gradient><dark_gray>]</dark_gray> <white>{player_nickname}</white><gray> is joining for the first time as player </gray><white>#{count}</white><gray>.</gray>"

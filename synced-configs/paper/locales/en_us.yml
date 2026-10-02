@@ -1,0 +1,23 @@
+# Locale overrides for player-facing messages.
+# Missing keys fall back to messages.yml.
+
+general:
+  player_not_found: "<red>Player not found.</red>"
+
+commands:
+  corechatx-help:
+    header: "{prefix} <gray>Available CoreChatX subcommands:</gray>"
+    reload: "<gray>/corechatx reload</gray>"
+    settings: "<gray>/corechatx settings</gray>"
+    locale: "<gray>/corechatx locale [tag]</gray>"
+    itemcache: "<gray>/corechatx itemcache [warmup|status|cancel]</gray>"
+
+privacy:
+  ignore:
+    usage: "<red>Usage: /ignore <player></red>"
+    self: "<red>You cannot ignore yourself.</red>"
+    already: "<yellow>You are already ignoring that player.</yellow>"
+    success: "<gray>You are now ignoring <white>{target_name}</white>.</gray>"
+
+moderation:
+  clear-chat-sender: "{prefix} <gray>Cleared chat for <white>{count}</white> online player(s).</gray>"

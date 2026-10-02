@@ -1,0 +1,20 @@
+# Moderation defaults.
+
+mute:
+  enabled: true
+  # If true, active mutes also block /msg and /reply.
+  block-private-messages: true
+  default-reason: "No reason provided"
+
+mutechat:
+  enabled: true
+
+anti-repeat:
+  enabled: true
+  history-window: 3
+  block-identical: true
+
+anti-caps:
+  enabled: false
+  min-length: 8
+  max-uppercase-ratio: 0.7

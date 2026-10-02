@@ -1,0 +1,39 @@
+# Chat bubbles / overhead chat configuration.
+
+enabled: true
+default-enabled: true
+
+permission: "corechatx.chatbubbles.use"
+
+enabled-channels: []
+disabled-channels: [ "staff" ]
+
+max-active-bubbles: 3
+
+base-height: 0.75
+stack-offset: 0.32
+
+max-visible-distance: 32
+
+base-duration-ticks: 80
+ticks-per-character: 2
+max-duration-ticks: 160
+
+max-plain-length: 80
+max-line-length: 28
+
+shadow: true
+see-through: false
+
+text-color: "#FFFFFF"
+background-color: "#80000000"
+
+hide-while-sneaking: false
+hide-if-invisible: true
+
+world-filter:
+  enabled: false
+  disabled-worlds: []
+
+renderer:
+  format: "{message}"
