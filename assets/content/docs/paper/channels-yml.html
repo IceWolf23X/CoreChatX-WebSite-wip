@@ -1,0 +1,30 @@
+<h2 class="reference-section" id="purpose">Purpose:<a aria-label="Link to Purpose:" class="heading-anchor" href="#/docs/paper/channels-yml~purpose">#</a></h2>
+<ul>
+<li>channel definitions</li>
+<li>delivery scope</li>
+<li>per-channel permission gates</li>
+<li>per-channel mention and chat-item behavior</li>
+<li>per-channel bridge export control</li>
+<li>optional per-channel chat format</li>
+<li>optional per-channel command shortcuts</li>
+<li>per-channel public-chat ignore behavior</li>
+</ul>
+<h2 class="reference-section" id="current-bundled-default">Current bundled default:<a aria-label="Link to Current bundled default:" class="heading-anchor" href="#/docs/paper/channels-yml~current-bundled-default">#</a></h2>
+<div class="config-file-mount" data-config-file="paper/channels.yml"></div>
+<h2 class="reference-section" id="important-behavior">Important behavior:<a aria-label="Link to Important behavior:" class="heading-anchor" href="#/docs/paper/channels-yml~important-behavior">#</a></h2>
+<ul>
+<li>invalid dynamic permission nodes are detected and warned during load</li>
+<li>only the broken binding is disabled; the plugin does not crash for one malformed permission</li>
+<li><code>shortcut</code> registers a dynamic command such as <code>/g</code>; without arguments it selects the channel, while <code>/g &lt;message&gt;</code> sends once without changing the active channel</li>
+<li>blank shortcuts are disabled; duplicate shortcuts and names conflicting with an existing command are rejected with a warning</li>
+<li><code>ignore.public-chat-mode</code> accepts <code>inherit</code>, <code>off</code>, <code>notifications-only</code>, or <code>hide-message</code>; <code>inherit</code> uses the global value from <code>privacy.yml</code></li>
+<li><code>export-to-bridges: true</code> means locally-originating messages in that channel are eligible for Discord/Telegram outbound export</li>
+<li>in proxy mode, outbound bridge export is performed only from the source backend so a network message is not exported once per backend</li>
+<li><code>discord.outbound-format</code> and <code>telegram.outbound-format</code> override the global bridge export format for that channel</li>
+<li><code>discord.inbound-format</code> and <code>telegram.inbound-format</code> override how inbound bridge messages are displayed when routed to that channel</li>
+<li><code>/hidechannel &lt;channel&gt; [minutes]</code> accepts only an enabled channel the player can otherwise access; omitting minutes creates a permanent hide</li>
+<li>hidden channels are excluded from that player's send and receive audience, and hiding the active channel selects an accessible visible fallback when one exists</li>
+<li><code>/unhidechannel &lt;channel&gt;</code> restores visibility; its suggestions contain only the player's currently hidden channels</li>
+<li>hidden-channel state is stored in <code>playerdata.yml</code> for standalone mode and in proxy-owned player state for proxy mode</li>
+</ul>
+<hr/>

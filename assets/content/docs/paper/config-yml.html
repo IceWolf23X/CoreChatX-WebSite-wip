@@ -1,0 +1,74 @@
+<h2 class="reference-section" id="modrinth-update-checks">Modrinth update checks:<a aria-label="Link to Modrinth update checks:" class="heading-anchor" href="#/docs/paper/config-yml~modrinth-update-checks">#</a></h2>
+<ul>
+<li><code>update-check.enabled</code> defaults to <code>true</code>; disabling it prevents update-check HTTP requests.</li>
+<li>Checks run off-thread about 10 seconds after activation, then every <code>update-check.interval-hours</code> (default <code>24</code>, clamped to <code>1–168</code>). Paper reload replaces the checker; Velocity changes require restart.</li>
+<li>Console and online OP players receive newly available versions. OP players joining later receive the cached result; joins never query Modrinth. Notifications repeat on a new login session, not on every periodic check. Each Paper backend uses its local OP status; Velocity reports only in console.</li>
+<li>Only stable releases are recommended. The newest eligible beta and alpha are announced separately for testing; previews already superseded by a stable release are suppressed.</li>
+<li>Paper and Velocity consoles display separate colored banners: green for stable updates, yellow for experimental alpha/beta builds. Each banner separates the installed version, available version, release channel, recommendation and download URL. In-game OP notices retain the configurable message templates below.</li>
+<li>Paper filters by loader and exact Minecraft version. Velocity filters by its loader because it cannot infer all backend versions; check network compatibility before upgrading.</li>
+<li>Comparison uses numeric <code>major.minor.patch</code> versions and optional fourth-component hotfix revisions, including <code>2026.3.0.1-hotfix</code>. Preview suffixes <code>-alpha.N</code>, <code>-beta.N</code>, <code>-rc.N</code> and <code>-snapshot.N</code>, plus build metadata, remain supported. Unknown formats are skipped; preview suffixes cannot be advertised as stable updates. The older <code>2026.3.0</code> checker cannot recognize the four-part hotfix format, so this first hotfix must be downloaded manually.</li>
+<li>HTTP timeout is five seconds; failures are reported once until a successful check and retried at the normal interval. No automatic JAR download or installation takes place.</li>
+<li>Customize OP messages in <code>messages.yml</code>: <code>updates.stable</code> and <code>updates.preview</code>, with <code>{version}</code>, <code>{installed}</code>, <code>{channel}</code> and <code>{url}</code> placeholders.</li>
+</ul>
+<h2 class="reference-section" id="purpose">Purpose:<a aria-label="Link to Purpose:" class="heading-anchor" href="#/docs/paper/config-yml~purpose">#</a></h2>
+<ul>
+<li>deployment mode</li>
+<li>backend identity</li>
+<li>proxy transport gates</li>
+<li>bridge master switch</li>
+<li>hook toggles</li>
+<li>logging toggles</li>
+<li>general reload/save behavior</li>
+</ul>
+<h2 class="reference-section" id="current-bundled-default">Current bundled default:<a aria-label="Link to Current bundled default:" class="heading-anchor" href="#/docs/paper/config-yml~current-bundled-default">#</a></h2>
+<div class="config-file-mount" data-config-file="paper/config.yml"></div>
+<h2 class="reference-section" id="operational-notes">Operational notes:<a aria-label="Link to Operational notes:" class="heading-anchor" href="#/docs/paper/config-yml~operational-notes">#</a></h2>
+<ul>
+<li><code>deployment.mode</code>, <code>deployment.server-id</code>, and <code>deployment.network-channel</code> require restart</li>
+<li>the startup log prints a <code>CORECHATX</code> banner with version, author, Paper architecture, GitHub and wiki links, then the deployment summary and transport state</li>
+<li>invalid proxy channel config does not crash the whole plugin; it degrades transport and logs the reason</li>
+<li>network channels must use lowercase Minecraft namespaced-key style, such as <code>corechatx:main</code> or <code>corechatx:network/main</code></li>
+<li>invalid channel examples include <code>CoreChatX:main</code>, <code>core chat x:main</code>, <code>corechatx</code>, and <code>corechatx:Main</code></li>
+<li><code>deployment.bridges-allowed: false</code> disables outbound bridge dispatch and inbound Discord/Telegram chat bridge runtime; Discord console-only bots can still start through <code>discord.console.*</code></li>
+<li><code>deployment.network-features-allowed: false</code> leaves <code>PROXY</code> deployment bootable but intentionally disables proxy transport and all cross-server features</li>
+<li><code>deployment.pending-pm-timeout-seconds</code> is clamped to at least 5 seconds</li>
+<li>with <code>hooks.placeholderapi: true</code>, almost every player-facing configurable string supports PlaceholderAPI placeholders when PlaceholderAPI is installed</li>
+<li>CoreChatX also registers <code>%corechatx_player_nickname%</code>, <code>%corechatx_first_join_date%</code> and <code>%corechatx_messages_count%</code> for other plugins when PlaceholderAPI is installed</li>
+</ul>
+<h2 id="optional-premiumvanish-connection-announcements">Optional PremiumVanish connection announcements<a aria-label="Link to Optional PremiumVanish connection announcements" class="heading-anchor" href="#/docs/paper/config-yml~optional-premiumvanish-connection-announcements">#</a></h2>
+<p>CoreChatX uses PremiumVanish's public API to suppress hidden players' join, first-join, and quit announcements before they reach Minecraft chat or the configured connection-message bridges. Visible players keep the configured announcement behavior. First-join storage and counters still record accepted connections, including hidden players.</p>
+<ul>
+<li>On a standalone Paper server, install PremiumVanish alongside CoreChatX and leave <code>config.yml -&gt; hooks.premiumvanish: true</code>. The same hook also covers local Paper announcements in <code>PROXY</code> deployments using <code>join-quit.mode: LOCAL</code>.</li>
+<li>For Velocity-owned network announcements, install PremiumVanish on Velocity and leave <code>velocity-config.properties -&gt; hooks.premiumvanish=true</code>. Configure PremiumVanish's backend/proxy synchronization according to its own installation instructions; a backend-only PremiumVanish installation cannot provide the proxy API hook.</li>
+<li>The hook is optional and enabled by default. Without PremiumVanish, announcements retain their existing behavior. Set the hook flag to <code>false</code> to disable this integration explicitly. Paper hook changes apply through <code>/corechatx reload</code>; Velocity changes require a restart.</li>
+<li>When an installed PremiumVanish API is incompatible or a visibility query fails, CoreChatX suppresses connection announcements and logs one diagnostic for that hook instance instead of assuming the player is visible. After fixing the provider, reload CoreChatX on Paper or restart Velocity to reinitialize the hook. If Velocity cannot bind the hide/show events, quit announcements are suppressed because its online-only API cannot safely be queried after disconnect.</li>
+<li>This integration controls connection announcements and their bridge copies. It does not filter TAB entries, player lists, chat, or other events, and does not generate fake joins/quits when vanish is toggled.</li>
+</ul>
+<h2 id="optional-full-advancement-synchronization">Optional full advancement synchronization<a aria-label="Link to Optional full advancement synchronization" class="heading-anchor" href="#/docs/paper/config-yml~optional-full-advancement-synchronization">#</a></h2>
+<p><code>advancement-sync.enabled</code> opts Paper into group-owned progress synchronization and live public advancement announcements. It defaults to <code>false</code>. The Velocity endpoint is independently disabled until configured in <code>velocity-advancements.properties</code>.</p>
+<p>Follow <a href="#/docs/reference/source-notes~external-references">the full advancement synchronization guide</a> before enabling it. It covers complete plugin/world/database backups, backend group pins, unique credentials, local HTTP or remote HTTPS, progressive merging of existing criteria, silent historical restoration, revocations, shutdown order and YAML/MySQL backup support. Disable overlapping advancement synchronization in other plugins first. All participating builds must match; the native silent-restoration adapter fails closed on unsupported Paper internals.</p>
+<h2 id="optional-death-messages-across-backends">Optional death messages across backends<a aria-label="Link to Optional death messages across backends" class="heading-anchor" href="#/docs/paper/config-yml~optional-death-messages-across-backends">#</a></h2>
+<p>This option lets players see public death announcements from other Paper backends in the same Velocity group. It is <strong>disabled by default</strong>, including when the setting is missing from an existing configuration. Standalone servers keep their normal local death messages.</p>
+<ol>
+<li>
+<p>Install builds that support this option on Velocity and all participating Paper backends, then restart them. Existing protocol-29 messages are unchanged, but older builds cannot handle the new death-message packet types.</p>
+</li>
+<li>
+<p>On each participating Paper backend, confirm <code>deployment.mode: "PROXY"</code>, <code>deployment.network-features-allowed: true</code>, and a <code>deployment.network-channel</code> belonging to the intended Velocity group. Keep its <code>deployment.server-id</code> aligned with its registered backend name. Deployment identity changes require a restart.</p>
+</li>
+<li>
+<p>In each of those Paper servers' <code>plugins/CoreChatX/config.yml</code>, set:</p>
+<div class="code-block"><div class="code-header"><span>YAML</span><div><button aria-label="Copy code" class="copy-code" type="button">Copy</button></div></div><pre tabindex="0"><code class="language-yml"><span class="nt">death-messages</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">network-enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div>
+</li>
+<li>
+<p>Run <code>/corechatx reload</code> on each changed Paper backend. This toggle controls <strong>both sending and receiving</strong>; leave it <code>false</code> on a backend that should not participate. No additional Velocity toggle is required.</p>
+</li>
+<li>
+<p>With players on two backends in the same group, trigger a normal visible death. The source backend shows its normal local announcement once; the other enabled backend receives the same component. Other groups and disabled backends receive no announcement.</p>
+</li>
+</ol>
+<p>The relay preserves the public event's Adventure component, including vanilla translations, colors and hover content. It does not apply the <code>/broadcast</code> format, trigger mention notifications, increment chat statistics, or export a second death event to Discord. Existing Discord death-mirror settings remain independent.</p>
+<p>Cancelled deaths, null/blank messages, events with <code>showDeathMessages</code> disabled, and deaths restricted by the server scoreboard's team visibility are not forwarded. Teams are local to each backend, so only unrestricted announcements can be safely shared. The private death-screen message is never exported. Plugin-message transport requires online player connections; this is a live announcement, with no history or replay when a backend is empty or unavailable.</p>
+<hr/>

@@ -1,0 +1,28 @@
+<h2 class="reference-section" id="purpose">Purpose:<a aria-label="Link to Purpose:" class="heading-anchor" href="#/docs/paper/chat-yml~purpose">#</a></h2>
+<ul>
+<li>public chat formatting</li>
+<li>group-specific format overrides</li>
+<li>mention token formatting</li>
+<li>public and PM cooldowns</li>
+</ul>
+<h2 class="reference-section" id="current-bundled-default">Current bundled default:<a aria-label="Link to Current bundled default:" class="heading-anchor" href="#/docs/paper/chat-yml~current-bundled-default">#</a></h2>
+<div class="config-file-mount" data-config-file="paper/chat.yml"></div>
+<h2 class="reference-section" id="format-priority">Format priority:<a aria-label="Link to Format priority:" class="heading-anchor" href="#/docs/paper/chat-yml~format-priority">#</a></h2>
+<ol>
+<li><code>channels.&lt;id&gt;.format</code></li>
+<li><code>public-chat.group-formats.&lt;luckperms-primary-group&gt;</code></li>
+<li><code>public-chat.format</code></li>
+</ol>
+<h2 class="reference-section" id="important-notes">Important notes:<a aria-label="Link to Important notes:" class="heading-anchor" href="#/docs/paper/chat-yml~important-notes">#</a></h2>
+<ul>
+<li><code>{rank_prefix}</code> works in every <code>group-formats.&lt;group&gt;</code> entry</li>
+<li>if LuckPerms is not available, group-specific formats are skipped and CoreChatX falls back to the base format</li>
+<li>if you already manage rank prefixes in LuckPerms, prefer <code>{rank_prefix}</code> over hardcoded titles in this file</li>
+<li>PlaceholderAPI placeholders can be used in most admin-controlled rendered strings, including chat formats and group formats, when PlaceholderAPI support is enabled</li>
+<li>raw player-authored message bodies do not pass through PlaceholderAPI; this prevents players from resolving arbitrary <code>%placeholder%</code> tokens inside normal chat text</li>
+<li><code>mentions.token-format</code> resolves <code>{player_name}</code> to the mentioned player's name</li>
+<li>PlaceholderAPI in <code>mentions.token-format</code> uses the mentioned player as context, not the sender</li>
+<li>for cross-backend mentions, CoreChatX uses the mentioned player's <code>OfflinePlayer</code> context so PlaceholderAPI expansions with offline support can still resolve</li>
+<li>negative cooldown seconds are treated as <code>0</code></li>
+</ul>
+<hr/>

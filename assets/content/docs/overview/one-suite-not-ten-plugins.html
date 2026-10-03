@@ -1,0 +1,33 @@
+<h2 class="reference-section" id="corechatx-covers-the-core-communication-stack">CoreChatX covers the core communication stack:<a aria-label="Link to CoreChatX covers the core communication stack:" class="heading-anchor" href="#/docs/overview/one-suite-not-ten-plugins~corechatx-covers-the-core-communication-stack">#</a></h2>
+<ul>
+<li>public chat</li>
+<li>private messages</li>
+<li>replies</li>
+<li>channels</li>
+<li>mentions</li>
+<li>custom pings</li>
+<li>interactive keywords</li>
+<li>chat item previews</li>
+<li>chat bubbles</li>
+<li>moderation tools</li>
+<li>player settings</li>
+<li>persistent nicknames and real-name lookup</li>
+<li>locale support</li>
+<li>Discord bridge</li>
+<li>Telegram bridge</li>
+<li>standalone and Velocity network setups</li>
+</ul>
+<p>The value is not just the feature count.
+The value is that these features know about each other.</p>
+<p>Channels can affect formatting and bridge export.
+Mentions can respect player settings.
+Private messages can work with social spy and ignore rules.
+Network chat can carry rich Adventure components and ChatItem preview references.
+Bridges can follow channel routing instead of acting like a separate side project.</p>
+<p>Optional death announcements can also cross Paper backends within the same Velocity group.
+Enable <code>death-messages.network-enabled</code> on every participating backend to send and receive
+the original public death component, preserving translations and formatting without a duplicate
+on the source server. This defaults to <code>false</code>; cancelled, hidden and team-restricted deaths
+stay local. It requires updated Paper and Velocity builds and is independent of Discord death mirrors.</p>
+<p>That is the difference between a chat system and separate plugins with overlapping commands and disconnected configuration.</p>
+<hr/>

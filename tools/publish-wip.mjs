@@ -77,6 +77,7 @@ export async function publish(root, options = {}) {
   command('gh', ['--version']);
   log('Checking the local website before any remote changes...');
   command(process.execPath, ['tools/build-config-bundle.mjs', '.'], { interactive: true });
+  command(process.execPath, ['tools/build-docs-bundle.mjs', '.'], { interactive: true });
   command(process.execPath, ['tests/validate-theme.mjs'], { interactive: true });
   command(process.execPath, ['--test'], { interactive: true });
 

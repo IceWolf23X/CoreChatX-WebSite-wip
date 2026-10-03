@@ -1,0 +1,28 @@
+<h2 class="reference-section" id="purpose">Purpose:<a aria-label="Link to Purpose:" class="heading-anchor" href="#/docs/paper/telegram-yml~purpose">#</a></h2>
+<ul>
+<li>Telegram outbound formatting and routing</li>
+<li>Telegram Bot API long-polling inbound relay settings</li>
+<li>route mapping from Telegram chats or forum topics into CoreChatX channels</li>
+</ul>
+<h2 class="reference-section" id="current-bundled-default">Current bundled default:<a aria-label="Link to Current bundled default:" class="heading-anchor" href="#/docs/paper/telegram-yml~current-bundled-default">#</a></h2>
+<div class="config-file-mount" data-config-file="paper/telegram.yml"></div>
+<h2 class="reference-section" id="important-operational-note">Important operational note:<a aria-label="Link to Important operational note:" class="heading-anchor" href="#/docs/paper/telegram-yml~important-operational-note">#</a></h2>
+<ul>
+<li>Telegram uses Telegram Bot API long polling through <code>getUpdates</code></li>
+<li>Telegram does not use Telegram4J</li>
+<li>per-channel Telegram formats can be configured in <code>channels.yml</code> under <code>channels.&lt;id&gt;.telegram.outbound-format</code> and <code>channels.&lt;id&gt;.telegram.inbound-format</code></li>
+<li>Telegram does not use MTProto</li>
+<li>Telegram does not use webhook mode and does not start an embedded HTTP server</li>
+<li>no <code>api-id</code> or <code>api-hash</code> are required; only <code>telegram.bot-token</code> is needed</li>
+<li>outbound supports per-channel Telegram targets through <code>telegram.outbound.channel-targets</code></li>
+<li>outbound supports Telegram forum topics through <code>message-thread-id</code></li>
+<li>Telegram outbound clamps formatted messages to a safe Bot API-sized payload and logs when truncation happens</li>
+<li>inbound routes can use <code>chatId</code> or <code>chatId:messageThreadId</code></li>
+<li><code>debug-route-detection: true</code> logs safe detected route keys to help admins configure group/topic routing</li>
+<li><code>deployment.bridges-allowed: false</code> prevents Telegram outbound and inbound runtime from starting even if <code>telegram.enabled</code> or <code>telegram.inbound.enabled</code> is true</li>
+<li><code>skip-pending-on-start: true</code> prevents old queued updates from flooding Minecraft when the bridge starts</li>
+<li>Telegram long-polling requests use a bounded HTTP timeout so reloads cannot leave an old polling request hanging indefinitely</li>
+<li>Telegram inbound timing values are clamped: <code>timeout-seconds</code> to <code>1..60</code>, <code>retry-delay-seconds</code> to <code>0..30</code>, and <code>error-backoff-seconds</code> to <code>1..300</code></li>
+<li>inbound messages are sanitized and clamped by <code>telegram.inbound.max-length</code> before they enter Minecraft chat</li>
+</ul>
+<hr/>

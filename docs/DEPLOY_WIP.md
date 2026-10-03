@@ -59,11 +59,19 @@ Il bypass vale solo per quel processo: non cambia permanentemente la policy del 
 
 Non crea release del plugin e non carica JAR. Li pubblicherai nella sezione **Releases della repository WIP**. Fino alla prima release con un JAR riconosciuto, la pagina download resta vuota.
 
-Il workflow Pages pubblica soltanto `index.html`, `reference.html`, `assets/` e `synced-configs/`, più metadata pubblici di build. Gli articoli della wiki sono mantenuti nei dati JavaScript sotto `assets/`. Il checkout privato `.sync/`, le credenziali Git e i tool non entrano nell'artefatto distribuito. Guide e tool restano comunque pubblici come file della repository.
+Il workflow Pages pubblica soltanto `index.html`, `reference.html`, `assets/` e `synced-configs/`, più metadata pubblici di build. Gli articoli della wiki sono mantenuti nei file HTML sotto `assets/content/docs/` e nel bundle generato `assets/js/generated/docs-bodies.js`. Il checkout privato `.sync/`, le credenziali Git e i tool non entrano nell'artefatto distribuito. Guide e tool restano comunque pubblici come file della repository.
 
 ## 4. Aggiornamenti successivi
 
-Modifica i file di contenuto/asset, fai commit e push a `main`: Pages si aggiorna automaticamente. Non rilanciare lo script di prima pubblicazione per la normale manutenzione.
+Modifica i file di contenuto/asset, ricostruisci il docs bundle se hai toccato `assets/content/docs/` o `docs-content.js`, fai commit e push a `main`: Pages si aggiorna automaticamente. Non rilanciare lo script di prima pubblicazione per la normale manutenzione.
+
+```powershell
+node tools/build-docs-bundle.mjs .
+node tools/build-docs-bundle.mjs . --check
+node tests/validate-theme.mjs
+```
+
+Il preflight di Pages (`tools/prepare-pages.mjs`) controlla anche che `assets/js/generated/docs-bodies.js` sia aggiornato quando il catalogo documentazione è presente. Un bundle obsoleto blocca la preparazione dell’artefatto; ricostruiscilo con il primo comando. Il generatore ammette il file vuoto `paper/files.html`, perché quella directory viene generata dal runtime.
 
 ```powershell
 git add assets

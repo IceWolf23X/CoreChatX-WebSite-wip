@@ -1,0 +1,38 @@
+<p>If you want a clean reset, stop the affected servers and proxy and back up their current admin configuration before deleting any files. Preserve runtime data and storage backups; this procedure resets configuration only.</p>
+<h2 id="paper-backend">Paper backend<a aria-label="Link to Paper backend" class="heading-anchor" href="#/docs/reference/regenerating-a-clean-config-set~paper-backend">#</a></h2>
+<h2 class="reference-section" id="delete-the-generated-admin-config-files">Delete the generated admin config files:<a aria-label="Link to Delete the generated admin config files:" class="heading-anchor" href="#/docs/reference/regenerating-a-clean-config-set~delete-the-generated-admin-config-files">#</a></h2>
+<div class="code-block"><div class="code-header"><span>Plain text</span><div><button aria-label="Copy code" class="copy-code" type="button">Copy</button></div></div><pre tabindex="0"><code class="language-text">config.yml
+messages.yml
+chat.yml
+channels.yml
+privacy.yml
+moderation.yml
+pings.yml
+filter.yml
+chatitems.yml
+keywords.yml
+chatbubbles.yml
+discord.yml
+telegram.yml
+storage.yml
+locales/
+</code></pre></div>
+<p>Then restart the server.
+CoreChatX recreates the bundled defaults automatically.</p>
+<h2 class="reference-section" id="if-you-are-using-proxy-mode-you-must-then-reapply">If you are using proxy mode, you must then reapply:<a aria-label="Link to If you are using proxy mode, you must then reapply:" class="heading-anchor" href="#/docs/reference/regenerating-a-clean-config-set~if-you-are-using-proxy-mode-you-must-then-reapply">#</a></h2>
+<ul>
+<li><code>deployment.mode: "PROXY"</code></li>
+<li>unique <code>deployment.server-id</code></li>
+<li><code>deployment.network-features-allowed: true</code></li>
+</ul>
+<h2 id="velocity-proxy">Velocity proxy<a aria-label="Link to Velocity proxy" class="heading-anchor" href="#/docs/reference/regenerating-a-clean-config-set~velocity-proxy">#</a></h2>
+<h2 class="reference-section" id="delete">Delete:<a aria-label="Link to Delete:" class="heading-anchor" href="#/docs/reference/regenerating-a-clean-config-set~delete">#</a></h2>
+<div class="code-block"><div class="code-header"><span>Plain text</span><div><button aria-label="Copy code" class="copy-code" type="button">Copy</button></div></div><pre tabindex="0"><code class="language-text">plugins/corechatx/velocity-config.properties
+plugins/corechatx/velocity-discord.yml
+plugins/corechatx/velocity-messages.yml
+plugins/corechatx/velocity-storage.yml
+plugins/corechatx/velocity-advancements.properties
+</code></pre></div>
+<p>Then restart Velocity.
+The proxy module recreates the four bundled default files and the disabled advancement endpoint template. Resetting <code>velocity-advancements.properties</code> removes its backend credential bindings; reapply the intended groups and tokens from your backup and follow <a href="#/docs/reference/source-notes~external-references">the advancement setup guide</a> before enabling synchronization again.</p>
+<hr/>

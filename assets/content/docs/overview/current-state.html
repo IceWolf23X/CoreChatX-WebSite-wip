@@ -1,0 +1,25 @@
+<h2 class="reference-section" id="corechatx-currently">CoreChatX currently:<a aria-label="Link to CoreChatX currently:" class="heading-anchor" href="#/docs/overview/current-state~corechatx-currently">#</a></h2>
+<ul>
+<li>supports Paper <code>1.21.11</code>, with additional live verification on Paper <code>26.2</code> build <code>112</code> for the recorded scenarios below</li>
+<li>ships separate <code>corechatx-paper</code> and <code>corechatx-velocity</code> jars</li>
+<li>uses <code>CoreChatX</code> as the Paper plugin name</li>
+<li>uses <code>corechatx</code> as the Velocity plugin id</li>
+<li>works on standalone Paper servers</li>
+<li>works on Velocity networks with multiple Paper backends</li>
+<li>keeps YAML as the default runtime backend and supports explicit MySQL authority for standalone Paper or Velocity-owned proxy groups</li>
+<li>provides fail-closed, backup-first YAML-to-MySQL migration and latest-state MySQL-to-YAML rollback tooling on Paper and Velocity</li>
+<li>has been tested on a live Paper test server</li>
+<li>has been tested on a small live Velocity network</li>
+<li>supports Discord inbound and outbound messages</li>
+<li>supports Telegram inbound and outbound messages</li>
+<li>supports Telegram forum topic routing</li>
+<li>includes optional chat bubbles above players</li>
+<li>keeps player communication settings aligned across server switches</li>
+<li>optionally synchronizes full advancement criteria across a Velocity group, merging existing progress with silent restoration and live public announcements; disabled by default, with an authenticated endpoint and YAML/MySQL authority (<a href="#/docs/reference/source-notes~external-references">setup and limits</a>)</li>
+<li>supports persistent or timed per-player channel hiding</li>
+<li>supports Discord account linking and optional role-based login gates</li>
+<li>supports persistent nicknames with real-name lookup and granular formatting permissions</li>
+<li>can render ChatItem snapshots as Discord images with interactive item inspection</li>
+<li>checks Modrinth asynchronously for updates, notifying console and OP players; green console banners recommend stable updates, while yellow banners identify alpha/beta builds as experimental</li>
+</ul>
+<hr/>

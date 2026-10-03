@@ -1,0 +1,16 @@
+<h2 id="reference-snapshot">Documentation content<a aria-label="Link to Documentation content" class="heading-anchor" href="#/docs/reference/source-notes~reference-snapshot">#</a></h2>
+<p>Each wiki article has its own HTML file under <code>assets/content/docs/</code>. Titles, categories and article order are maintained in <code>assets/js/data/docs-content.js</code>. Run <code>node tools/build-docs-bundle.mjs .</code> after editing article HTML to update the offline bundle used by the wiki, search and <a href="reference.html">full reference</a>.</p>
+<p>Configuration examples come from the allow-listed public defaults in <code>synced-configs/</code> and the generated JavaScript bundle. The Velocity advancement configuration is a separately maintained runtime template. Match the examples and feature descriptions to the CoreChatX build you install.</p>
+<h2 id="external-references">External references<a aria-label="Link to External references" class="heading-anchor" href="#/docs/reference/source-notes~external-references">#</a></h2>
+<p>Advancement options, endpoint defaults, backend credential rules and safety notices are described under Paper <a href="#/docs/paper/config-yml">config.yml</a> and <a href="#/docs/velocity/velocity-advancements-properties">velocity-advancements.properties</a>. Obtain the complete matching setup guide before enabling synchronization.</p>
+<p>The <a href="https://wiki-corechatx.icewolf23x.dev/advancement-sync.html" rel="noopener noreferrer" target="_blank">advancement setup guide</a> is an external reference requiring an internet connection. External pages are not bundled with the wiki.</p>
+<h2 id="source-discrepancies">Configuration and compatibility notes<a aria-label="Link to Configuration and compatibility notes" class="heading-anchor" href="#/docs/reference/source-notes~source-discrepancies">#</a></h2>
+<p>Use the detailed <a href="#/docs/paper/channels-yml">channels.yml</a> example for mention gates: <code>from-minecraft</code>, <code>from-discord</code> and <code>from-telegram</code> are separate settings. Verify the Java and server-version requirements for your exact deployment.</p>
+<h2 id="public-project-references">Public project references<a aria-label="Link to Public project references" class="heading-anchor" href="#/docs/reference/source-notes~public-project-references">#</a></h2>
+<ul>
+<li><a href="https://modrinth.com/plugin/corechatx" rel="noopener noreferrer" target="_blank">Modrinth project and downloads</a></li>
+<li><a href="https://wiki-corechatx.icewolf23x.dev/" rel="noopener noreferrer" target="_blank">Official project website</a></li>
+<li><a href="https://github.com/IceWolf23X/CoreChatX-issues/issues" rel="noopener noreferrer" target="_blank">Public issue tracker</a></li>
+</ul>
+<h2 id="offline-behavior">Offline behavior<a aria-label="Link to Offline behavior" class="heading-anchor" href="#/docs/reference/source-notes~offline-behavior">#</a></h2>
+<p>Wiki navigation, search, highlighting, code copying and theme switching use bundled assets. The Releases page requests public GitHub metadata when opened and can use cached or bundled metadata offline. JAR downloads and external project links require an internet connection.</p>

@@ -1,0 +1,27 @@
+<h2 class="reference-section" id="corechatx-includes-practical-behavior-for-server-owners">CoreChatX includes practical behavior for server owners:<a aria-label="Link to CoreChatX includes practical behavior for server owners:" class="heading-anchor" href="#/docs/overview/admin-experience~corechatx-includes-practical-behavior-for-server-owners">#</a></h2>
+<ul>
+<li>clear startup information</li>
+<li>version and author shown on startup</li>
+<li>Paper or Velocity architecture shown on startup</li>
+<li><code>CORECHATX</code> startup banner</li>
+<li><code>corechatx.*</code> permission namespace</li>
+<li><code>corechatx:main</code> default network channel</li>
+<li>safer config validation</li>
+<li>cleaner failure handling</li>
+<li>safer network message handling</li>
+<li>bridge lifecycle handling on reload and shutdown</li>
+<li>config regeneration support</li>
+<li>bStats metrics with a bundled license notice</li>
+<li>atomic YAML runtime writes</li>
+<li>isolated Velocity group storage with persistent Discord unlink tombstones</li>
+<li>one bounded MySQL pool/executor per process, checksummed schema history, DB-time fenced scope leases, monotonic transactional updates, and confirmed runtime caches</li>
+<li>fail-closed asynchronous MySQL startup and Paper pre-login hydration without JDBC on the Paper primary thread</li>
+<li>deterministic MySQL packaging in both runtime jars, including merged JDBC service metadata but excluding test tooling</li>
+<li>deterministic canonical snapshots, immutable checksummed backups, short-lived confirmation plans, parity checks, durable transition journals, crash-safe resume/abort, and retained-original rollback promotion</li>
+<li>recovery-only <code>/ccxstorage</code> control planes on Paper and Velocity, with explicit all-group transitions on proxy deployments</li>
+<li>main-thread snapshots before Discord callbacks use live Paper player state</li>
+<li>reload-safe settings GUI service/repository lookup</li>
+<li>quit cleanup for PM reply targets</li>
+</ul>
+<p>These are not flashy player-facing features, but they make day-to-day operation much easier to trust and maintain.</p>
+<hr/>

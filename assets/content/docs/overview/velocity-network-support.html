@@ -1,0 +1,24 @@
+<p>CoreChatX supports both standalone Paper servers and Velocity networks.</p>
+<h2 class="reference-section" id="in-network-mode-it-can-keep-these-features-working-across-servers">In network mode, it can keep these features working across servers:<a aria-label="Link to In network mode, it can keep these features working across servers:" class="heading-anchor" href="#/docs/overview/velocity-network-support~in-network-mode-it-can-keep-these-features-working-across-servers">#</a></h2>
+<ul>
+<li>network-wide chat channels</li>
+<li>cross-server private messages</li>
+<li>player communication settings, nicknames, hidden channels, ignore lists, and moderation state</li>
+<li>player name suggestions</li>
+<li>TAB entries where available</li>
+<li>mentions and pings</li>
+<li>interactive keyword behavior</li>
+<li>ChatItem preview access</li>
+<li>bridge export without duplicate network messages</li>
+<li>proxy-owned Discord account linking, unlink tombstones, and role-based admission</li>
+<li>group-aware join/quit/first-join announcements</li>
+<li>PremiumVanish-aware connection announcements when PremiumVanish is installed on Velocity</li>
+<li>group-aware Discord player lists, channel descriptions, and event/status messages</li>
+</ul>
+<p>Velocity isolates runtime state by configured CoreChatX network group. Persistent unlink
+tombstones ensure that a backend returning after cache eviction, proxy restart, or more
+than seven days offline still receives an authoritative unlink instead of retaining a
+stale Discord association.</p>
+<p>This is where the "one suite" approach matters most.
+A network setup should not require a separate plugin stack on every backend just to make messages, toggles, mentions, and PMs understand that players moved servers.</p>
+<hr/>

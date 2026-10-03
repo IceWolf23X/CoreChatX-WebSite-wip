@@ -1,0 +1,31 @@
+<p>This file exists only on Velocity and is used when Paper backends run in <code>deployment.mode: "PROXY"</code>.
+In proxy mode, the Discord bot for account linking, login role checks and Discord bridge I/O must live on Velocity.
+Paper backends may still run separate console-only Discord bots through Paper <code>discord.yml -&gt; discord.console.*</code>.
+In standalone mode, ignore this file and configure Paper <code>discord.yml</code> instead.</p>
+<div class="config-file-mount" data-config-file="velocity/velocity-discord.yml"></div>
+<h2 class="reference-section" id="important-rules">Important rules:<a aria-label="Link to Important rules:" class="heading-anchor" href="#/docs/velocity/velocity-discord-yml~important-rules">#</a></h2>
+<ul>
+<li><code>discord.enabled</code> starts the Velocity-owned Discord bot</li>
+<li><code>account-linking.enabled</code> enables Velocity-owned Discord/Minecraft linking for proxy groups</li>
+<li><code>account-linking.require-linked</code> blocks unlinked Discord users from writing through configured Discord inbound routes</li>
+<li><code>allow-offline-linked-players</code>, <code>enforce-minecraft-mutes</code>, and <code>enforce-channel-send-permission</code> are Velocity-owned in proxy mode and are forwarded to Paper for linked Discord inbound messages</li>
+<li><code>require-linked-to-play</code> denies unlinked Minecraft players entry before connecting to a proxy backend, with a Velocity-generated link code when available</li>
+<li>in both standalone and proxy deployments, mandatory linking remains enforced when the bot/link command is unavailable or code creation fails; no unlinked player is admitted as a fallback</li>
+<li>already linked players continue through the optional role gate; <code>deny-if-unverifiable</code> controls only role-check failures and never bypasses mandatory linking</li>
+<li>the unavailable-link denial is configurable as <code>discord.link-check-unavailable-kick</code> in Paper <code>messages.yml</code> and <code>account-linking.messages.link-check-unavailable-kick</code> in Velocity <code>velocity-discord.yml</code></li>
+<li><code>required-play-roles.role-ids</code> must contain numeric Discord role IDs, not role names</li>
+<li>an active role whitelist requires the privileged <strong>Server Members Intent</strong>; removing the last allowed role or leaving the guild disconnects an online linked player, and the login gate blocks reconnection</li>
+<li><code>required-play-roles.groups.&lt;network-channel&gt;</code> can override <code>enabled</code>, <code>guild-id</code>, <code>role-ids</code>, and <code>deny-if-unverifiable</code> per isolated CoreChatX group</li>
+<li>missing group override fields inherit the global <code>required-play-roles</code> value; setting <code>enabled: false</code> disables the role gate for that group</li>
+<li>if <code>guild-id</code> is blank, the bot must be in exactly one guild for role checks to be verifiable</li>
+<li><code>discord.default-channel-id</code> and <code>discord.channel-overrides</code> are the Velocity-side targets for Minecraft -&gt; Discord messages</li>
+<li><code>discord.inbound.channel-routes</code> maps Discord channel IDs to CoreChatX channel IDs; in multi-group setups use object routes with <code>network-channel</code></li>
+<li>a nonblank Discord-rendered string supplied by Paper is always used, preserving backend/per-channel formatting; <code>discord.format</code> is the fallback when the backend packet has no rendered text</li>
+<li>there is no <code>discord.use-paper-outbound-format</code> option</li>
+<li><code>account-linking.sync-mc-name</code> updates linked Discord nicknames from proxy-owned Minecraft nickname state</li>
+<li><code>discord.connection-messages</code> and <code>discord.event-messages</code> mirror proxy/group joins, quits, first joins, deaths, and advancements without duplicate backend fanout</li>
+<li><code>discord.player-list</code> supports group-aware text and slash responses; <code>discord.channel-description</code> supports whole-proxy and per-group counts</li>
+<li><code>discord.server-status</code> reports proxy lifecycle and debounced backend online/offline transitions; backend monitoring requires <code>backend-groups.*</code> pins in <code>velocity-config.properties</code></li>
+<li>Paper <code>discord.yml</code> is still used for standalone mode. In proxy mode, use it only for optional per-backend <code>discord.console.*</code> bots with separate bot tokens.</li>
+</ul>
+<hr/>

@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 const moduleUrl = new URL('../tools/prepare-pages.mjs', import.meta.url);
 // Build a minimal site and private test files without any source-document directory.
 async function fixture(t) {
@@ -44,5 +46,20 @@ test('Failed preflight preserves an existing Pages artifact',async(t)=>{
  await fs.mkdir(path.join(root,'_site'));await fs.writeFile(path.join(root,'_site/keep'),'old-good-site');
  await fs.writeFile(path.join(root,'assets/client.pem'),'private');
  await assert.rejects(preparePages(root),/private|forbidden/i);
+ assert.equal(await fs.readFile(path.join(root,'_site/keep'),'utf8'),'old-good-site');
+});
+
+// Publishing stale HTML would discard an author's edits while claiming to ship the latest pages.
+test('Pages preflight rejects stale article bodies and preserves the existing artifact',async(t)=>{
+ const {preparePages}=await import(moduleUrl);const root=await fixture(t);
+ await fs.mkdir(path.join(root,'assets/content/docs/overview'),{recursive:true});
+ const body=path.join(root,'assets/content/docs/overview/example.html');
+ await fs.writeFile(body,'<p>Original article</p>\n');
+ await fs.writeFile(path.join(root,'assets/js/data/docs-content.js'),'window.COREX_DOCS={articles:[{id:"overview/example",bodyFile:"assets/content/docs/overview/example.html"}]};');
+ const result=spawnSync(process.execPath,[fileURLToPath(new URL('../tools/build-docs-bundle.mjs',import.meta.url)),root],{encoding:'utf8'});
+ assert.equal(result.status,0,result.stderr);
+ await fs.mkdir(path.join(root,'_site'));await fs.writeFile(path.join(root,'_site/keep'),'old-good-site');
+ await fs.writeFile(body,'<p>Updated article</p>\n');
+ await assert.rejects(preparePages(root),/stale|rebuild/i);
  assert.equal(await fs.readFile(path.join(root,'_site/keep'),'utf8'),'old-good-site');
 });

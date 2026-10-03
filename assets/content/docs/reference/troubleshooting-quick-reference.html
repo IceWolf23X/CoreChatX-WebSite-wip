@@ -1,0 +1,127 @@
+<h2 id="startup-banner-does-not-appear">Startup banner does not appear<a aria-label="Link to Startup banner does not appear" class="heading-anchor" href="#/docs/reference/troubleshooting-quick-reference~startup-banner-does-not-appear">#</a></h2>
+<p>Check that the correct jar is installed for the platform.
+The Paper jar must be on Paper, and the Velocity jar must be on Velocity.
+On startup, CoreChatX prints a <code>CORECHATX</code> banner with version, author, architecture, and a project-link placeholder.</p>
+<h2 id="corechatx-reload-does-not-apply-a-change"><code>/corechatx reload</code> does not apply a change<a aria-label="Link to /corechatx reload does not apply a change" class="heading-anchor" href="#/docs/reference/troubleshooting-quick-reference~corechatx-reload-does-not-apply-a-change">#</a></h2>
+<h2 class="reference-section" id="some-settings-are-identity-or-transport-settings-and-require-restart">Some settings are identity or transport settings and require restart:<a aria-label="Link to Some settings are identity or transport settings and require restart:" class="heading-anchor" href="#/docs/reference/troubleshooting-quick-reference~some-settings-are-identity-or-transport-settings-and-require-restart">#</a></h2>
+<ul>
+<li><code>deployment.mode</code></li>
+<li><code>deployment.server-id</code></li>
+<li><code>deployment.network-channel</code></li>
+<li>every setting in Velocity <code>velocity-config.properties</code>, <code>velocity-discord.yml</code>, <code>velocity-messages.yml</code>, and <code>velocity-storage.yml</code></li>
+</ul>
+<p>If the change affects runtime transport, restart the affected backend or proxy instead of relying on reload.</p>
+<h2 id="network-messages-do-not-cross-servers">Network messages do not cross servers<a aria-label="Link to Network messages do not cross servers" class="heading-anchor" href="#/docs/reference/troubleshooting-quick-reference~network-messages-do-not-cross-servers">#</a></h2>
+<h2 class="reference-section" id="verify">Verify:<a aria-label="Link to Verify:" class="heading-anchor" href="#/docs/reference/troubleshooting-quick-reference~verify">#</a></h2>
+<ul>
+<li>every backend uses <code>deployment.mode: "PROXY"</code></li>
+<li>every backend has a unique <code>deployment.server-id</code></li>
+<li>every backend has <code>deployment.network-features-allowed: true</code></li>
+<li>every backend <code>deployment.network-channel</code> is present in Velocity <code>velocity-config.properties -&gt; network-channel</code></li>
+<li>the Velocity jar is installed and started</li>
+<li>at least one eligible player connection exists for plugin-message transport when Paper needs a packet carrier</li>
+</ul>
+<p>Also check that the channel itself is configured as <code>scope: NETWORK</code>.
+In standalone mode, <code>NETWORK</code> channels fall back to normal local chat behavior.</p>
+<h2 id="discord-or-telegram-messages-do-not-send">Discord or Telegram messages do not send<a aria-label="Link to Discord or Telegram messages do not send" class="heading-anchor" href="#/docs/reference/troubleshooting-quick-reference~discord-or-telegram-messages-do-not-send">#</a></h2>
+<h2 class="reference-section" id="verify-2">Verify:<a aria-label="Link to Verify:" class="heading-anchor" href="#/docs/reference/troubleshooting-quick-reference~verify-2">#</a></h2>
+<ul>
+<li><code>deployment.bridges-allowed: true</code></li>
+<li>the specific bridge <code>enabled</code> value is true</li>
+<li>the CoreChatX channel has <code>export-to-bridges: true</code></li>
+<li>tokens, channel ids, chat ids, and topic ids are valid</li>
+<li>outbound routing points to the intended external target</li>
+</ul>
+<p>In proxy mode, outbound export is performed only from the source backend to avoid duplicate external messages.</p>
+<h2 id="discord-or-telegram-inbound-does-not-appear-in-minecraft">Discord or Telegram inbound does not appear in Minecraft<a aria-label="Link to Discord or Telegram inbound does not appear in Minecraft" class="heading-anchor" href="#/docs/reference/troubleshooting-quick-reference~discord-or-telegram-inbound-does-not-appear-in-minecraft">#</a></h2>
+<h2 class="reference-section" id="verify-3">Verify:<a aria-label="Link to Verify:" class="heading-anchor" href="#/docs/reference/troubleshooting-quick-reference~verify-3">#</a></h2>
+<ul>
+<li>inbound is enabled for that bridge</li>
+<li>the inbound route points to an existing CoreChatX channel</li>
+<li>the backend running the inbound listener is one that should locally display the message</li>
+<li>for Discord, the bot has the required Message Content intent when message content is needed</li>
+<li>for Telegram, the bot is reachable through Bot API long polling</li>
+</ul>
+<p>Telegram uses Bot API <code>getUpdates</code>.
+It does not use MTProto, Telegram4J, webhook mode, or an embedded HTTP server.</p>
+<h2 id="removing-a-discord-whitelist-role-does-not-disconnect-the-player">Removing a Discord whitelist role does not disconnect the player<a aria-label="Link to Removing a Discord whitelist role does not disconnect the player" class="heading-anchor" href="#/docs/reference/troubleshooting-quick-reference~removing-a-discord-whitelist-role-does-not-disconnect-the-player">#</a></h2>
+<h2 class="reference-section" id="verify-4">Verify:<a aria-label="Link to Verify:" class="heading-anchor" href="#/docs/reference/troubleshooting-quick-reference~verify-4">#</a></h2>
+<ul>
+<li>the account-linking role gate is enabled for the affected network group</li>
+<li>the bot has the privileged <strong>Server Members Intent</strong> enabled in the Discord Developer Portal</li>
+<li>the bot was restarted after enabling that intent</li>
+<li><code>guild-id</code> and <code>role-ids</code> identify the expected guild and numeric Discord roles</li>
+<li>the Minecraft account is linked to the Discord member being changed</li>
+</ul>
+<p>CoreChatX evaluates login against the current Discord membership and also consumes live
+member-role and guild-leave events. Losing the final configured role, leaving, being
+kicked, or being banned from the configured guild disconnects an online linked player.
+The login gate then blocks reconnection until the Discord requirement is satisfied.</p>
+<h2 id="placeholderapi-placeholders-do-not-render">PlaceholderAPI placeholders do not render<a aria-label="Link to PlaceholderAPI placeholders do not render" class="heading-anchor" href="#/docs/reference/troubleshooting-quick-reference~placeholderapi-placeholders-do-not-render">#</a></h2>
+<h2 class="reference-section" id="verify-5">Verify:<a aria-label="Link to Verify:" class="heading-anchor" href="#/docs/reference/troubleshooting-quick-reference~verify-5">#</a></h2>
+<ul>
+<li>PlaceholderAPI is installed on that backend</li>
+<li><code>hooks.placeholderapi: true</code></li>
+<li>the expansion that owns the placeholder is installed and working</li>
+<li>the string being edited is a supported server-controlled template</li>
+</ul>
+<p>Raw player message bodies do not pass through PlaceholderAPI.
+Mention token PlaceholderAPI context is the mentioned player, using <code>OfflinePlayer</code> where possible for cross-backend mentions.</p>
+<h2 id="mentions-do-not-notify-players">Mentions do not notify players<a aria-label="Link to Mentions do not notify players" class="heading-anchor" href="#/docs/reference/troubleshooting-quick-reference~mentions-do-not-notify-players">#</a></h2>
+<h2 class="reference-section" id="verify-6">Verify:<a aria-label="Link to Verify:" class="heading-anchor" href="#/docs/reference/troubleshooting-quick-reference~verify-6">#</a></h2>
+<ul>
+<li>mentions are enabled in <code>chat.yml</code></li>
+<li>the channel has <code>allow-mentions: true</code></li>
+<li>the target player allows mention notifications</li>
+<li>ignore and privacy settings are not blocking the notification</li>
+<li>permissions and staff bypass rules are configured as intended</li>
+</ul>
+<h2 id="chatitems-work-locally-but-not-across-servers">ChatItems work locally but not across servers<a aria-label="Link to ChatItems work locally but not across servers" class="heading-anchor" href="#/docs/reference/troubleshooting-quick-reference~chatitems-work-locally-but-not-across-servers">#</a></h2>
+<h2 class="reference-section" id="verify-7">Verify:<a aria-label="Link to Verify:" class="heading-anchor" href="#/docs/reference/troubleshooting-quick-reference~verify-7">#</a></h2>
+<ul>
+<li>backend and Velocity network settings match</li>
+<li>ChatItems are enabled for the channel</li>
+<li>remote snapshot request limits are not rejecting the item bundle</li>
+<li>the snapshot has not expired</li>
+<li><code>network-features-allowed</code> is true on participating backends</li>
+</ul>
+<p>Cross-server ChatItems use lightweight refs in chat and on-demand snapshot retrieval through Velocity.
+They intentionally avoid embedding a full inventory payload into every chat packet.</p>
+<h2 id="discord-chatitem-images-do-not-render">Discord ChatItem images do not render<a aria-label="Link to Discord ChatItem images do not render" class="heading-anchor" href="#/docs/reference/troubleshooting-quick-reference~discord-chatitem-images-do-not-render">#</a></h2>
+<h2 class="reference-section" id="verify-8">Verify:<a aria-label="Link to Verify:" class="heading-anchor" href="#/docs/reference/troubleshooting-quick-reference~verify-8">#</a></h2>
+<ul>
+<li><code>chatitems.yml -&gt; discord-images.enabled: true</code></li>
+<li>the Minecraft source channel allows ChatItems and bridge export</li>
+<li>the sender has the configured token permission</li>
+<li>vanilla assets can be downloaded or already exist in the local cache</li>
+<li>optional resource-pack paths resolve from <code>plugins/CoreChatX/</code></li>
+<li>the image count and network snapshot limits are not rejecting the request</li>
+</ul>
+<p>Use <code>/corechatx itemcache status</code> to inspect warmup state. A rendering failure does not
+break the Minecraft ChatItem preview; it only prevents the Discord attachment.</p>
+<h2 id="chat-bubbles-are-missing">Chat bubbles are missing<a aria-label="Link to Chat bubbles are missing" class="heading-anchor" href="#/docs/reference/troubleshooting-quick-reference~chat-bubbles-are-missing">#</a></h2>
+<h2 class="reference-section" id="verify-9">Verify:<a aria-label="Link to Verify:" class="heading-anchor" href="#/docs/reference/troubleshooting-quick-reference~verify-9">#</a></h2>
+<ul>
+<li>chat bubbles are enabled in <code>chatbubbles.yml</code></li>
+<li>the player has the bubble permission</li>
+<li>the player has not disabled bubbles in settings</li>
+<li>the channel has <code>allow-chat-bubbles: true</code></li>
+<li>the message passed normal CoreChatX checks</li>
+</ul>
+<p>In proxy mode, bubbles stay local to the backend where the sender is physically playing.</p>
+<h2 id="a-config-permission-warning-appears">A config permission warning appears<a aria-label="Link to A config permission warning appears" class="heading-anchor" href="#/docs/reference/troubleshooting-quick-reference~a-config-permission-warning-appears">#</a></h2>
+<h2 class="reference-section" id="check-dynamic-permission-nodes-in">Check dynamic permission nodes in:<a aria-label="Link to Check dynamic permission nodes in:" class="heading-anchor" href="#/docs/reference/troubleshooting-quick-reference~check-dynamic-permission-nodes-in">#</a></h2>
+<ul>
+<li><code>channels.yml</code></li>
+<li><code>pings.yml</code></li>
+<li><code>privacy.yml</code></li>
+<li><code>keywords.yml</code></li>
+<li><code>chatitems.yml</code></li>
+</ul>
+<p>Malformed nodes disable only the affected binding or keyword where validation is available.
+They do not require deleting the whole config.</p>
+<h2 id="a-runtime-data-file-looks-wrong">A runtime data file looks wrong<a aria-label="Link to A runtime data file looks wrong" class="heading-anchor" href="#/docs/reference/troubleshooting-quick-reference~a-runtime-data-file-looks-wrong">#</a></h2>
+<p>Stop the server, back up the file, then inspect it.
+Runtime files such as <code>playerdata.yml</code>, <code>channeldata.yml</code>, <code>ignoredata.yml</code>, <code>mutedata.yml</code>, and <code>discordlinks.yml</code> are live state.
+Deleting or editing them changes player/plugin data.</p>
+<hr/>

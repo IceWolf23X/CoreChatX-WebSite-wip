@@ -24,15 +24,32 @@ La gallery arriva volutamente **vuota**, con il placeholder già previsto: non s
 | Repository e cache delle release, nomi degli allegati JAR | `assets/js/data/site-config.js` → `releases` |
 | Immagini della preview e comportamento della gallery | `assets/js/data/site-config.js` → `assets.heroPreview` |
 | Titoli, pulsanti, schede, FAQ, menu, footer, ordine delle sezioni | `assets/js/data/landing-content.js` |
-| Categorie, titoli, spiegazioni e corpi degli articoli wiki | `assets/js/data/docs-content.js` |
+| Categorie, hub, titoli, descrizioni, ordine e collegamenti degli articoli wiki | `assets/js/data/docs-content.js` |
+| Corpo leggibile di ogni articolo wiki | `assets/content/docs/<article-id>.html` |
+| Bundle offline generato dei corpi | `assets/js/generated/docs-bodies.js` |
 | Etichette di ricerca, navigazione, copia, controlli della gallery | `assets/js/data/ui-text.js` |
 | Quali default vengono pubblicati dalla repository privata | `tools/config-sync-map.mjs` |
 
-Salva il file e ricarica il browser. Non occorre rigenerare nulla per una normale modifica ai `.js` editoriali.
+Salva il file e ricarica il browser. Le modifiche a home, identità e interfaccia non richiedono una build. Dopo una modifica a un corpo HTML della wiki esegui il comando del punto 2.1 prima di verificare o pubblicare.
 
 **La rigenerazione necessaria per i config riguarda i file originali** (`.yml`, `.properties`, ecc.): questi vengono impacchettati in un bundle JavaScript per essere disponibili anche offline. Non modificare a mano `assets/js/generated/config-files.js`. Lo snapshot delle release GitHub può essere aggiornato separatamente per la consultazione offline: vedi il punto 11.
 
-I corpi degli articoli usano `bodyHtml`: sono stringhe HTML dentro il `.js`, non contenuti da scrivere in `index.html`. Sono contenuti fidati dell'editor, non una destinazione per HTML fornito dai visitatori. La wiki e la reference HTML leggono direttamente questi dati; aggiornamenti e collegamenti si mantengono negli stessi file JavaScript.
+I corpi degli articoli sono file HTML leggibili in `assets/content/docs/`, uno per `article-id`, con ancore stabili. `docs-content.js` conserva metadati e il campo `bodyFile`; `assets/js/generated/docs-bodies.js` è il bundle automatico usato offline e non va modificato a mano. Sono contenuti fidati dell’editor, non una destinazione per HTML fornito dai visitatori.
+
+### 2.1 Modificare, aggiungere o rimuovere un articolo
+
+1. Per modificare un articolo, aggiorna il relativo `assets/content/docs/<article-id>.html`, mantenendo gli anchor già pubblici.
+2. Per aggiungerlo, inserisci metadati e `bodyFile` in `assets/js/data/docs-content.js`, crea il file HTML corrispondente e aggiungilo al gruppo/hub appropriato se deve comparire nell’overview.
+3. Per rimuoverlo, elimina il riferimento dal catalogo e il relativo file HTML solo quando non esistono più link o riferimenti che lo usano.
+4. Ricostruisci e controlla il bundle:
+
+```bash
+node tools/build-docs-bundle.mjs .
+node tools/build-docs-bundle.mjs . --check
+node tests/validate-theme.mjs
+```
+
+Il comando di build aggiorna `assets/js/generated/docs-bodies.js`; `--check` è non scrivente e fallisce se il bundle committato è obsoleto. I due entrypoint caricano prima il catalogo e poi il bundle, quindi l’anteprima offline e la reference usano lo stesso contenuto.
 
 ## 3. Configurare la gallery della preview
 
@@ -143,7 +160,7 @@ Nel valore incolla il token. Non inserirlo in un `.js`, in un file YAML del prog
 1. Verifica che `.github/workflows/sync-plugin-configs.yml` sia pubblicato nel branch predefinito del website.
 2. Dopo aver configurato il token, in **Actions** riabilita **Sync plugin configuration defaults → Enable workflow**, poi seleziona **Run workflow** sul branch predefinito. Il workflow resta disabilitato nella repository WIP finché il token non è disponibile.
 3. Controlla gli step di checkout, sincronizzazione, bundle, validazione e commit.
-4. Il risultato previsto è un commit che aggiorna `synced-configs/` e `assets/js/generated/config-files.js`; se i default sono già uguali, non viene creato un commit inutile.
+4. Il risultato previsto è un commit che aggiorna `synced-configs/` e `assets/js/generated/config-files.js`; se i default sono già uguali, non viene creato un commit inutile. La documentazione HTML segue invece `tools/build-docs-bundle.mjs`.
 5. Apri una pagina config della wiki e confronta una chiave con il file sorgente.
 
 Il workflow ha `permissions: contents: write`. Policy dell'organizzazione, branch protection o ruleset possono comunque impedirne il push: in quel caso adatta il flusso a una pull request o a un branch di sincronizzazione autorizzato, senza disabilitare indiscriminatamente le protezioni.
@@ -222,11 +239,11 @@ Se hai già copiato i config in `synced-configs/`, salta soltanto il primo coman
 
 Per ottenere il sito aggiornato sul PC dopo un sync fatto da Actions, esegui `git pull` nel clone website oppure scarica di nuovo la repository. L'archivio ZIP che avevi scaricato prima **non si aggiorna da solo**.
 
-Per distribuire un nuovo ZIP, comprimi l'intera cartella website aggiornata, includendo asset e bundle. Non includere `.git/`, `.sync/`, `__pycache__/`, token, checkout privati o file del tuo server. Per un pacchetto di solo consultazione bastano HTML, assets e config: la documentazione è incorporata nei dati JavaScript. Per un template riutilizzabile conserva anche guide, workflow, tools e tests.
+Per distribuire un nuovo ZIP, comprimi l'intera cartella website aggiornata, includendo asset, catalogo e bundle. Non includere `.git/`, `.sync/`, `__pycache__/`, token, checkout privati o file del tuo server. Per un pacchetto di solo consultazione bastano HTML, assets, il catalogo e il docs bundle generato, oltre ai config: la documentazione resta disponibile offline anche senza eseguire tool. Per un template riutilizzabile conserva anche guide, workflow, tools e tests.
 
 ### Aggiungere un nuovo file config
 
-Aggiungi una voce alla allow-list in `tools/config-sync-map.mjs`, con `id`, `platform`, `format`, `source`, `target` e `article`. Crea la corrispondente pagina in `docs-content.js` con `configFile` e un mount `data-config-file` che usino lo stesso id; poi sincronizza, rigenera e valida. Il dettaglio del componente è in `docs/CUSTOMIZATION.md`.
+Aggiungi una voce alla allow-list in `tools/config-sync-map.mjs`, con `id`, `platform`, `format`, `source`, `target` e `article`. Crea la corrispondente pagina in `docs-content.js` con `configFile` e un mount `data-config-file` che usino lo stesso id; poi sincronizza, rigenera e valida. Per il testo dell’articolo modifica il file HTML indicato da `bodyFile` e ricostruisci il docs bundle. Il dettaglio dei componenti è in `docs/CUSTOMIZATION.md`.
 
 I file non presenti nella lista **non vengono pubblicati automaticamente**, anche se terminano in `.yml`. Nuovi articoli e spiegazioni non vengono inventati a partire da nomi di chiavi. Se rimuovi una voce dalla lista, elimina esplicitamente anche il vecchio snapshot pubblico quando non deve più essere distribuito: il sync incluso non cancella genericamente le cartelle di destinazione.
 
@@ -236,7 +253,7 @@ Lavora su una nuova copia/repository, non sovrascrivere CoreChatX accidentalment
 
 1. In `site-config.js` cambia prodotto, descrizione, tagline, logo/favicon, link, palette e gallery. Sostituisci le immagini nei percorsi configurati.
 2. In `landing-content.js` sostituisci testi, schede, FAQ e collegamenti alla wiki.
-3. In `docs-content.js` sostituisci gli articoli e le categorie; rimuovi i contenuti CoreChatX non pertinenti. Aggiorna anche `ui-text.js`, che contiene testi editoriali delle pagine indice oltre alle etichette generiche.
+3. In `docs-content.js` sostituisci metadati, articoli e categorie; aggiorna i file HTML `assets/content/docs/` indicati da `bodyFile`; rimuovi i contenuti CoreChatX non pertinenti. Ricostruisci il docs bundle e aggiorna anche `ui-text.js`, che contiene testi editoriali delle pagine indice oltre alle etichette generiche.
 4. Aggiorna la pagina sull'ambito della documentazione e tutti i riferimenti rimasti al vecchio prodotto.
 5. In `tools/config-sync-map.mjs` cambia repository/ref e lista dei default. Rimuovi gli snapshot del vecchio plugin che non devono restare pubblici, poi rigenera il bundle.
 6. Allinea anche `repository`/`ref` nel workflow website e percorsi/branch/destinazione nel notifier del nuovo plugin. I secret devono avere accesso alle **nuove** repository.

@@ -1,0 +1,26 @@
+<h2 class="reference-section" id="purpose">Purpose:<a aria-label="Link to Purpose:" class="heading-anchor" href="#/docs/velocity/velocity-config-properties~purpose">#</a></h2>
+<ul>
+<li>declare one or more plugin messaging channels used as isolated CoreChatX groups</li>
+<li>control proxy-provided group player chat completions and TAB entries</li>
+<li>document where proxy-owned runtime data is stored</li>
+<li>optionally pin Velocity backend names to CoreChatX groups so pre-backend Discord login gates can run before Paper receives the player</li>
+</ul>
+<h2 class="reference-section" id="current-bundled-default">Current bundled default:<a aria-label="Link to Current bundled default:" class="heading-anchor" href="#/docs/velocity/velocity-config-properties~current-bundled-default">#</a></h2>
+<div class="config-file-mount" data-config-file="velocity/velocity-config.properties"></div>
+<h2 class="reference-section" id="important-rules">Important rules:<a aria-label="Link to Important rules:" class="heading-anchor" href="#/docs/velocity/velocity-config-properties~important-rules">#</a></h2>
+<ul>
+<li>each listed <code>network-channel</code> value creates a separate CoreChatX group</li>
+<li>each Paper backend joins the group matching its own <code>deployment.network-channel</code></li>
+<li><code>backend-groups.&lt;velocity-server-name&gt;=&lt;network-channel&gt;</code> is optional for normal routing but required for true pre-backend account-linking/role kicks in multi-group setups</li>
+<li>changing this file requires a Velocity restart</li>
+<li>changing <code>network-channel</code> also requires restart on affected backends after their <code>deployment.network-channel</code> is aligned</li>
+<li>Velocity startup prints the same <code>CORECHATX</code> banner shape with version, author, Velocity architecture, and project-link placeholder</li>
+<li>if invalid, the proxy logs degraded routing state instead of silently pretending everything is fine</li>
+<li>the same lowercase namespaced-key validation used by Paper is applied here</li>
+<li>Velocity normalizes packet source identity to the real backend connection and logs mismatches</li>
+<li><code>player-directory.chat-completions: false</code> leaves client chat completions untouched by CoreChatX</li>
+<li><code>player-directory.tab-entries: false</code> leaves client TAB entries untouched by CoreChatX</li>
+<li>in <code>PROXY</code>, Velocity owns runtime data under <code>data/groups/&lt;encoded-channel&gt;/</code> with YAML or in isolated database scopes with MySQL; Paper runtime YAML files are not the authority for cross-server state</li>
+<li>in <code>PROXY</code>, Discord bridge I/O, account-linking and required-play role checks are configured in Velocity <code>velocity-discord.yml</code>; there is no backend <code>authority-server</code> carrier requirement</li>
+</ul>
+<hr/>

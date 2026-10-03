@@ -14,7 +14,7 @@ Static, reusable CoreX product website with a landing page and documentation wik
 
 Gallery maintenance reference: [docs/GALLERY.md](docs/GALLERY.md).
 
-The shipped site has **no backend and no build step for normal content editing**. Open `index.html` directly. Landing copy, wiki copy, navigation labels, product identity, links, theme colors and asset paths are read from JavaScript data files.
+The shipped site has **no backend**. Open `index.html` directly. Landing copy, wiki metadata, navigation labels, product identity, links, theme colors and asset paths are read from JavaScript data files. Documentation article bodies are published as readable HTML sources and loaded through the generated offline docs bundle.
 
 ## Edit the website
 
@@ -22,13 +22,25 @@ The shipped site has **no backend and no build step for normal content editing**
 | --- | --- |
 | `assets/js/data/site-config.js` | Product name, logo/favicon paths, external links, hero gallery images/settings, public GitHub release repository and light/dark theme colors. |
 | `assets/js/data/landing-content.js` | Landing navigation and every landing section, including order, cards, FAQ and footer. |
-| `assets/js/data/docs-content.js` | Wiki groups, article metadata and article bodies. |
+| `assets/js/data/docs-content.js` | Wiki groups, hubs, article metadata, order and `bodyFile` references. |
+| `assets/content/docs/<article-id>.html` | One readable HTML source for each article body, with stable anchors. |
+| `assets/js/generated/docs-bodies.js` | Generated offline bundle that attaches `bodyHtml` to the catalog. Do not edit it manually. |
 | `assets/js/data/ui-text.js` | Interface text: search, theme, documentation controls, copy/expand labels and errors. |
 | `assets/img/` | Image assets. Add the files here (or elsewhere) and point to them from the JS data files. |
 
 `index.html` is intentionally only a shell. It should not contain product copy.
 
-The wiki and `reference.html` read the maintained article data directly. Article tools offer Copy, Print and the full HTML reference; configuration examples keep their own raw YAML/properties downloads. Update documentation in `docs-content.js` and validate its internal links before publishing.
+The wiki and `reference.html` load the catalog and docs bundle before rendering. Article tools offer Copy, Print and the full HTML reference; configuration examples keep their own raw YAML/properties downloads. To edit an article, change its HTML source, rebuild the docs bundle, and validate its internal links before publishing. Metadata, groups, hubs and order remain in `docs-content.js`.
+
+For documentation changes:
+
+```bash
+node tools/build-docs-bundle.mjs .
+node tools/build-docs-bundle.mjs . --check
+node tests/validate-theme.mjs
+```
+
+The first command writes `assets/js/generated/docs-bodies.js`; `--check` reports whether the committed bundle is stale without writing. Ordinary home, identity and UI edits need no docs build. Raw YAML/properties edits still use the separate config bundle command below.
 
 ## Configuration defaults
 
@@ -80,6 +92,7 @@ Run:
 ```bash
 node tests/validate-theme.mjs
 node --test
+node tests/browser_docs_content.cjs
 python tests/browser_github_releases.py
 python tests/browser_gallery.py
 python tests/browser_smoke.py --embedded
@@ -87,7 +100,9 @@ python tests/browser_preview_hover.py --embedded
 python tests/browser_ultrawide.py --embedded
 ```
 
-The browser test harness covers mobile, ordinary desktop and ultrawide layouts through 32:9. Managed test Chromium blocks native `file://` navigation, so it injects the exact shipped HTML/CSS/JS into a blank page. Landing/wiki/gallery regression tests verify no external requests; release UI tests use deterministic mocked API responses. Live public API access and GitHub Actions execution are separate checks.
+`browser_docs_content.cjs` uses an available Node Playwright runtime and Chromium to verify the real offline `file://` entrypoints, all articles/configuration mounts and both article and configuration-key search. If Playwright is supplied outside this checkout, expose its package directory through `NODE_PATH` for that command; no repository dependency installation is required when the runtime is already available.
+
+The Python browser harnesses cover mobile, ordinary desktop and ultrawide layouts through 32:9. Their original managed environment blocked native `file://` navigation, so the `--embedded` mode injects the exact shipped HTML/CSS/JS into a blank page. Landing/wiki/gallery regression tests verify no external requests; release UI tests use deterministic mocked API responses. Live public API access and GitHub Actions execution are separate checks.
 
 ## Releases / direct downloads
 

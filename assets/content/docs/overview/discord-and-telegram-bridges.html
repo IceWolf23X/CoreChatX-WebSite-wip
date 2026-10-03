@@ -1,0 +1,37 @@
+<p>CoreChatX includes built-in bridge support.</p>
+<p>Important disclosure: Discord and Telegram bridges are optional and only run when the server owner enables and configures them.
+When enabled, CoreChatX can send selected chat content, player display names, channel labels, and related message formatting to the Discord or Telegram services configured by the server owner.
+Inbound bridge messages can also bring Discord or Telegram messages back into configured Minecraft channels.</p>
+<h2 class="reference-section" id="bridge-features-include">Bridge features include:<a aria-label="Link to Bridge features include:" class="heading-anchor" href="#/docs/overview/discord-and-telegram-bridges~bridge-features-include">#</a></h2>
+<ul>
+<li>Discord outbound messages</li>
+<li>Discord inbound messages</li>
+<li>Telegram outbound messages</li>
+<li>Telegram inbound messages</li>
+<li>Telegram forum topic routing</li>
+<li>per-channel bridge targets</li>
+<li>channel-level bridge export control</li>
+<li>global bridge master switch</li>
+<li>cleaner reload and shutdown behavior</li>
+<li>safe message length handling</li>
+<li>Discord/Minecraft account linking</li>
+<li>optional linked-member nickname synchronization</li>
+<li>optional linked-account and Discord-role login gates</li>
+<li>immediate revocation when a linked member loses the final allowed role or leaves the configured guild</li>
+<li>join, quit, first-join, death, and advancement mirrors</li>
+<li>text and slash player-list embeds</li>
+<li>configurable public, DM, or slash-ephemeral player-list responses</li>
+<li>Discord channel-description updates with online counts and PlaceholderAPI support</li>
+<li>proxy and backend online/offline status embeds</li>
+<li>Discord console command relay and live console-log mirroring</li>
+<li>rendered Discord ChatItem images and per-item inspection menus</li>
+</ul>
+<p>Discord role-based admission requires the privileged <strong>Server Members Intent</strong>. When
+the gate is enabled, CoreChatX checks the linked member at login and reacts to live
+role or guild-membership changes: an affected online player is disconnected, and the
+same gate prevents reconnection until access is restored.</p>
+<p>The bridge layer is treated as part of the chat system, not as a separate external pipe with unrelated routing rules.</p>
+<p>That matters because channel rules, formatting, network behavior, and bridge routing should agree with each other.
+If they do not, players notice.
+Admins notice faster.</p>
+<hr/>

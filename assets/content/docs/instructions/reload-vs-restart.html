@@ -1,0 +1,48 @@
+<h2 class="reference-section" id="safe-with-corechatx-reload">Safe with <code>/corechatx reload</code>:<a aria-label="Link to Safe with /corechatx reload:" class="heading-anchor" href="#/docs/instructions/reload-vs-restart~safe-with-corechatx-reload">#</a></h2>
+<ul>
+<li><code>config.yml</code> for non-identity runtime toggles such as <code>debug</code>, hooks, logging, bridge/runtime gates, join/quit, first-join, network death announcements, and reload summary behavior</li>
+<li><code>messages.yml</code></li>
+<li><code>chat.yml</code></li>
+<li><code>pings.yml</code></li>
+<li><code>filter.yml</code></li>
+<li><code>chatitems.yml</code></li>
+<li><code>keywords.yml</code></li>
+<li><code>chatbubbles.yml</code></li>
+<li><code>channels.yml</code></li>
+<li><code>privacy.yml</code></li>
+<li><code>moderation.yml</code></li>
+<li><code>storage.yml</code> can be reread safely, but backend/identity/MySQL changes are rejected and require restart</li>
+<li><code>discord.yml</code></li>
+<li><code>telegram.yml</code></li>
+<li>locale files under <code>locales/</code></li>
+</ul>
+<p>Paper starts and stops its Discord gateway asynchronously. A successful <code>/corechatx reload</code> does not wait for Discord token verification or gateway readiness; Minecraft commands remain available while the bot reconnects. Gateway listeners and ready-state tasks are installed on the Paper thread only for the current lifecycle generation. Late builds, cancelled installation tasks and retired gateway callbacks cannot reactivate the previous bridge.</p>
+<p>In proxy mode, a normal Paper reload keeps the existing runtime-data client, hydrated player/privacy/moderation mirrors and pending storage requests. The client resolves the replacement network bridge through the current service registry. After transport registration, cached/online player domains and global state are refreshed asynchronously to recover updates missed while networking was disabled; existing values remain readable until the responses arrive. Final plugin shutdown still fails pending requests and clears the mirrors. This prevents transient default preferences or empty statistics after a configuration reload.</p>
+<p>On each proxy-backed Paper join, including a backend switch, Paper proactively requests player settings, privacy/channel state, the player's mute and global state from Velocity on the next server tick. It does not wait for the player's first chat message to start loading moderation data. The reads run asynchronously, with up to three attempts and ten server ticks between failed attempts. Paper waits for valid authority replies before applying its accepted-join display updates and first-join claim; callbacks for a departed or replaced connection are discarded. Unknown mute state still denies public/private messages until confirmed, so a slow or unavailable proxy can still produce the temporary-unavailability message. Failed writes are not automatically retried.</p>
+<p>The Paper-to-Velocity reply deadline is five seconds per request, separate from <code>storage.operation-timeout-ms</code> on Velocity. RPC timeout diagnostics include the operation, request ID, backend and player ID. Increasing the storage timeout alone does not extend that network reply deadline.</p>
+<p>If deployment mode, server ID or network channel is edited, reload retains the boot identity and logs a restart-required warning; ordinary runtime toggles still take effect.</p>
+<h2 class="reference-section" id="requires-full-restart-to-truly-take-effect">Requires full restart to truly take effect:<a aria-label="Link to Requires full restart to truly take effect:" class="heading-anchor" href="#/docs/instructions/reload-vs-restart~requires-full-restart-to-truly-take-effect">#</a></h2>
+<ul>
+<li><code>config.yml -&gt; deployment.mode</code></li>
+<li><code>config.yml -&gt; deployment.server-id</code></li>
+<li><code>config.yml -&gt; deployment.network-channel</code></li>
+<li><code>config.yml -&gt; advancement-sync.enabled</code>, <code>advancement-sync.endpoint</code>, and <code>advancement-sync.token</code>; <code>/corechatx reload</code> retains the boot service and its endpoint credentials</li>
+<li>switching a backend between standalone and proxy deployment</li>
+<li>changing any Velocity admin config (<code>velocity-config.properties</code>, <code>velocity-discord.yml</code>, <code>velocity-messages.yml</code>, <code>velocity-storage.yml</code>, or <code>velocity-advancements.properties</code>); there is no proxy-side config reload command</li>
+<li>when Velocity <code>velocity-config.properties -&gt; network-channel</code> changes, affected Paper backends must also use the same new <code>deployment.network-channel</code></li>
+</ul>
+<h2 class="reference-section" id="important-deployment-rule">Important deployment rule:<a aria-label="Link to Important deployment rule:" class="heading-anchor" href="#/docs/instructions/reload-vs-restart~important-deployment-rule">#</a></h2>
+<ul>
+<li>Paper backends and the Velocity proxy must use the exact same network channel</li>
+</ul>
+<h2 class="reference-section" id="artifact-model">Artifact model:<a aria-label="Link to Artifact model:" class="heading-anchor" href="#/docs/instructions/reload-vs-restart~artifact-model">#</a></h2>
+<ul>
+<li>CoreChatX currently ships as two separate runtime jars.</li>
+<li>CoreChatX Paper jar: install <code>corechatx-paper-&lt;version&gt;.jar</code> on each Paper backend.</li>
+<li>CoreChatX Velocity jar: install <code>corechatx-velocity-&lt;version&gt;.jar</code> on the Velocity proxy.</li>
+<li>Do not install the Paper jar on Velocity, and do not install the Velocity jar on Paper.</li>
+<li>source builds compile <code>corechatx-common</code> once as an internal shared module</li>
+<li>Maven Shade embeds exactly one copy of <code>corechatx-common</code>, <code>corechatx-storage-mysql</code>, HikariCP, and Connector/J in each runtime jar; platform/bridge libraries keep their existing Paper/Velocity loading model</li>
+<li>source builds also produce <code>corechatx-common-&lt;version&gt;.jar</code> and <code>corechatx-storage-mysql-&lt;version&gt;.jar</code>, but neither internal module jar is installed separately on a server</li>
+</ul>
+<hr/>

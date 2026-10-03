@@ -1,0 +1,30 @@
+<h2 class="reference-section" id="corechatx-supports-multiple-channel-styles">CoreChatX supports multiple channel styles:<a aria-label="Link to CoreChatX supports multiple channel styles:" class="heading-anchor" href="#/docs/overview/channels~corechatx-supports-multiple-channel-styles">#</a></h2>
+<ul>
+<li>global chat</li>
+<li>local chat</li>
+<li>staff chat</li>
+<li>network-wide chat</li>
+<li>role-based chat spaces</li>
+<li>custom server-defined channels</li>
+</ul>
+<p>Channel delivery scopes are explicit: <code>NETWORK</code> crosses matching Velocity groups,
+<code>SERVER</code> stays on one backend, and <code>LOCAL_RADIUS</code> stays within a configurable world radius.</p>
+<h2 class="reference-section" id="channels-can-decide">Channels can decide:<a aria-label="Link to Channels can decide:" class="heading-anchor" href="#/docs/overview/channels~channels-can-decide">#</a></h2>
+<ul>
+<li>who can send</li>
+<li>who can receive</li>
+<li>whether a short command such as <code>/g</code> switches or sends once to the channel</li>
+<li>which features are enabled</li>
+<li>how messages look</li>
+<li>whether chat bubbles are allowed</li>
+<li>whether ChatItems are allowed</li>
+<li>whether messages can be exported to Discord or Telegram</li>
+<li>whether ignored senders stay visible, lose notification rights, or are hidden in that channel</li>
+</ul>
+<p>Players with the corresponding permissions can also hide an accessible channel with
+<code>/hidechannel &lt;channel&gt; [minutes]</code> and restore it with <code>/unhidechannel &lt;channel&gt;</code>.
+A hidden channel cannot be sent to or received by that player; timed hides expire
+automatically, permanent hides remain until explicitly removed, and the setting follows
+the player across backend switches in proxy mode.</p>
+<p>This keeps channel behavior centralized instead of scattered across several plugins with separate ideas of how chat should behave.</p>
+<hr/>

@@ -6,14 +6,17 @@ import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 import vm from 'node:vm';
 import { CONFIG_FILES } from '../tools/config-sync-map.mjs';
+import { buildDocsBundle } from '../tools/build-docs-bundle.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+await buildDocsBundle(root, { check: true });
 const context = vm.createContext({ window: {} });
 for (const rel of [
   'assets/js/data/site-config.js',
   'assets/js/data/ui-text.js',
   'assets/js/data/landing-content.js',
   'assets/js/data/docs-content.js',
+  'assets/js/generated/docs-bodies.js',
   'assets/js/generated/config-files.js',
   'assets/js/generated/releases.js'
 ]) {

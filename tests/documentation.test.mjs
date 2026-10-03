@@ -6,11 +6,11 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-// Read documentation and interface data without loading the retired source documents.
+// Load the catalog and compiled HTML with the same offline contract used by both browser shells.
 function data() {
   const context = vm.createContext({ window: {} });
-  for (const file of ['docs-content.js', 'ui-text.js', 'landing-content.js']) {
-    vm.runInContext(fs.readFileSync(path.join(root, 'assets/js/data', file), 'utf8'), context);
+  for (const file of ['assets/js/data/docs-content.js', 'assets/js/generated/docs-bodies.js', 'assets/js/data/ui-text.js', 'assets/js/data/landing-content.js']) {
+    vm.runInContext(fs.readFileSync(path.join(root, file), 'utf8'), context);
   }
   return context.window;
 }

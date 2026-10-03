@@ -1,0 +1,141 @@
+<h2 class="reference-section" id="purpose">Purpose:<a aria-label="Link to Purpose:" class="heading-anchor" href="#/docs/paper/storage-yml~purpose">#</a></h2>
+<ul>
+<li>choose the restart-scoped standalone runtime backend</li>
+<li>define the durable namespace/scope identity</li>
+<li>configure the MySQL pool, bounded executor, schema journal, scope lease, login hydration, and operation bounds</li>
+</ul>
+<h2 class="reference-section" id="current-bundled-default">Current bundled default:<a aria-label="Link to Current bundled default:" class="heading-anchor" href="#/docs/paper/storage-yml~current-bundled-default">#</a></h2>
+<div class="config-file-mount" data-config-file="paper/storage.yml"></div>
+<h2 class="reference-section" id="backend-behavior">Backend behavior:<a aria-label="Link to Backend behavior:" class="heading-anchor" href="#/docs/paper/storage-yml~backend-behavior">#</a></h2>
+<ul>
+<li><code>YAML</code> is the default and retains the existing atomic temporary-file/replace persistence</li>
+<li><code>MYSQL</code> is active only when written explicitly as <code>storage.backend</code>; legacy <code>storage.sql.*</code> keys only generate a warning and never enable SQL</li>
+<li>standalone Paper owns the MySQL pool; proxy-mode Paper backends must keep their runtime authority on Velocity and do not open JDBC connections</li>
+<li>MySQL bootstrap is asynchronous and fail-closed: login and storage-dependent commands remain unavailable until schema, scope, lease, global state, and confirmed indexes are ready</li>
+<li>MySQL failure never falls back silently to YAML</li>
+</ul>
+<h2 class="reference-section" id="identity-and-restart-rules">Identity and restart rules:<a aria-label="Link to Identity and restart rules:" class="heading-anchor" href="#/docs/paper/storage-yml~identity-and-restart-rules">#</a></h2>
+<ul>
+<li><code>backend</code>, <code>namespace</code>, <code>scope</code>, and every <code>mysql.*</code> value require a full restart</li>
+<li><code>/corechatx reload</code> retains the boot pool, executor, lease, confirmed cache, and storage identity; edited restart-only values are rejected until restart</li>
+<li>changing YAML/MySQL authority by editing the enum alone is rejected when authoritative data already exists; use the journaled <code>/ccxstorage</code> migration or rollback workflow below</li>
+<li>an open migration/rollback journal reconstructs a mutation freeze before ordinary repositories start, including after a crash or restart</li>
+</ul>
+<h2 class="reference-section" id="credentials-and-tls">Credentials and TLS:<a aria-label="Link to Credentials and TLS:" class="heading-anchor" href="#/docs/paper/storage-yml~credentials-and-tls">#</a></h2>
+<ul>
+<li><code>password-env</code> is preferred; a non-blank environment variable overrides <code>password</code></li>
+<li>secrets are not embedded in the JDBC URL or printed by storage configuration diagnostics</li>
+<li><code>ssl-mode</code> is a Connector/J mode such as <code>VERIFY_IDENTITY</code>; use <code>DISABLED</code> only for a deliberately trusted local test environment. In that explicit mode CoreChatX enables Connector/J RSA public-key retrieval so a fresh MySQL 8 <code>caching_sha2_password</code> login can complete without TLS; secure TLS modes never enable that fallback</li>
+</ul>
+<h2 class="reference-section" id="pool-and-executor-bounds">Pool and executor bounds:<a aria-label="Link to Pool and executor bounds:" class="heading-anchor" href="#/docs/paper/storage-yml~pool-and-executor-bounds">#</a></h2>
+<ul>
+<li><code>validation-timeout-ms</code> must be lower than <code>connect-timeout-ms</code></li>
+<li><code>executor-threads</code> must be at least <code>1</code> and cannot exceed <code>maximum-pool-size</code></li>
+<li><code>executor-queue-capacity</code> is bounded; overload is rejected instead of growing memory without limit</li>
+<li><code>query-timeout-seconds</code> applies to every statement, while Connector/J socket timeout is derived from the same bound</li>
+<li><code>max-lifetime-ms</code>, <code>keepalive-time-ms</code>, and <code>shutdown-timeout-ms</code> control resource lifetime and bounded shutdown</li>
+</ul>
+<h2 class="reference-section" id="admission-and-response-policy">Admission and response policy:<a aria-label="Link to Admission and response policy:" class="heading-anchor" href="#/docs/paper/storage-yml~admission-and-response-policy">#</a></h2>
+<ul>
+<li><code>login-hydration-timeout-ms</code> is the only bounded wait performed by Paper, and it runs in <code>AsyncPlayerPreLoginEvent</code>, never on the primary thread</li>
+<li>hydration loads settings/hidden channels, statistics, active channel, ignores, mute state, and Discord link/unlink state as one consistent snapshot</li>
+<li><code>operation-timeout-ms</code> bounds the user-facing response without cancelling an already accepted authoritative transaction; a late commit still updates the confirmed cache and retains per-player mutation ordering</li>
+<li><code>unavailable-message</code> is the non-blank login/command message used while authority is unavailable</li>
+</ul>
+<h2 class="reference-section" id="schema-and-lease-policy">Schema and lease policy:<a aria-label="Link to Schema and lease policy:" class="heading-anchor" href="#/docs/paper/storage-yml~schema-and-lease-policy">#</a></h2>
+<ul>
+<li><code>schema-auto-migrate: true</code> installs or resumes the checksummed V1 runtime schema, V2 migration-control extension, V3 channel-persistence preference, and V4 advancement records under an exclusive database lock; CoreChatX 2026.3.1 requires V4 even when advancement sync is disabled</li>
+<li>history is journaled as <code>RUNNING</code>, <code>SUCCESS</code>, or <code>FAILED</code>; final table/column/engine/unique-index verification occurs before <code>SUCCESS</code></li>
+<li><code>schema-auto-migrate: false</code> refuses startup when a required version is missing; externally managed schemas must include V1 through V4 before boot</li>
+<li><code>lease-duration-ms</code> and <code>lease-renew-interval-ms</code> use database time; another live owner for the same scope is rejected and expired takeover receives a newer fencing token</li>
+</ul>
+<h2 id="storage-maintenance-and-migration-workflow">Storage maintenance and migration workflow<a aria-label="Link to Storage maintenance and migration workflow" class="heading-anchor" href="#/docs/paper/storage-yml~storage-maintenance-and-migration-workflow">#</a></h2>
+<p><code>/ccxstorage</code> is the recovery-safe storage control plane. It is registered before normal
+runtime services so <code>status</code>, validation, parity checks, resume, and safe abort remain
+available when an incomplete transition intentionally keeps gameplay storage fail-closed.
+Inspection and backups require <code>corechatx.command.storage</code> (default <code>op</code>); migration and
+rollback state changes are console-only even when a player is an operator.</p>
+<h2 class="reference-section" id="paper-operates-one-standalone-scope">Paper operates one standalone scope:<a aria-label="Link to Paper operates one standalone scope:" class="heading-anchor" href="#/docs/paper/storage-yml~paper-operates-one-standalone-scope">#</a></h2>
+<div class="code-block"><div class="code-header"><span>Plain text</span><div><button aria-label="Copy code" class="copy-code" type="button">Copy</button></div></div><pre tabindex="0"><code class="language-text">/ccxstorage status
+/ccxstorage check files
+/ccxstorage check mysql
+/ccxstorage check parity &lt;run-uuid&gt;
+/ccxstorage backup files
+/ccxstorage backup mysql
+/ccxstorage backup list
+/ccxstorage backup verify &lt;backup-id-or-file&gt;
+/ccxstorage migrate files-to-mysql plan
+/ccxstorage migrate files-to-mysql execute &lt;run-uuid&gt; &lt;confirmation-token&gt;
+/ccxstorage migrate files-to-mysql status
+/ccxstorage migrate files-to-mysql resume &lt;run-uuid&gt; [confirmation-token]
+/ccxstorage migrate files-to-mysql abort &lt;run-uuid&gt;
+/ccxstorage rollback mysql-to-files plan
+/ccxstorage rollback mysql-to-files execute &lt;run-uuid&gt; &lt;confirmation-token&gt;
+/ccxstorage rollback mysql-to-files status
+/ccxstorage rollback mysql-to-files resume &lt;run-uuid&gt; [confirmation-token]
+/ccxstorage rollback mysql-to-files abort &lt;run-uuid&gt;
+/ccxstorage history
+</code></pre></div>
+<p>Velocity reads one global backend choice but owns one authoritative scope per configured
+network-channel group. Read-only checks and backups therefore require either
+<code>--scope &lt;group&gt;</code> or <code>--all-scopes</code>. Backend transitions must cover every configured group:</p>
+<div class="code-block"><div class="code-header"><span>Plain text</span><div><button aria-label="Copy code" class="copy-code" type="button">Copy</button></div></div><pre tabindex="0"><code class="language-text">/ccxstorage status
+/ccxstorage check files --scope &lt;group&gt;
+/ccxstorage check mysql --all-scopes
+/ccxstorage check parity --all-scopes
+/ccxstorage backup files --all-scopes
+/ccxstorage backup mysql --scope &lt;group&gt;
+/ccxstorage backup list
+/ccxstorage backup verify &lt;backup-id-or-file&gt;
+/ccxstorage history --all-scopes
+/ccxstorage migrate files-to-mysql plan --all-scopes
+/ccxstorage migrate files-to-mysql execute --all-scopes &lt;group&gt;=&lt;run-uuid&gt;=&lt;token&gt; ...
+/ccxstorage migrate files-to-mysql status --all-scopes
+/ccxstorage migrate files-to-mysql resume --all-scopes [&lt;group&gt;=&lt;token&gt; ...]
+/ccxstorage migrate files-to-mysql abort --all-scopes
+/ccxstorage rollback mysql-to-files plan --all-scopes
+/ccxstorage rollback mysql-to-files execute --all-scopes &lt;group&gt;=&lt;run-uuid&gt;=&lt;token&gt; ...
+/ccxstorage rollback mysql-to-files status --all-scopes
+/ccxstorage rollback mysql-to-files resume --all-scopes [&lt;group&gt;=&lt;token&gt; ...]
+/ccxstorage rollback mysql-to-files abort --all-scopes
+</code></pre></div>
+<h2 class="reference-section" id="safe-files-to-mysql-cutover">Safe files-to-MySQL cutover:<a aria-label="Link to Safe files-to-MySQL cutover:" class="heading-anchor" href="#/docs/paper/storage-yml~safe-files-to-mysql-cutover">#</a></h2>
+<ol>
+<li>Run <code>check files</code>, then <code>plan</code>; copy the emitted run UUID and short-lived token.</li>
+<li>Run <code>execute</code>. CoreChatX drains accepted mutations, flushes YAML, rechecks the source,
+creates and verifies an immutable backup, proves the target empty, imports, verifies
+canonical parity, and leaves YAML frozen behind a durable journal.</li>
+<li>Follow the exact terminal instruction: change <code>storage.backend</code> to <code>MYSQL</code> and restart.</li>
+<li>Startup verifies the run, acquires the MySQL lease, hydrates the runtime, marks the run
+active, and only then closes the local journal.</li>
+</ol>
+<p>Safe MySQL-to-files rollback always exports the latest database state; never restore a
+pre-cutover YAML archive over a MySQL authority that has accepted newer writes. Run the
+rollback <code>plan</code> and <code>execute</code>, change the backend to <code>YAML</code>, then restart. Startup verifies
+the durable database run, resumes the crash-safe staged-file promotion, retains the former
+live files under <code>storage-rollbacks/&lt;run&gt;-originals</code>, verifies parity, and activates YAML.</p>
+<p>Backups are published only after checksum verification. Their ZIP manifest includes the
+platform, plugin/Java versions, UTC time, actor, storage identity, transition evidence,
+per-domain hashes, and artifact hashes. Credentials and storage configuration files are
+excluded. <code>backup mysql</code> is a portable logical CoreChatX snapshot, not a replacement for a
+DBA physical backup. Confirmation tokens are printed only by <code>plan</code>, expire after ten
+minutes, are stored in MySQL only as hashes, and are never cached for tab completion.</p>
+<p>If execute/resume fails after a journal exists, do not delete the journal or staging files.
+Use <code>status</code>, <code>check parity</code>, <code>resume</code>, or the direction-specific safe <code>abort</code>. In
+recovery-only startup, a successful abort requires one restart before ordinary services are
+reconstructed. If MySQL state cannot prove an abort safe, CoreChatX deliberately remains
+frozen.</p>
+<p>Migration run IDs are valid only within the configured storage scope. Aborting a planned or failed files-to-MySQL run changes its metadata without deleting runtime rows. An imported pre-cutover run can remove staged rows only while it exclusively owns the transition, has no active runtime lease, and the current canonical fingerprint still matches its import. Changed data, another incomplete transition, or an ambiguous <code>RUNNING</code> state makes abort fail safely; inspect history and backups before recovery.</p>
+<p>A verified abort now records the local terminal state <code>ABORTED</code>, while <code>CLOSED</code>
+identifies a completed cutover. A new attempt after abort starts from the original source;
+it does not require deleting the journal. Legacy <code>CLOSED</code> aborts are reconciled by <code>plan</code>
+or <code>execute</code> only when the matching MySQL run proves that the same scope and direction
+were aborted. On Velocity, <code>abort --all-scopes</code> also cleans plans created before any local
+journal was published and permits safe repeated aborts. An active/imported run with a
+missing journal is not silently treated as a plan. After a new plan, use its new run IDs
+and confirmation tokens.</p>
+<p>Keep the corrected JARs for subsequent maintenance: older builds do not recognize the
+new <code>ABORTED</code> local journal state. Do not edit transition files or database checksums to
+make an older build accept them. Source builds preserve the original SQL resource bytes
+through <code>.gitattributes</code>; schema checksum validation remains strict.</p>
+<hr/>

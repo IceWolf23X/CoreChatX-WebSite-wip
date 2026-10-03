@@ -1,0 +1,35 @@
+<h2 class="reference-section" id="purpose">Purpose:<a aria-label="Link to Purpose:" class="heading-anchor" href="#/docs/paper/chatitems-yml~purpose">#</a></h2>
+<ul>
+<li>token aliases</li>
+<li>permission nodes per token family</li>
+<li>visible token formatting</li>
+<li>preview expiration</li>
+<li>preview inventory titles</li>
+<li>Discord PNG rendering and embed text for ChatItem snapshots</li>
+<li>Discord item-inspection dropdowns</li>
+<li>vanilla/resource-pack asset resolution and render scaling</li>
+<li>cross-server snapshot request size and timeout limits</li>
+</ul>
+<h2 class="reference-section" id="current-bundled-default">Current bundled default:<a aria-label="Link to Current bundled default:" class="heading-anchor" href="#/docs/paper/chatitems-yml~current-bundled-default">#</a></h2>
+<div class="config-file-mount" data-config-file="paper/chatitems.yml"></div>
+<h2 class="reference-section" id="behavior-notes">Behavior notes:<a aria-label="Link to Behavior notes:" class="heading-anchor" href="#/docs/paper/chatitems-yml~behavior-notes">#</a></h2>
+<ul>
+<li>Minecraft previews are immutable snapshots captured when the message is accepted; expiration or reload makes old preview links fail closed</li>
+<li><code>discord-images.enabled</code> controls only rendered Discord attachments; in-game ChatItem tokens and clickable previews remain available</li>
+<li>Discord rendering uses locally cached vanilla client assets and optional resource packs; relative pack paths are resolved from <code>plugins/CoreChatX/</code></li>
+<li>non-item Discord snapshots can expose an item selector whose response is ephemeral to the selecting Discord user</li>
+<li><code>/corechatx itemcache warmup|status|cancel</code> manages the asynchronous render cache warmup and requires <code>corechatx.command.itemcache</code> for players</li>
+<li>if the sender lacks the required permission, the token stays plain text</li>
+<li>snapshots are runtime objects and are cleared on reload/restart</li>
+<li>multiple ChatItem tokens in the same player message share one snapshot UUID/bundle; each token click carries the requested view, such as <code>item</code>, <code>armor</code>, or <code>inventory</code></li>
+<li>snapshot UUIDs are treated as short-lived capability ids: anyone who received the rendered chat component can open the available preview views until it expires, but ids are random, not listed, and not persisted</li>
+<li>in proxy mode, chat packets carry only lightweight ChatItem bundle refs; on click, Velocity requests the full bundle from the source backend and forwards the response to the requesting backend</li>
+<li>Velocity can cache a returned remote bundle until it expires, so later clicks on other views from the same message do not have to ask the source backend again</li>
+<li>because current per-message parsing shares one bundle, normal chat generally emits one bundle ref even when the message contains several ChatItem tokens; <code>network.max-snapshots-per-message</code> remains a defensive protocol bound</li>
+<li>if the remote bundle is missing, expired, rejected, or not returned before <code>network.request-timeout-seconds</code>, the player receives the normal expired-preview feedback</li>
+<li>oversized or invalid ChatItem bundle payloads are rejected without blocking the chat message itself</li>
+<li><code>network.max-compressed-bytes</code>, <code>network.max-uncompressed-bytes</code>, and <code>network.max-item-bytes</code> protect Paper-side bundle serialization and import during remote click handling</li>
+<li><code>network.request-timeout-seconds</code> is clamped to at least <code>1</code></li>
+<li>ChatItem byte limits are clamped to at least <code>1024</code> bytes</li>
+</ul>
+<hr/>

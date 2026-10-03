@@ -51,11 +51,20 @@ Edit `assets/js/data/landing-content.js`.
 
 ## 3. Documentation content
 
-Edit `assets/js/data/docs-content.js`.
+Edit article metadata and navigation in `assets/js/data/docs-content.js`. Edit article prose in the matching `assets/content/docs/<article-id>.html` file.
 
-Each article is a JavaScript object with metadata and `bodyHtml`. The sidebar, search index, table of contents, previous/next navigation and source links are derived at runtime.
+Each article is a catalog object with metadata and a `bodyFile` path. The sidebar, search index, table of contents, previous/next navigation and source links are derived at runtime. `assets/js/generated/docs-bodies.js` is generated from the catalog and HTML sources; do not edit it by hand.
 
-A normal article may contain HTML directly. A plugin configuration article should **not** duplicate the default config. Instead use:
+After changing an article body, run:
+
+```bash
+node tools/build-docs-bundle.mjs .
+node tools/build-docs-bundle.mjs . --check
+```
+
+The first command writes the offline bundle and the second checks that it is current without writing. Add or remove an article by updating its catalog entry, HTML body and overview group/hub when needed, then rebuild and run `node tests/validate-theme.mjs`. Ordinary landing, identity and UI wording changes do not require this build.
+
+Article bodies may contain trusted HTML directly in their dedicated source file. A plugin configuration article should **not** duplicate the default config. Instead use:
 
 ```js
 configFile: {
@@ -70,7 +79,7 @@ and place the mount where the config should appear:
 <div class="config-file-mount" data-config-file="paper/config.yml"></div>
 ```
 
-The renderer gets the raw content from `assets/js/generated/config-files.js`.
+The renderer gets article HTML from the docs bundle and raw configuration content from `assets/js/generated/config-files.js`.
 
 The synchronization manifest is format-agnostic. A future `.json`, `.toml`, `.config`, `.conf` or other text default can be added in `tools/config-sync-map.mjs` by setting its `format`; the renderer keeps the original bytes as text and uses the format only for the visible label / syntax class.
 

@@ -1,0 +1,80 @@
+<p>Use this document as the operational reference for a real installation.
+It is intentionally more detailed than the feature list because it documents the files, runtime gates, restart requirements, and safety limits that matter when the plugin is already installed on a server.</p>
+<h2 class="reference-section" id="minimum-expectations">Minimum expectations:<a aria-label="Link to Minimum expectations:" class="heading-anchor" href="#/docs/instructions/before-you-configure~minimum-expectations">#</a></h2>
+<ul>
+<li>Java 21 runtime</li>
+<li>Paper <code>1.21.11</code> for backend servers</li>
+<li>Velocity for multi-backend network installs</li>
+<li>the Paper CoreChatX jar installed only on Paper backends</li>
+<li>the Velocity CoreChatX jar installed only on Velocity</li>
+</ul>
+<h2 class="reference-section" id="optional-integrations">Optional integrations:<a aria-label="Link to Optional integrations:" class="heading-anchor" href="#/docs/instructions/before-you-configure~optional-integrations">#</a></h2>
+<ul>
+<li>LuckPerms for rank/group metadata and permission assignment</li>
+<li>PlaceholderAPI for dynamic placeholders in server-controlled templates</li>
+<li>PremiumVanish for suppressing hidden players' join, first-join, and quit announcements</li>
+<li>Discord bot token and required gateway intents for the Discord bridge</li>
+<li>Telegram bot token for the Telegram Bot API long-polling bridge</li>
+</ul>
+<h2 class="reference-section" id="core-terminology">Core terminology:<a aria-label="Link to Core terminology:" class="heading-anchor" href="#/docs/instructions/before-you-configure~core-terminology">#</a></h2>
+<ul>
+<li><code>Paper backend</code> means a real Minecraft server running the Paper jar</li>
+<li><code>Velocity proxy</code> means the proxy process running the Velocity jar</li>
+<li><code>STANDALONE</code> means one Paper server without cross-backend CoreChatX routing</li>
+<li><code>PROXY</code> means a Paper backend connected to a Velocity network</li>
+<li><code>server-id</code> is the unique CoreChatX identity of one Paper backend</li>
+<li><code>network-channel</code> is the plugin messaging channel shared by Paper and Velocity</li>
+<li><code>bridge</code> means Discord or Telegram inbound/outbound relay</li>
+<li><code>runtime data file</code> means generated player/plugin state, not a decorative default config</li>
+</ul>
+<h2 class="reference-section" id="high-level-runtime-model">High-level runtime model:<a aria-label="Link to High-level runtime model:" class="heading-anchor" href="#/docs/instructions/before-you-configure~high-level-runtime-model">#</a></h2>
+<ul>
+<li>Paper owns chat parsing, formatting, commands, chat items, bubbles, pings, local bridge rendering, and all static backend configuration</li>
+<li>In <code>STANDALONE</code>, Paper owns runtime player/plugin data in local YAML files or the explicitly selected MySQL backend</li>
+<li>In <code>PROXY</code>, Velocity owns runtime data that must survive backend switches: player settings, nicknames, ignore lists, active channels, mutes, global state, Discord links, and pending link codes</li>
+<li>Velocity also relays network packets, player directory data, global completions, TAB entries, and remote ChatItem snapshot requests</li>
+<li>external bridges are configured on Paper in <code>STANDALONE</code>; in <code>PROXY</code>, Velocity owns Discord while Paper backends still own Telegram</li>
+<li>player-authored chat is sanitized and controlled before it becomes a rendered Adventure component</li>
+<li>server-controlled templates can use MiniMessage and, where supported, PlaceholderAPI</li>
+</ul>
+<h2 class="reference-section" id="keep-this-distinction-in-mind">Keep this distinction in mind:<a aria-label="Link to Keep this distinction in mind:" class="heading-anchor" href="#/docs/instructions/before-you-configure~keep-this-distinction-in-mind">#</a></h2>
+<ul>
+<li>admin config strings are trusted server templates</li>
+<li>raw player messages are untrusted input</li>
+<li>runtime data files are live state</li>
+</ul>
+<h2 id="corechatx-project-identity">CoreChatX project identity<a aria-label="Link to CoreChatX project identity" class="heading-anchor" href="#/docs/instructions/before-you-configure~corechatx-project-identity">#</a></h2>
+<h2 class="reference-section" id="current-public-identity">Current public identity:<a aria-label="Link to Current public identity:" class="heading-anchor" href="#/docs/instructions/before-you-configure~current-public-identity">#</a></h2>
+<ul>
+<li>product/plugin name: <code>CoreChatX</code></li>
+<li>Paper plugin name: <code>CoreChatX</code></li>
+<li>Velocity plugin id: <code>corechatx</code></li>
+<li>Java package root: <code>me.icewolf23.corechatx</code></li>
+<li>Maven parent artifact: <code>corechatx-parent</code></li>
+<li>Maven runtime artifacts: <code>corechatx-paper</code> and <code>corechatx-velocity</code></li>
+<li>shared common module: <code>corechatx-common</code></li>
+<li>default Paper command: <code>/corechatx</code></li>
+<li>default Paper command alias: <code>/ccx</code></li>
+<li>default settings command alias: <code>/ccxsettings</code></li>
+<li>default permission namespace: <code>corechatx.*</code></li>
+<li>default plugin messaging channel: <code>corechatx:main</code></li>
+</ul>
+<h2 class="reference-section" id="clean-install-rule">Clean install rule:<a aria-label="Link to Clean install rule:" class="heading-anchor" href="#/docs/instructions/before-you-configure~clean-install-rule">#</a></h2>
+<ul>
+<li>install <code>corechatx-paper-&lt;version&gt;.jar</code> on Paper</li>
+<li>install <code>corechatx-velocity-&lt;version&gt;.jar</code> on Velocity</li>
+</ul>
+<p>When upgrading the 2026.3.0 storage corrections, deploy matching builds on Velocity and every Paper backend in the group. Settings intents, single-player ignore additions/removals, atomic chat-mute updates and first-join claims use new proxy request actions. An older proxy cannot acknowledge these actions, so a mixed deployment can reject or time out mutations. Command success waits for the authority response; a caller timeout does not prove that the write was cancelled. <code>/ignore</code> and <code>/unignore</code> apply the requested final state idempotently, including when an opposite request is still pending. Ignore capacity is checked by the authority.</p>
+<p>Proxy moderation refuses public chat and private messages while the player's mute state is still unknown. The request remains asynchronous; the player receives the existing temporary runtime-data-unavailable message and can retry. A delayed negative read cannot override a known mute or cleared state. Velocity's YAML authority also checks normalized nickname uniqueness atomically with each nickname-bearing write, including competing requests for different players.</p>
+<p>Paper's persistent YAML files are loaded strictly. A malformed or unreadable existing file stops storage initialization instead of being treated as empty data. A failed player/global reload also fences subsequent writes and shutdown flushes until the file is repaired and successfully reloaded. Preserve the original file and restore a verified backup or correct its syntax; do not delete live data to force startup.</p>
+<ul>
+<li>keep Paper data in <code>plugins/CoreChatX/</code></li>
+<li>keep Velocity data in <code>plugins/corechatx/</code></li>
+</ul>
+<h2 class="reference-section" id="old-install-rule">Old install rule:<a aria-label="Link to Old install rule:" class="heading-anchor" href="#/docs/instructions/before-you-configure~old-install-rule">#</a></h2>
+<ul>
+<li>do not mix old jars, old plugin ids, old permission namespaces, or old network channels with CoreChatX</li>
+<li>treat older differently named config folders as old install data</li>
+<li>for a clean CoreChatX setup, let the plugin generate fresh defaults and manually reapply only the settings you still want</li>
+</ul>
+<hr/>

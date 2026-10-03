@@ -7,5 +7,7 @@
 *.md text eol=lf
 *.cmd text eol=crlf
 *.ps1 text eol=crlf
+# Article sources must match the LF text stored in the generated offline bundle.
+/assets/content/docs/** text eol=lf
 # More-specific rule is repeated last to preserve raw config snapshots.
 /synced-configs/** -text

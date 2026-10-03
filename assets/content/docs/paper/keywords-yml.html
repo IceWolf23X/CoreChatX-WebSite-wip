@@ -1,0 +1,21 @@
+<h2 class="reference-section" id="purpose">Purpose:<a aria-label="Link to Purpose:" class="heading-anchor" href="#/docs/paper/keywords-yml~purpose">#</a></h2>
+<ul>
+<li>interactive reusable chat tokens</li>
+<li>one MiniMessage renderer per keyword</li>
+<li>optional permission gates</li>
+<li>optional PlaceholderAPI expansion per keyword</li>
+<li>optional channel restrictions</li>
+</ul>
+<h2 class="reference-section" id="current-bundled-default">Current bundled default:<a aria-label="Link to Current bundled default:" class="heading-anchor" href="#/docs/paper/keywords-yml~current-bundled-default">#</a></h2>
+<div class="config-file-mount" data-config-file="paper/keywords.yml"></div>
+<h2 class="reference-section" id="behavior-notes">Behavior notes:<a aria-label="Link to Behavior notes:" class="heading-anchor" href="#/docs/paper/keywords-yml~behavior-notes">#</a></h2>
+<ul>
+<li>token aliases are matched literally and case-sensitively</li>
+<li>if a sender lacks the configured permission, the token remains plain text</li>
+<li>if <code>enabled-channels</code> is non-empty, the keyword only works in those channels</li>
+<li>if the current channel is listed in <code>disabled-channels</code>, the token remains plain text</li>
+<li>if <code>allow-placeholderapi: true</code>, PlaceholderAPI is applied to the renderer before MiniMessage deserialization when PlaceholderAPI is installed and enabled</li>
+<li>in proxy mode, network chat and remote PMs transport the rendered component from the source backend</li>
+<li>invalid keyword definitions only disable themselves and log a warning</li>
+</ul>
+<hr/>

@@ -1,0 +1,19 @@
+<h2 class="reference-section" id="purpose">Purpose:<a aria-label="Link to Purpose:" class="heading-anchor" href="#/docs/velocity/velocity-storage-yml~purpose">#</a></h2>
+<ul>
+<li>choose <code>YAML</code> or <code>MYSQL</code> for the Velocity-owned runtime authority</li>
+<li>define the restart-scoped namespace shared by all configured groups</li>
+<li>configure the one process-wide MySQL pool/executor and bounded proxy operation response</li>
+</ul>
+<h2 class="reference-section" id="current-bundled-default">Current bundled default:<a aria-label="Link to Current bundled default:" class="heading-anchor" href="#/docs/velocity/velocity-storage-yml~current-bundled-default">#</a></h2>
+<div class="config-file-mount" data-config-file="velocity/velocity-storage.yml"></div>
+<h2 class="reference-section" id="important-rules">Important rules:<a aria-label="Link to Important rules:" class="heading-anchor" href="#/docs/velocity/velocity-storage-yml~important-rules">#</a></h2>
+<ul>
+<li>Velocity is the only MySQL owner in <code>PROXY</code>; Paper backends continue to use proxy repositories and never open a database connection</li>
+<li>all groups share one Hikari pool and bounded executor but use isolated numeric scopes derived from namespace, proxy authority, and group channel</li>
+<li>startup returns a Velocity <code>EventTask</code> and publishes no routing/Discord runtime until every configured group authority is ready</li>
+<li>one failed group keeps the entire MySQL runtime unavailable; there is no partial YAML fallback</li>
+<li><code>operation-timeout-ms</code> bounds the backend/JDA response stage without cancelling the authoritative commit or its confirmed-cache update</li>
+<li>backend, namespace, pool, executor, schema, and lease settings all require a full Velocity restart</li>
+<li>the password environment override, schema journal, structural verification, DB-time lease, fencing token, and resource bounds follow the same rules documented for Paper <code>storage.yml</code></li>
+</ul>
+<hr/>

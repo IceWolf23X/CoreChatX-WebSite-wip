@@ -1,0 +1,180 @@
+<p>Most commands below are Paper gameplay commands. <code>/ccxstorage</code> is registered on both Paper
+and Velocity; its complete platform-specific grammar and restart workflow are documented in
+the storage-maintenance section above.</p>
+<div aria-label="Scrollable reference table" class="table-scroll" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Permission (default)</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/corechatx</code> or <code>/ccx</code></td>
+<td><code>corechatx.command.corechatx</code> (<code>true</code>)</td>
+<td>Shows only the root subcommands the sender can use.</td>
+</tr>
+<tr>
+<td><code>/corechatx reload</code></td>
+<td><code>corechatx.command.reload</code> (<code>op</code>)</td>
+<td>Rebuilds Paper configuration, repositories, services, bridges, tasks, snapshots, and bubbles using the reload-safe lifecycle.</td>
+</tr>
+<tr>
+<td><code>/corechatx settings</code></td>
+<td><code>corechatx.command.settings</code> (<code>true</code>)</td>
+<td>Opens the same player GUI as <code>/chatsettings</code>.</td>
+</tr>
+<tr>
+<td><code>/corechatx locale [tag]</code></td>
+<td><code>corechatx.command.locale</code> (<code>true</code>)</td>
+<td>Shows or changes the player's locale.</td>
+</tr>
+<tr>
+<td><code>/corechatx itemcache &lt;warmup|status|cancel&gt;</code></td>
+<td><code>corechatx.command.itemcache</code> (<code>op</code>)</td>
+<td>Manages Discord ChatItem render-cache warmup; console may use it without a permission check.</td>
+</tr>
+<tr>
+<td><code>/ccxstorage &lt;status|check|backup|migrate|rollback|history&gt;</code></td>
+<td><code>corechatx.command.storage</code> (<code>op</code>)</td>
+<td>Validates, backs up, migrates, resumes, aborts, and audits authoritative storage; migration/rollback mutations are console-only.</td>
+</tr>
+<tr>
+<td><code>/msg &lt;player&gt; &lt;message&gt;</code> (<code>/tell</code>, <code>/whisper</code>, <code>/w</code>)</td>
+<td><code>corechatx.command.msg</code> (<code>true</code>)</td>
+<td>Sends a private message, including proxy routing when available.</td>
+</tr>
+<tr>
+<td><code>/reply &lt;message&gt;</code> (<code>/r</code>)</td>
+<td><code>corechatx.command.reply</code> (<code>true</code>)</td>
+<td>Replies to the current runtime conversation target.</td>
+</tr>
+<tr>
+<td><code>/socialspy</code> (<code>/spy</code>)</td>
+<td><code>corechatx.command.socialspy</code> (<code>op</code>)</td>
+<td>Toggles persistent PM social spy.</td>
+</tr>
+<tr>
+<td><code>/broadcast &lt;message&gt;</code> (<code>/bc</code>)</td>
+<td><code>corechatx.command.broadcast</code> (<code>op</code>)</td>
+<td>Sends the configured formatted staff broadcast.</td>
+</tr>
+<tr>
+<td><code>/nick &lt;nickname|off&gt;</code></td>
+<td><code>corechatx.command.nick</code> (<code>true</code>)</td>
+<td>Sets or clears the sender's persistent nickname; <code>clear</code> and <code>reset</code> also clear it.</td>
+</tr>
+<tr>
+<td><code>/nick &lt;player&gt; &lt;nickname|off&gt;</code></td>
+<td><code>corechatx.command.nick.others</code> (<code>op</code>)</td>
+<td>Sets or clears another online player's nickname.</td>
+</tr>
+<tr>
+<td><code>/realname &lt;nickname&gt;</code></td>
+<td><code>corechatx.command.realname</code> (<code>true</code>)</td>
+<td>Resolves a custom nickname to the real Minecraft username.</td>
+</tr>
+<tr>
+<td><code>/discord link</code></td>
+<td><code>corechatx.command.discord.link</code> (<code>true</code>)</td>
+<td>Generates a one-time Discord link code.</td>
+</tr>
+<tr>
+<td><code>/discord unlink</code></td>
+<td><code>corechatx.command.discord.unlink</code> (<code>true</code>)</td>
+<td>Removes the sender's Discord link.</td>
+</tr>
+<tr>
+<td><code>/discord linked</code></td>
+<td><code>corechatx.command.discord.linked</code> (<code>true</code>)</td>
+<td>Shows the sender's Discord link state.</td>
+</tr>
+<tr>
+<td><code>/discord linkadmin &lt;player&gt; &lt;discord_user_id&gt;</code></td>
+<td><code>corechatx.command.discord.admin</code> (<code>op</code>)</td>
+<td>Forces a link for an online/offline known player or UUID.</td>
+</tr>
+<tr>
+<td><code>/discord unlink &lt;player|discord_user_id&gt;</code></td>
+<td><code>corechatx.command.discord.admin</code> (<code>op</code>)</td>
+<td>Removes another player's link by known player/UUID or Discord user ID.</td>
+</tr>
+<tr>
+<td><code>/ping &lt;sound|actionbar&gt; [on|off|toggle|status]</code></td>
+<td><code>corechatx.command.ping</code> (<code>true</code>)</td>
+<td>Reads or changes mention/custom-ping notification preferences.</td>
+</tr>
+<tr>
+<td><code>/channel list</code></td>
+<td><code>corechatx.command.channel</code> (<code>true</code>)</td>
+<td>Lists channels the player can access.</td>
+</tr>
+<tr>
+<td><code>/channel set &lt;id&gt;</code></td>
+<td><code>corechatx.command.channel</code> (<code>true</code>)</td>
+<td>Selects an enabled, accessible, visible channel.</td>
+</tr>
+<tr>
+<td><code>/hidechannel &lt;channel&gt; [minutes]</code></td>
+<td><code>corechatx.command.hidechannel</code> (<code>true</code>)</td>
+<td>Hides an accessible channel permanently or for a positive whole number of minutes.</td>
+</tr>
+<tr>
+<td><code>/unhidechannel &lt;channel&gt;</code></td>
+<td><code>corechatx.command.unhidechannel</code> (<code>true</code>)</td>
+<td>Restores one of the player's hidden channels.</td>
+</tr>
+<tr>
+<td><code>/ignore &lt;player&gt;</code></td>
+<td><code>corechatx.command.ignore</code> (<code>true</code>)</td>
+<td>Adds a player to the PM ignore list and applies the configured public-chat ignore mode.</td>
+</tr>
+<tr>
+<td><code>/unignore &lt;player&gt;</code></td>
+<td><code>corechatx.command.unignore</code> (<code>true</code>)</td>
+<td>Removes a player from the ignore list.</td>
+</tr>
+<tr>
+<td><code>/ignorelist</code></td>
+<td><code>corechatx.command.ignorelist</code> (<code>true</code>)</td>
+<td>Lists ignored players.</td>
+</tr>
+<tr>
+<td><code>/pmtoggle</code></td>
+<td><code>corechatx.command.pmtoggle</code> (<code>true</code>)</td>
+<td>Toggles receipt of private messages.</td>
+</tr>
+<tr>
+<td><code>/chatsettings</code> (<code>/ccxsettings</code>)</td>
+<td><code>corechatx.command.settings</code> (<code>true</code>)</td>
+<td>Opens the player communication settings GUI.</td>
+</tr>
+<tr>
+<td><code>/mute &lt;player&gt; [duration] [reason...]</code></td>
+<td><code>corechatx.command.mute</code> (<code>op</code>)</td>
+<td>Mutes a known player; duration accepts <code>&lt;number&gt;&lt;s|m|h|d&gt;</code>, while omitted/<code>permanent</code> is permanent.</td>
+</tr>
+<tr>
+<td><code>/unmute &lt;player&gt;</code></td>
+<td><code>corechatx.command.unmute</code> (<code>op</code>)</td>
+<td>Removes an active mute.</td>
+</tr>
+<tr>
+<td><code>/mutechat</code></td>
+<td><code>corechatx.command.mutechat</code> (<code>op</code>)</td>
+<td>Toggles the persistent global public-chat mute.</td>
+</tr>
+<tr>
+<td><code>/clearchat</code></td>
+<td><code>corechatx.command.clearchat</code> (<code>op</code>)</td>
+<td>Clears visible chat for online players using the configured line count.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Configured channel shortcuts add <code>/shortcut</code> and <code>/shortcut &lt;message&gt;</code> dynamically;
+they reuse the channel's send/access rules and do not introduce a separate fixed permission.
+The internal <code>/corechatx item &lt;snapshot-uuid&gt; [view]</code> action is generated by clickable
+ChatItem components and opens an existing snapshot; it is not shown as an admin/player
+workflow command.</p>
+<hr/>

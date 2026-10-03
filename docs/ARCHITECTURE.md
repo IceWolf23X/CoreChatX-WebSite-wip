@@ -7,15 +7,16 @@ index.html (empty shell)
   -> site-config.js       product identity, links, asset paths, theme palette
   -> ui-text.js           interface wording
   -> landing-content.js   landing data
-  -> docs-content.js      wiki data
+  -> docs-content.js      wiki catalog, metadata and bodyFile references
+  -> docs-bodies.js       generated article HTML bundle
   -> config-files.js      generated offline copy of raw plugin defaults
   -> renderer.js / docs.js / search.js / app.js
   -> core/preview-gallery.js   decoded-image gallery and lifecycle
 ```
 
-Normal content changes do not require editing HTML or renderer code.
+Landing, identity and interface-data changes do not require editing entrypoint HTML or renderer code. Article prose is edited in its dedicated HTML source.
 
-Wiki articles are maintained directly in `docs-content.js`; both the routed wiki and `reference.html` read the same data. Article tools link to the full HTML reference. The documentation-scope page keeps stable navigation anchors and explains the configuration snapshots and public references.
+Wiki metadata is maintained in `docs-content.js`, while each article body lives in `assets/content/docs/<article-id>.html`. `tools/build-docs-bundle.mjs` assembles those sources into `assets/js/generated/docs-bodies.js`; both the routed wiki and `reference.html` load the catalog and bundle before reading the same data. Article tools link to the full HTML reference. Stable anchors remain in the page sources.
 
 ## Code highlighting
 
@@ -34,18 +35,31 @@ CoreChatX-plugin (private)
   -> synced-configs/**          original YAML/properties bytes
   -> build-config-bundle.mjs
   -> assets/js/generated/config-files.js
-  -> config-file mounts in docs-content.js
+  -> configFile metadata in docs-content.js
+  -> configuration mounts in the article HTML sources
 ```
 
-The raw file remains the source of truth. `docs-content.js` only decides **where** that file appears and adds the surrounding explanation.
+The raw file remains the source of truth. `docs-content.js` declares the article metadata and `configFile` contract; the article HTML source places the configuration mount and provides the surrounding explanation.
 
 The JavaScript bundle is generated solely for offline `file://` compatibility. On a hosted site it could be replaced by HTTP `fetch()`, but the committed bundle lets one package satisfy both hosted and double-click usage.
+
+The documentation bundle follows the same offline constraint:
+
+```text
+assets/content/docs/<article-id>.html
+  -> tools/build-docs-bundle.mjs .
+  -> assets/js/generated/docs-bodies.js
+  -> COREX_DOCS articles + bodyHtml (catalog loaded first)
+  -> docs.js / reference-renderer.js
+```
+
+Run `node tools/build-docs-bundle.mjs . --check` to validate freshness without writing. Normal home, identity and UI changes do not require this command; editing an article HTML source does.
 
 ## Reuse for another CoreX plugin
 
 1. Replace product identity and palette in `site-config.js`.
 2. Replace landing content in `landing-content.js`.
-3. Replace docs in `docs-content.js`.
+3. Replace catalog metadata in `docs-content.js` and article bodies in `assets/content/docs/`; rebuild the docs bundle.
 4. Replace logo/images under `assets/` and point to them from JS.
 5. Update `config-sync-map.mjs` with that plugin repository's public default files.
 6. Configure the two GitHub secrets described in `GITHUB_SYNC.md` when cross-repository automation is needed.

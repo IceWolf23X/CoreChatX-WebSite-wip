@@ -1,0 +1,30 @@
+<h2 class="reference-section" id="recorded-validation-includes">Recorded validation includes:<a aria-label="Link to Recorded validation includes:" class="heading-anchor" href="#/docs/overview/verified~recorded-validation-includes">#</a></h2>
+<ul>
+<li>build and test passes</li>
+<li>standalone Paper startup</li>
+<li>Velocity startup</li>
+<li>Paper startup in network mode</li>
+<li>command checks</li>
+<li>config regeneration checks</li>
+<li>live Paper test environment checks</li>
+<li>live Velocity network test environment checks</li>
+</ul>
+<p>The established YAML deployments and process-level standalone/proxy MySQL lifecycles have
+been exercised. The automated suite also covers real MySQL schema, lease, lifecycle,
+concurrency, migration, logical export/import parity, rollback preservation, and crash-safe
+file promotion.</p>
+<p>The bounded laboratory acceptance completed on 2026-09-09 covered authenticated
+Minecraft/Discord sessions, YAML-to-MySQL cutover, latest-state rollback, interruption
+recovery, and user-visible storage and bridge failures on standalone and Velocity
+deployments. The <a href="#/docs/reference/source-notes~external-references">recorded lab acceptance</a>
+describes the conditional acceptance and its exact scope for those tested builds.</p>
+<p>Additional live verification on 2026-09-15 used two authenticated Minecraft 26.2 clients,
+Paper 26.2 build 112, and Velocity 4.1.0 build 21. The recorded cases covered advancement
+synchronization, silent historical restoration, revocations, cross-backend advancement
+and death announcements, and YAML/MySQL persistence. The <a href="#/docs/reference/source-notes~external-references">advancement guide</a>
+records these cases and their boundaries.</p>
+<p>These laboratory results apply to the recorded builds and scenarios. Validation with
+production data, measured production capacity, and exhaustive configuration/datapack
+coverage remain unverified. Telegram runtime checks were excluded from the recorded
+laboratory acceptance scope.</p>
+<hr/>

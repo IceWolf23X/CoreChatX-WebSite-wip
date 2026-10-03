@@ -47,6 +47,8 @@ jobs:
           package-manager-cache: false
       - name: Rebuild the offline configuration bundle
         run: node tools/build-config-bundle.mjs .
+      - name: Rebuild the offline documentation bundle
+        run: node tools/build-docs-bundle.mjs .
       - name: Run Node regression tests
         run: node --test
       - name: Validate theme data and snapshots

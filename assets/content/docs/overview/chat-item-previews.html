@@ -1,0 +1,23 @@
+<h2 class="reference-section" id="players-can-share-clickable-previews-for">Players can share clickable previews for:<a aria-label="Link to Players can share clickable previews for:" class="heading-anchor" href="#/docs/overview/chat-item-previews~players-can-share-clickable-previews-for">#</a></h2>
+<ul>
+<li>held items</li>
+<li>shulker contents</li>
+<li>armor</li>
+<li>hotbar</li>
+<li>inventory</li>
+<li>ender chest</li>
+</ul>
+<p>Multiple ChatItem tokens in the same message can reuse the same captured player state while still opening the correct view.</p>
+<p>On a Velocity network, players on another backend can still click and open the preview through lightweight snapshot references and on-demand retrieval.
+That keeps network chat cleaner and avoids stuffing heavy item data into the main chat packet.</p>
+<h2 class="reference-section" id="when-discord-export-is-enabled-corechatx-can-also">When Discord export is enabled, CoreChatX can also:<a aria-label="Link to When Discord export is enabled, CoreChatX can also:" class="heading-anchor" href="#/docs/overview/chat-item-previews~when-discord-export-is-enabled-corechatx-can-also">#</a></h2>
+<ul>
+<li>render item, shulker, armor, hotbar, inventory, and ender-chest snapshots as PNG images</li>
+<li>reproduce item names, lore, enchantments, attributes, potion effects, trims, banners, books, fireworks, durability, and other tooltip details</li>
+<li>load vanilla client assets and layer optional server resource packs</li>
+<li>expose Discord dropdowns that return an ephemeral preview of a selected inventory item</li>
+<li>warm, inspect, or cancel the item render cache through <code>/corechatx itemcache</code></li>
+</ul>
+<p>Discord rendering is independent from the in-game preview: an asset/render failure does
+not remove the Minecraft ChatItem token.</p>
+<hr/>

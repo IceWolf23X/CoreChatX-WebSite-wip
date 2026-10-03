@@ -1,0 +1,96 @@
+<h2 id="standalone-paper">Standalone Paper<a aria-label="Link to Standalone Paper" class="heading-anchor" href="#/docs/instructions/quick-install-patterns~standalone-paper">#</a></h2>
+<h2 class="reference-section" id="use-the-default-backend-config">Use the default backend config:<a aria-label="Link to Use the default backend config:" class="heading-anchor" href="#/docs/instructions/quick-install-patterns~use-the-default-backend-config">#</a></h2>
+<div class="code-block"><div class="code-header"><span>YAML</span><div><button aria-label="Copy code" class="copy-code" type="button">Copy</button></div></div><pre tabindex="0"><code class="language-yml"><span class="nt">deployment</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="s">"STANDALONE"</span>
+<span class="w">  </span><span class="nt">server-id</span><span class="p">:</span><span class="w"> </span><span class="s">"paper-1"</span>
+<span class="w">  </span><span class="nt">network-channel</span><span class="p">:</span><span class="w"> </span><span class="s">"corechatx:main"</span>
+<span class="w">  </span><span class="nt">bridges-allowed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">network-features-allowed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</code></pre></div>
+<h2 class="reference-section" id="in-this-setup">In this setup:<a aria-label="Link to In this setup:" class="heading-anchor" href="#/docs/instructions/quick-install-patterns~in-this-setup">#</a></h2>
+<ul>
+<li>no Velocity module is required</li>
+<li><code>NETWORK</code> channels behave as normal local backend chat</li>
+<li>cross-server PM routing is inactive</li>
+<li>network player directory, global TAB entries, and cross-backend chat completions are inactive</li>
+</ul>
+<h2 id="velocity-network">Velocity network<a aria-label="Link to Velocity network" class="heading-anchor" href="#/docs/instructions/quick-install-patterns~velocity-network">#</a></h2>
+<h2 class="reference-section" id="on-each-paper-backend">On each Paper backend:<a aria-label="Link to On each Paper backend:" class="heading-anchor" href="#/docs/instructions/quick-install-patterns~on-each-paper-backend">#</a></h2>
+<ul>
+<li>set <code>deployment.mode: "PROXY"</code></li>
+<li>set a unique <code>deployment.server-id</code></li>
+<li>set <code>deployment.network-channel</code> to the CoreChatX group that backend should join</li>
+<li>set <code>deployment.network-features-allowed: true</code></li>
+</ul>
+<h2 class="reference-section" id="on-velocity">On Velocity:<a aria-label="Link to On Velocity:" class="heading-anchor" href="#/docs/instructions/quick-install-patterns~on-velocity">#</a></h2>
+<ul>
+<li>install the Velocity CoreChatX jar</li>
+<li>list every allowed group channel in <code>velocity-config.properties -&gt; network-channel</code></li>
+</ul>
+<h2 class="reference-section" id="example-backend-identities">Example backend identities:<a aria-label="Link to Example backend identities:" class="heading-anchor" href="#/docs/instructions/quick-install-patterns~example-backend-identities">#</a></h2>
+<ul>
+<li><code>alpha</code></li>
+<li><code>beta</code></li>
+<li><code>survival-1</code></li>
+<li><code>hub</code></li>
+</ul>
+<h2 class="reference-section" id="network-behavior-enabled-by-this-setup">Network behavior enabled by this setup:<a aria-label="Link to Network behavior enabled by this setup:" class="heading-anchor" href="#/docs/instructions/quick-install-patterns~network-behavior-enabled-by-this-setup">#</a></h2>
+<ul>
+<li><code>NETWORK</code> channels can cross backend boundaries</li>
+<li>cross-server PM delivery can use the proxy route</li>
+<li>player communication settings are synchronized through Velocity</li>
+<li>active channel state, ping toggles, PM toggle, social spy, mention notifications, locale, staff-chat state, and ignore lists can follow backend switches</li>
+<li>the proxy can provide global player name completions and TAB entries for players connected to configured backends</li>
+<li>network chat preserves rendered Adventure components, ChatItem preview refs, mentions, and activated custom ping metadata across backends</li>
+<li>Velocity treats the real backend connection as the source of truth for proxy packets; backend-declared source ids cannot override it</li>
+<li>malformed, oversized, or oversized-generated plugin-message payloads are rejected before routing</li>
+</ul>
+<h2 id="production-setup-checklist">Production setup checklist<a aria-label="Link to Production setup checklist" class="heading-anchor" href="#/docs/instructions/quick-install-patterns~production-setup-checklist">#</a></h2>
+<h2 class="reference-section" id="for-a-clean-standalone-paper-install">For a clean standalone Paper install:<a aria-label="Link to For a clean standalone Paper install:" class="heading-anchor" href="#/docs/instructions/quick-install-patterns~for-a-clean-standalone-paper-install">#</a></h2>
+<ul>
+<li>install only the Paper jar</li>
+<li>keep <code>deployment.mode: "STANDALONE"</code></li>
+<li>keep <code>deployment.network-features-allowed: false</code></li>
+<li>configure formats, channels, messages, moderation, chat items, keywords, bubbles, and optional bridges on that backend</li>
+<li>restart after changing deployment identity fields</li>
+<li>use <code>/corechatx reload</code> for normal wording, formatting, channel, filter, and feature tuning</li>
+</ul>
+<h2 class="reference-section" id="for-a-clean-velocity-network-install">For a clean Velocity network install:<a aria-label="Link to For a clean Velocity network install:" class="heading-anchor" href="#/docs/instructions/quick-install-patterns~for-a-clean-velocity-network-install">#</a></h2>
+<ul>
+<li>install the Paper jar on every backend</li>
+<li>install the Velocity jar on the proxy</li>
+<li>set every backend to <code>deployment.mode: "PROXY"</code></li>
+<li>give every backend a unique <code>deployment.server-id</code></li>
+<li>set each backend <code>deployment.network-channel</code> to the isolated group it should join</li>
+<li>include each backend group channel in <code>plugins/corechatx/velocity-config.properties -&gt; network-channel</code></li>
+<li>set <code>deployment.network-features-allowed: true</code> on each backend that should participate in cross-server features</li>
+<li>restart the affected Paper backends and Velocity after changing identity or network channel values</li>
+</ul>
+<p>For <code>2026.2.0</code> upgrades, a clean setup is recommended. Regenerate fresh Paper and Velocity config files, then reapply server-specific values such as <code>deployment.*</code>, channels, Discord token, Discord routes and required role IDs. In proxy mode, do not reuse old backend runtime YAML as authoritative network data because Velocity now owns runtime/user state.</p>
+<h2 class="reference-section" id="for-bridge-installs">For bridge installs:<a aria-label="Link to For bridge installs:" class="heading-anchor" href="#/docs/instructions/quick-install-patterns~for-bridge-installs">#</a></h2>
+<ul>
+<li>keep <code>deployment.bridges-allowed: true</code></li>
+<li>enable only the bridge services you actually use</li>
+<li>enable outbound export only on the CoreChatX channels that should leave Minecraft</li>
+<li>configure inbound routes so external messages land in an intentional CoreChatX channel</li>
+<li>in <code>STANDALONE</code>, Paper <code>discord.yml</code> owns Discord bridge inbound/outbound</li>
+<li>in <code>PROXY</code>, Velocity <code>velocity-discord.yml</code> owns Discord bridge inbound/outbound and forwards packets to the proper CoreChatX group</li>
+<li>in <code>PROXY</code>, Paper <code>discord.yml</code> may still run <code>discord.console.*</code> for backend console access only</li>
+<li>Telegram remains Paper-owned in both deployment modes; network export is emitted only by the source backend</li>
+</ul>
+<h2 class="reference-section" id="for-placeholderapi-heavy-installs">For PlaceholderAPI-heavy installs:<a aria-label="Link to For PlaceholderAPI-heavy installs:" class="heading-anchor" href="#/docs/instructions/quick-install-patterns~for-placeholderapi-heavy-installs">#</a></h2>
+<ul>
+<li>install PlaceholderAPI on every backend that must render placeholders</li>
+<li>install the expansions required by your formats</li>
+<li>keep raw player messages separate from admin templates</li>
+<li>remember that mention token placeholders use the mentioned player as context</li>
+<li>test offline-player placeholder behavior before relying on it for cross-backend hover text</li>
+</ul>
+<h2 class="reference-section" id="for-chatitems-on-a-network">For ChatItems on a network:<a aria-label="Link to For ChatItems on a network:" class="heading-anchor" href="#/docs/instructions/quick-install-patterns~for-chatitems-on-a-network">#</a></h2>
+<ul>
+<li>keep ChatItems enabled only on the channels where previews are wanted</li>
+<li>tune byte limits only if you understand the size of your custom item metadata</li>
+<li>prefer the bundled on-demand snapshot flow over embedding huge item data into every network chat packet</li>
+<li>accept that expired or rejected snapshots should fail closed with a normal expired-preview message</li>
+</ul>
+<hr/>

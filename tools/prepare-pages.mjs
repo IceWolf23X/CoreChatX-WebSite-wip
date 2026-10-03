@@ -1,7 +1,9 @@
 /** Build a small public Pages artifact. Never copy the repository or private checkout wholesale. */
 import fs from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { buildDocsBundle } from './build-docs-bundle.mjs';
 export const STATIC_ENTRIES = ['index.html', 'reference.html', 'assets', 'synced-configs'];
 
 async function verifyTree(file) {
@@ -15,11 +17,12 @@ async function verifyTree(file) {
   else if (!stat.isFile()) throw new Error(`Unsupported public file type: ${file}`);
 }
 
-/** Package the public HTML, assets and configuration snapshots into the Pages output. */
+/** Package public assets after verifying any authored documentation matches its offline snapshot. */
 export async function preparePages(root) {
   root = path.resolve(root);
   // Validate before touching the existing output. This also prevents symlink traversal.
   for (const entry of STATIC_ENTRIES) await verifyTree(path.join(root, entry));
+  if (existsSync(path.join(root, 'assets/js/data/docs-content.js'))) await buildDocsBundle(root, { check: true });
   const output = path.join(root, '_site');
   const staging = path.join(root, '_site.tmp');
   for (const dir of [output, staging]) {

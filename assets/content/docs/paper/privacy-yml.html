@@ -1,0 +1,19 @@
+<h2 class="reference-section" id="purpose">Purpose:<a aria-label="Link to Purpose:" class="heading-anchor" href="#/docs/paper/privacy-yml~purpose">#</a></h2>
+<ul>
+<li>PM defaults</li>
+<li>staff PM bypass behavior</li>
+<li>ignore system configuration</li>
+<li>default public-chat visibility and notification behavior for ignored players</li>
+</ul>
+<h2 class="reference-section" id="current-bundled-default">Current bundled default:<a aria-label="Link to Current bundled default:" class="heading-anchor" href="#/docs/paper/privacy-yml~current-bundled-default">#</a></h2>
+<div class="config-file-mount" data-config-file="paper/privacy.yml"></div>
+<h2 class="reference-section" id="validation-note">Validation note:<a aria-label="Link to Validation note:" class="heading-anchor" href="#/docs/paper/privacy-yml~validation-note">#</a></h2>
+<ul>
+<li><code>staff-bypass-permission</code> is also validated</li>
+<li>if malformed, only that bypass binding is disabled and the plugin logs a warning</li>
+<li><code>ignore.max-ignored-players</code> is clamped to <code>0</code> or higher</li>
+<li><code>ignore.public-chat-mode</code> accepts <code>off</code>, <code>notifications-only</code>, or <code>hide-message</code>; invalid values fall back to <code>notifications-only</code></li>
+<li><code>ignore.block-mentions-from-ignored</code> is a legacy compatibility switch: it can disable <code>notifications-only</code>, but an explicit <code>hide-message</code> still suppresses both the public message and its notifications</li>
+<li>none of these public-chat modes changes PM blocking: ignored players remain unavailable to <code>/msg</code> and <code>/reply</code></li>
+</ul>
+<hr/>

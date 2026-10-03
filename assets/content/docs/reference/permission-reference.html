@@ -1,0 +1,39 @@
+<h2 class="reference-section" id="some-permissions-are-defined-in-config-files-and-can-be-changed-by-the-server-owner">Some permissions are defined in config files and can be changed by the server owner:<a aria-label="Link to Some permissions are defined in config files and can be changed by the server owner:" class="heading-anchor" href="#/docs/reference/permission-reference~some-permissions-are-defined-in-config-files-and-can-be-changed-by-the-server-owner">#</a></h2>
+<ul>
+<li><code>pings.yml -&gt; custom-pings.&lt;id&gt;.use-permission</code></li>
+<li><code>pings.yml -&gt; custom-pings.&lt;id&gt;.receive-permission</code></li>
+<li><code>keywords.yml -&gt; keywords.&lt;id&gt;.permission</code></li>
+<li><code>channels.yml -&gt; channels.&lt;id&gt;.permission-send</code></li>
+<li><code>channels.yml -&gt; channels.&lt;id&gt;.permission-receive</code></li>
+<li><code>privacy.yml -&gt; private-messages.staff-bypass-permission</code></li>
+<li><code>chatitems.yml -&gt; tokens.&lt;type&gt;.permission</code></li>
+</ul>
+<p>These nodes may not all be listed in <code>plugin.yml</code> because they are configurable values,
+not fixed plugin API. <code>channels.yml</code>, <code>pings.yml</code>, and <code>privacy.yml</code> validate malformed
+dynamic permission nodes and disable only the broken binding. An invalid keyword
+permission disables only that keyword. ChatItem token permissions are used as configured,
+so keep them valid Bukkit permission nodes.</p>
+<h2 class="reference-section" id="fixed-non-command-permissions-bundled-in-plugin-yml">Fixed non-command permissions bundled in <code>plugin.yml</code>:<a aria-label="Link to Fixed non-command permissions bundled in plugin.yml:" class="heading-anchor" href="#/docs/reference/permission-reference~fixed-non-command-permissions-bundled-in-plugin-yml">#</a></h2>
+<ul>
+<li>moderation bypasses: <code>corechatx.moderation.bypass.mutechat</code>, <code>corechatx.moderation.bypass.repeat</code>, and <code>corechatx.moderation.bypass.caps</code> (<code>op</code>)</li>
+<li>cooldown bypasses: <code>corechatx.cooldown.bypass.public</code> and <code>corechatx.cooldown.bypass.pm</code> (<code>op</code>)</li>
+<li>shared staff example: <code>corechatx.staff</code> (<code>op</code>)</li>
+<li>bubbles: <code>corechatx.chatbubbles.use</code> (<code>op</code>)</li>
+<li>ChatItems: <code>corechatx.chatitem.item</code>, <code>.shulker</code>, <code>.armor</code>, <code>.hotbar</code>, <code>.inventory</code>, and <code>.enderchest</code> (<code>op</code>)</li>
+<li>storage maintenance: <code>corechatx.command.storage</code> (<code>op</code>); migration and rollback mutations remain console-only</li>
+<li>all player-authored legacy colors: <code>corechatx.format.color</code> or <code>corechatx.format.color.*</code> (<code>op</code>)</li>
+<li>individual player-authored colors: <code>corechatx.format.color.black</code>, <code>corechatx.format.color.dark_blue</code>, <code>corechatx.format.color.dark_green</code>, <code>corechatx.format.color.dark_aqua</code>, <code>corechatx.format.color.dark_red</code>, <code>corechatx.format.color.dark_purple</code>, <code>corechatx.format.color.gold</code>, <code>corechatx.format.color.gray</code>, <code>corechatx.format.color.dark_gray</code>, <code>corechatx.format.color.blue</code>, <code>corechatx.format.color.green</code>, <code>corechatx.format.color.aqua</code>, <code>corechatx.format.color.red</code>, <code>corechatx.format.color.light_purple</code>, <code>corechatx.format.color.yellow</code>, and <code>corechatx.format.color.white</code> (<code>op</code>)</li>
+<li>all player-authored legacy styles: <code>corechatx.format.style</code> or <code>corechatx.format.style.*</code> (<code>op</code>)</li>
+<li>individual player-authored styles: <code>corechatx.format.style.magic</code>, <code>corechatx.format.style.bold</code>, <code>corechatx.format.style.strikethrough</code>, <code>corechatx.format.style.underline</code>, <code>corechatx.format.style.italic</code>, and <code>corechatx.format.style.reset</code> (<code>op</code>)</li>
+</ul>
+<h2 class="reference-section" id="nickname-formatting-is-deliberately-separate-from-player-authored-chat-formatting">Nickname formatting is deliberately separate from player-authored chat formatting:<a aria-label="Link to Nickname formatting is deliberately separate from player-authored chat formatting:" class="heading-anchor" href="#/docs/reference/permission-reference~nickname-formatting-is-deliberately-separate-from-player-authored-chat-formatting">#</a></h2>
+<ul>
+<li><code>corechatx.nick.color</code> grants all nickname colors (<code>op</code>), while individual nodes default to <code>false</code></li>
+<li>individual nickname colors are <code>corechatx.nick.color.black</code>, <code>corechatx.nick.color.dark-blue</code>, <code>corechatx.nick.color.dark-green</code>, <code>corechatx.nick.color.dark-aqua</code>, <code>corechatx.nick.color.dark-red</code>, <code>corechatx.nick.color.dark-purple</code>, <code>corechatx.nick.color.gold</code>, <code>corechatx.nick.color.gray</code>, <code>corechatx.nick.color.dark-gray</code>, <code>corechatx.nick.color.blue</code>, <code>corechatx.nick.color.green</code>, <code>corechatx.nick.color.aqua</code>, <code>corechatx.nick.color.red</code>, <code>corechatx.nick.color.light-purple</code>, <code>corechatx.nick.color.yellow</code>, <code>corechatx.nick.color.white</code>, <code>corechatx.nick.color.hex</code>, and <code>corechatx.nick.color.gradient</code></li>
+<li><code>corechatx.nick.format</code> grants all nickname styles (<code>op</code>), while individual nodes default to <code>false</code></li>
+<li>individual nickname styles are <code>corechatx.nick.format.obfuscated</code>, <code>corechatx.nick.format.bold</code>, <code>corechatx.nick.format.strikethrough</code>, <code>corechatx.nick.format.underline</code>, <code>corechatx.nick.format.italic</code>, and <code>corechatx.nick.format.reset</code></li>
+</ul>
+<p>Command permissions and defaults are listed in the command table above. Player-facing
+commands default to <code>true</code>; staff, moderation, reload, item-cache, storage, cross-player nickname,
+and Discord administration permissions default to <code>op</code>.</p>
+<hr/>

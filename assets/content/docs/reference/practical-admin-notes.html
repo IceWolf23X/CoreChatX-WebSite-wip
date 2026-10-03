@@ -1,0 +1,20 @@
+<ul>
+<li>Keep <code>messages.yml</code> as the main wording file unless you actively need locale-specific overrides.</li>
+<li>Use LuckPerms for rank titles/prefixes, and use CoreChatX for layout.</li>
+<li>Keep <code>group-formats</code> keyed to the LuckPerms primary group in lowercase.</li>
+<li>Keep <code>YAML</code> unless you deliberately provision and validate <code>MYSQL</code>; changing the enum alone is not a migration of existing runtime data.</li>
+<li>When testing a network, always verify backend <code>server-id</code> values are unique.</li>
+<li>If a custom permission node in <code>channels.yml</code>, <code>pings.yml</code>, or <code>privacy.yml</code> is malformed, CoreChatX warns and disables only that specific binding; malformed keyword permissions disable only that keyword.</li>
+<li>If you delete runtime data files such as <code>playerdata.yml</code> or <code>mutedata.yml</code>, you are deleting live player/plugin state, not just decorative cache.</li>
+<li>CoreChatX starts bStats on Paper and Velocity; opt-out is controlled by the platform-wide bStats files (<code>plugins/bStats/config.yml</code> on Paper and <code>plugins/bStats/config.txt</code> on Velocity), not by a CoreChatX config key.</li>
+</ul>
+<h2 class="reference-section" id="operational-guidance">Operational guidance:<a aria-label="Link to Operational guidance:" class="heading-anchor" href="#/docs/reference/practical-admin-notes~operational-guidance">#</a></h2>
+<ul>
+<li>treat <code>config.yml -&gt; deployment.*</code> and <code>velocity-config.properties -&gt; network-channel</code> as boot identity, not casual reload settings</li>
+<li>keep one source of truth for each visual decision; do not duplicate the same format across many plugins</li>
+<li>use channels for routing rules instead of hardcoding bridge behavior in several places</li>
+<li>use PlaceholderAPI in trusted templates, not as a way to let players execute arbitrary placeholder expansion through chat</li>
+<li>keep bridge tokens private and never paste them into public support logs</li>
+<li>back up runtime data before manually editing player settings, mutes, ignores, or active channel state</li>
+</ul>
+<hr/>
