@@ -1,6 +1,6 @@
 # CoreChatX-WebSite-wip
 
-**Published website: [CoreChatX WIP](https://icewolf23x.github.io/CoreChatX-WebSite-wip/).** GitHub Pages uses the `main` branch through GitHub Actions. Normal updates use commit and push; the first-publication helper in [docs/DEPLOY_WIP.md](docs/DEPLOY_WIP.md) is for a fresh folder and repository.
+**Published website: [CoreChatX WIP](https://icewolf23x.github.io/CoreChatX-WebSite-wip/).** GitHub Pages uses the `main` branch through GitHub Actions. Normal updates use commit and push; the Node first-publication helper (`node tools/publish-wip.mjs`) in [docs/DEPLOY_WIP.md](docs/DEPLOY_WIP.md) is for a fresh folder and repository. Windows launchers are optional local files ignored by Git.
 
 The 19 published plugin defaults come from `IceWolf23X/CoreChatX-plugin`, branch `codex/fix-source-audit`, commit `eb06bd05f2a4d952ee7fee6323e3f52b32d7b145`. Future private-source synchronization requires the separate `COREX_PLUGIN_READ_TOKEN` secret; its workflow stays disabled until that credential is configured.
 

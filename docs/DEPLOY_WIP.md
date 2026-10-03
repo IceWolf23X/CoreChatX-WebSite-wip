@@ -33,17 +33,17 @@ Dopo un'installazione chiudi e riapri il terminale, così il PATH aggiornato è 
 ## 2. Pubblica
 
 1. Estrai l'intero ZIP in una **cartella nuova**, non dentro un checkout esistente del plugin o del vecchio sito.
-2. Entra in `CoreChatX-WebSite-wip` e avvia **`PUBBLICA-WIP.cmd`** con doppio clic.
+2. Apri PowerShell nella cartella `CoreChatX-WebSite-wip` ed esegui **`node tools/publish-wip.mjs`**.
 3. Se GitHub CLI non è autenticato, completa l'accesso nel browser con **IceWolf23X**. La procedura richiede gli scope `repo` e `workflow` per creare la repository e caricare i workflow. Le credenziali sono gestite da GitHub CLI; non vengono scritte nel sito o nei suoi JavaScript.
 4. Attendi l'esito: lo script mostra il link del sito solo dopo che il suo workflow Pages risulta riuscito. Un errore o un timeout non viene presentato come pubblicazione riuscita.
 
-In alternativa, da PowerShell nella cartella del pacchetto:
+Comando da PowerShell nella cartella del pacchetto:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\Publish-Wip.ps1
+node tools/publish-wip.mjs
 ```
 
-Il bypass vale solo per quel processo: non cambia permanentemente la policy del PC. È possibile eseguire direttamente `node tools/publish-wip.mjs`.
+Il comando Node funziona senza launcher Windows. `Publish-Wip.ps1` e `PUBBLICA-WIP.cmd`, se presenti sul tuo PC, sono scorciatoie locali facoltative ignorate da Git; non vengono distribuite dalla repository. Gli aggiornamenti ordinari del sito già pubblicato seguono il punto 4.
 
 ## 3. Cosa fa lo script
 

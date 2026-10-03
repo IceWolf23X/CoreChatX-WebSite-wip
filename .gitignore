@@ -15,3 +15,7 @@ _site.tmp/
 
 # Local project map.
 /CODE_INDEX.md
+
+# Optional local Windows launchers for first publication.
+/Publish-Wip.ps1
+/PUBBLICA-WIP.cmd

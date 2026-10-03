@@ -1,6 +1,6 @@
 # SETUP — dallo ZIP al sito CoreX funzionante
 
-> **Pacchetto WIP:** per creare e pubblicare `IceWolf23X/CoreChatX-WebSite-wip`, parti da [docs/DEPLOY_WIP.md](docs/DEPLOY_WIP.md) e avvia `PUBBLICA-WIP.cmd`. Il deploy Pages via Actions è incluso. Questa preparazione locale non ha già creato la repository.
+> **Sito WIP:** la repository è già pubblicata e si aggiorna con commit e push. Per la prima pubblicazione da un pacchetto nuovo, consulta [docs/DEPLOY_WIP.md](docs/DEPLOY_WIP.md) e usa `node tools/publish-wip.mjs`. Il deploy Pages via Actions è incluso.
 
 Questa guida riguarda **l'uso del tema website**, non l'installazione del plugin Minecraft.
 Le pagine del sito rimangono in inglese; questa guida operativa è in italiano.
@@ -195,7 +195,7 @@ Non aggiungere a questi workflow esecuzioni da pull request non fidate con acces
 
 ## 7. Pubblicare il sito: GitHub Pages tramite Actions
 
-Questo pacchetto WIP include `.github/workflows/deploy-pages.yml` e lo script di prima pubblicazione `PUBBLICA-WIP.cmd` (wrapper PowerShell + Node). La procedura completa è in [docs/DEPLOY_WIP.md](docs/DEPLOY_WIP.md).
+Questo pacchetto WIP include `.github/workflows/deploy-pages.yml` e il tool Node di prima pubblicazione `tools/publish-wip.mjs`. Le scorciatoie Windows `Publish-Wip.ps1` e `PUBBLICA-WIP.cmd` sono facoltative, conservate solo localmente e ignorate da Git. La procedura completa è in [docs/DEPLOY_WIP.md](docs/DEPLOY_WIP.md).
 
 La sorgente Pages deve essere **GitHub Actions**, non `Deploy from a branch` e non `/docs`. Lo script configura la repository pubblica, `main`, HTTPS, la variabile `COREX_PAGES_ENABLED=true` e avvia il deploy. Il workflow prepara `_site/` con i soli file pubblici necessari: nessun checkout privato, `.git`, token o strumenti di manutenzione viene pubblicato nell'artefatto Pages.
 

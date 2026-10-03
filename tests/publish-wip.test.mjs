@@ -42,6 +42,17 @@ function fakeRunner(settings={}){
  return {run,calls};
 }
 test('Publisher script exists',()=>assert.equal(fs.existsSync(moduleUrl),true,'Missing publish-wip.mjs'));
+
+// A fresh package must publish directly through Node without optional local Windows shortcuts.
+test('Direct Node publication does not require the Windows launchers',async(t)=>{
+ const {publish}=await import(moduleUrl);const root=fixture(t);const fake=fakeRunner();
+ for(const file of ['PUBBLICA-WIP.cmd','Publish-Wip.ps1'])fs.unlinkSync(path.join(root,file));
+ // External provisioning is simulated; the real publisher still validates the package on disk.
+ const result=await publish(root,{run:fake.run,log:()=>{},sleep:async()=>{}});
+ assert.equal(result.runId,77);
+ assert.equal(result.pagesUrl,'https://icewolf23x.github.io/CoreChatX-WebSite-wip/');
+});
+
 test('Wrong GitHub user is rejected before creating or pushing',async(t)=>{
  const {publish}=await import(moduleUrl);const root=fixture(t);const fake=fakeRunner({login:'other-account'});
  await assert.rejects(publish(root,{run:fake.run,log:()=>{}}),/IceWolf23X/);

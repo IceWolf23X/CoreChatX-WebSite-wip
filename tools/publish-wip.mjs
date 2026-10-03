@@ -14,7 +14,7 @@ const REPO = 'CoreChatX-WebSite-wip';
 const PUBLIC_ENTRIES = [
   '.github', '.gitignore', '.gitattributes', '.nojekyll', 'README.md', 'SETUP.md',
   'index.html', 'reference.html', 'assets', 'docs', 'synced-configs',
-  'tools', 'tests', 'PUBBLICA-WIP.cmd', 'Publish-Wip.ps1'
+  'tools', 'tests'
 ];
 const sleepDefault = ms => new Promise(resolve => setTimeout(resolve, ms));
 function systemRun(cmd, args, options = {}) {
